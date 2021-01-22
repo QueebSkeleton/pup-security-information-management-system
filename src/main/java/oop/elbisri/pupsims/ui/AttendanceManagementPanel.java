@@ -14,7 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
+
+import oop.elbisri.pupsims.repository.AttendanceJdbcRepositoryImpl;
 
 /**
  * Attendance Management Panel of this Application. Contains a Table
@@ -38,6 +39,11 @@ public class AttendanceManagementPanel extends JPanel {
 	 * The main table of this panel.
 	 */
 	private JTable jtblAttendance;
+	
+	/**
+	 * TableModel of the main table.
+	 */
+	protected AttendanceTableModel attendanceTableModel;
 
 	/**
 	 * Construct the panel.
@@ -77,18 +83,12 @@ public class AttendanceManagementPanel extends JPanel {
 		jtblAttendance = new JTable();
 		jtblAttendance.setRowHeight(25);
 		jtblAttendance.setIntercellSpacing(new Dimension(10, 10));
-		// TODO: Replace dummy model.
-		jtblAttendance.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"1", "Test Guard 1", "Today", "Present"},
-				{"2", "Test Guard 2", "Today", "Present"},
-				{"3", "Test Guard 3", "Today", "Present"},
-			},
-			new String[] {
-				"#", "Name", "Date", "Status"
-			}
-		));
 		jtblAttendance.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		
+		// Table Model
+		attendanceTableModel = new AttendanceTableModel();
+		jtblAttendance.setModel(attendanceTableModel);
+		
 		jscrlpnAttendanceTable.setViewportView(jtblAttendance);
 		/* END OF jtblAttendance */
 		
@@ -119,6 +119,15 @@ public class AttendanceManagementPanel extends JPanel {
 		jpnlTablePagination.add(jcmbPageSize);
 		/* END OF jcmbPageSize */
 
+	}
+	
+	/**
+	 * Sets the attendance repository of the internal TableModel that this panel manages.
+	 * 
+	 * @param attendanceRepository the repository to set for the TableModel
+	 */
+	public void setAttendanceRepository(AttendanceJdbcRepositoryImpl attendanceRepository) {
+		attendanceTableModel.setAttendanceRepository(attendanceRepository);
 	}
 
 }

@@ -7,6 +7,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import oop.elbisri.pupsims.repository.AttendanceJdbcRepositoryImpl;
+
 /**
  * Main Frame of the Application. Every interaction possible for
  * this data-entry system is made in here.
@@ -37,7 +39,7 @@ public class MainFrame extends JFrame {
 	/**
 	 * Attendance management panel.
 	 */
-	private AttendanceManagementPanel attendanceManagementPanel;
+	protected AttendanceManagementPanel attendanceManagementPanel;
 
 	/**
 	 * Construct the frame.
@@ -84,17 +86,40 @@ public class MainFrame extends JFrame {
 		attendanceManagementPanel = new AttendanceManagementPanel();
 	}
 	
+	/**
+	 * Show the attendance management panel.
+	 */
 	public void showAttendanceManagementPanel() {
-		if(jpnlCurrentShownPanel != null)
+		// If another panel is shown, remove it from the content pane
+		if(jpnlCurrentShownPanel != null) {
+			if(jpnlCurrentShownPanel == attendanceManagementPanel)
+				return;
 			jpnlContentPane.remove(jpnlCurrentShownPanel);
+		}
 		
-		else if(jpnlCurrentShownPanel == attendanceManagementPanel)
-			return;
-		
+		// Add the attendance management panel on the content pane
 		jpnlCurrentShownPanel = attendanceManagementPanel;
 		jpnlContentPane.add(attendanceManagementPanel);
+		
+		// Prompt revalidation of the containment hierarchy
+		// since we dynamically added a new component
+		// while this mainframe is shown.
 		revalidate();
 		repaint();
+	}
+	
+	/**
+	 * Wires an attendance repository to this frame.<br><br>
+	 * 
+	 * Since the frame creates and manages the Attendance Panel
+	 * (and this panel needs an attendance repository),
+	 * either we also create the attendance repository in this class (but too tightly coupled),
+	 * or create a convenience function so we can simply wire it.
+	 * 
+	 * @param attendanceRepository the repository to set
+	 */
+	public void setAttendanceRepository(AttendanceJdbcRepositoryImpl attendanceRepository) {
+		attendanceManagementPanel.setAttendanceRepository(attendanceRepository);
 	}
 
 }
