@@ -6,11 +6,11 @@ import java.awt.Font;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 /**
  * Main sidebar panel of the whole application. The user
@@ -26,6 +26,8 @@ public class SidebarPanel extends JPanel {
 	 * Default Serial Version UID (for serializability, not important, placed to remove warnings)
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private MainFrame mainFrame;
 
 	/**
 	 * Create the panel.
@@ -92,6 +94,9 @@ public class SidebarPanel extends JPanel {
 		
 		// Attendance Panel Button
 		JButton jbtnAttendancePanel = new JButton("Attendance");
+		jbtnAttendancePanel.addActionListener(event -> {
+			mainFrame.showAttendanceManagementPanel();
+		});
 		jbtnAttendancePanel.setBorderPainted(false);
 		jbtnAttendancePanel.setHorizontalAlignment(SwingConstants.LEFT);
 		jbtnAttendancePanel.setMaximumSize(new Dimension(32767, 40));
@@ -174,6 +179,10 @@ public class SidebarPanel extends JPanel {
 		jbtnInspectionLogPanel.setBackground(new Color(153, 0, 0));
 		add(jbtnInspectionLogPanel);
 
+	}
+	
+	public void setMainFrame(MainFrame mainFrame) {
+		this.mainFrame = mainFrame;
 	}
 
 }

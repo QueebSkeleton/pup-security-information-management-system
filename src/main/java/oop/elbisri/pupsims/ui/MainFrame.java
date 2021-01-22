@@ -28,6 +28,16 @@ public class MainFrame extends JFrame {
 	 * Main Content Pane of this Frame
 	 */
 	private JPanel jpnlContentPane;
+	
+	/**
+	 * Current shown panel.
+	 */
+	private JPanel jpnlCurrentShownPanel;
+	
+	/**
+	 * Attendance management panel.
+	 */
+	private AttendanceManagementPanel attendanceManagementPanel;
 
 	/**
 	 * Construct the frame.
@@ -65,18 +75,26 @@ public class MainFrame extends JFrame {
 		
 		// Create the Sidebar Panel
 		SidebarPanel sidebarPanel = new SidebarPanel();
+		// Set the Sidebar Panel hook to this MainFrame
+		sidebarPanel.setMainFrame(this);
 		// Add the Sidebar to the main sole pane of the frame
 		jpnlContentPane.add(sidebarPanel);
 		
-		// TODO: This is temporary. Create a separate class for each panel (e.g. Security Guard Panel)
-		// Create the main panel for content and main functionality
-		JPanel panel = new JPanel();
-		// Set background to white
-		panel.setBackground(Color.WHITE);
-		// (By default the max size of every JPanel is 32767, 32767. This will be read by the BoxLayout
-		// and accomodate the remaining space on the content pane)
-		// Add this to the main content pane
-		jpnlContentPane.add(panel);
+		// Create the Attendance Management Panel
+		attendanceManagementPanel = new AttendanceManagementPanel();
+	}
+	
+	public void showAttendanceManagementPanel() {
+		if(jpnlCurrentShownPanel != null)
+			jpnlContentPane.remove(jpnlCurrentShownPanel);
+		
+		else if(jpnlCurrentShownPanel == attendanceManagementPanel)
+			return;
+		
+		jpnlCurrentShownPanel = attendanceManagementPanel;
+		jpnlContentPane.add(attendanceManagementPanel);
+		revalidate();
+		repaint();
 	}
 
 }
