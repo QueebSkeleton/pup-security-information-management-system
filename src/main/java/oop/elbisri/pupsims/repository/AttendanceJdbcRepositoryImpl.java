@@ -1,6 +1,7 @@
 package oop.elbisri.pupsims.repository;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,6 +26,7 @@ public class AttendanceJdbcRepositoryImpl {
 	 * One per method defined in this repository.
 	 */
 	private static final String GET_ALL_QUERY = "SELECT * FROM attendance";
+	private static final String SAVE_STATEMENT = "INSERT INTO attendance VALUES (null, ?, ?, ?)";
 	
 	/**
 	 * The main datasource that this repository retrieves and manipulates data.
@@ -81,8 +83,29 @@ public class AttendanceJdbcRepositoryImpl {
 		return attendanceList;
 	}
 	
+	/**
+	 * Saves the specified attendance object to the datasource.
+	 * @param attendance the attendance to be saved
+	 */
 	public void save(Attendance attendance) {
-		throw new UnsupportedOperationException("Save not yet supported.");
+		try(
+			// Make a connection	
+			Connection connection = dataSource.getConnection();
+			// Create the statement to be executed later
+			PreparedStatement insertAttendanceStatement =
+					connection.prepareStatement(SAVE_STATEMENT)) {
+			
+			// Bind the attendance fields to the prepared statement
+			insertAttendanceStatement.setLong(1, attendance.getSecurityGuardId());
+			insertAttendanceStatement.setString(2, attendance.getLogDate().toString());
+			insertAttendanceStatement.setString(3, attendance.getStatus().toString());
+			
+			// Execute the insert statement
+			insertAttendanceStatement.execute();
+		} catch(SQLException e) {
+			// TODO: Handle exceptions in a sophisticated manner.
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -8,6 +8,7 @@ import java.awt.Font;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -41,9 +42,19 @@ public class AttendanceManagementPanel extends JPanel {
 	private JTable jtblAttendance;
 	
 	/**
+	 * Attendance Repository.
+	 */
+	protected AttendanceJdbcRepositoryImpl attendanceRepository;
+	
+	/**
 	 * TableModel of the main table.
 	 */
 	protected AttendanceTableModel attendanceTableModel;
+	
+	/**
+	 * Add Form Dialog of this panel.
+	 */
+	protected AttendanceAddDialog attendanceAddDialog;
 
 	/**
 	 * Construct the panel.
@@ -62,16 +73,28 @@ public class AttendanceManagementPanel extends JPanel {
 		jpnlHeader.setBorder(new EmptyBorder(0, 0, 10, 0));
 		jpnlHeader.setMinimumSize(new Dimension(10, 45));
 		jpnlHeader.setMaximumSize(new Dimension(32767, 55));
-		FlowLayout flowLayout = (FlowLayout) jpnlHeader.getLayout();
-		flowLayout.setAlignment(FlowLayout.LEFT);
 		jpnlHeader.setBackground(Color.WHITE);
 		add(jpnlHeader);
 		/* END OF jpnlHeader */
 		
 		/* jlblHeader - Main Header Label */
+		jpnlHeader.setLayout(new BoxLayout(jpnlHeader, BoxLayout.X_AXIS));
 		JLabel jlblHeader = new JLabel("Manage Attendance");
 		jlblHeader.setFont(new Font("Segoe UI Semibold", Font.BOLD, 24));
 		jpnlHeader.add(jlblHeader);
+		
+		JPanel panel = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
+		flowLayout.setAlignment(FlowLayout.RIGHT);
+		panel.setBackground(Color.WHITE);
+		jpnlHeader.add(panel);
+		
+		JButton jbtnShowAddForm = new JButton("Add");
+		jbtnShowAddForm.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		jbtnShowAddForm.addActionListener(event -> {
+			attendanceAddDialog.setVisible(true);
+		});
+		panel.add(jbtnShowAddForm);
 		/* END OF jlblHeader */
 		
 		/* jscrlpnAttendanceTable - Scrollable Table Panel */
@@ -87,6 +110,7 @@ public class AttendanceManagementPanel extends JPanel {
 		
 		// Table Model
 		attendanceTableModel = new AttendanceTableModel();
+		attendanceTableModel.attendanceManagementPanel = this;
 		jtblAttendance.setModel(attendanceTableModel);
 		
 		jscrlpnAttendanceTable.setViewportView(jtblAttendance);
@@ -119,15 +143,19 @@ public class AttendanceManagementPanel extends JPanel {
 		jpnlTablePagination.add(jcmbPageSize);
 		/* END OF jcmbPageSize */
 
+		// Create the add form dialog
+		attendanceAddDialog = new AttendanceAddDialog();
+		attendanceAddDialog.attendanceManagementPanel = this;
 	}
 	
 	/**
-	 * Sets the attendance repository of the internal TableModel that this panel manages.
+	 * Sets the attendance repository of the internal TableModel that this panel manages,
+	 * and the add form dialog box.
 	 * 
 	 * @param attendanceRepository the repository to set for the TableModel
 	 */
 	public void setAttendanceRepository(AttendanceJdbcRepositoryImpl attendanceRepository) {
-		attendanceTableModel.setAttendanceRepository(attendanceRepository);
+		this.attendanceRepository = attendanceRepository;
 	}
 
 }

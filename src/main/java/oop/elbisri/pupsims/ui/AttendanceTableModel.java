@@ -5,7 +5,6 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import oop.elbisri.pupsims.domain.Attendance;
-import oop.elbisri.pupsims.repository.AttendanceJdbcRepositoryImpl;
 
 public class AttendanceTableModel extends AbstractTableModel {
 
@@ -20,9 +19,9 @@ public class AttendanceTableModel extends AbstractTableModel {
 	private static final String[] columnNames = { "#", "Name", "Date", "Status" };
 	
 	/**
-	 * The repository to look for data.
+	 * Attendance Management Panel that owns this dialog box.
 	 */
-	private AttendanceJdbcRepositoryImpl attendanceRepository;
+	protected AttendanceManagementPanel attendanceManagementPanel;
 	
 	/**
 	 * 
@@ -70,10 +69,6 @@ public class AttendanceTableModel extends AbstractTableModel {
 		
 		}
 	}
-
-	public void setAttendanceRepository(AttendanceJdbcRepositoryImpl attendanceRepository) {
-		this.attendanceRepository = attendanceRepository;
-	}
 	
 	public void update() {
 		repopulateCache();
@@ -81,7 +76,7 @@ public class AttendanceTableModel extends AbstractTableModel {
 	}
 	
 	private void repopulateCache() {
-		cache = attendanceRepository.getAll();
+		cache = attendanceManagementPanel.attendanceRepository.getAll();
 	}
 
 }
