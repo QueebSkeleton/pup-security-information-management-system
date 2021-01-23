@@ -1,7 +1,9 @@
 package oop.elbisri.pupsims.ui.attendance;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 
 import oop.elbisri.pupsims.domain.Attendance;
@@ -119,15 +121,32 @@ public class PaginatingTableModel extends AbstractTableModel {
 	 * of the listening JTable.
 	 */
 	public void update() {
-		repopulateCache();
-		fireTableDataChanged();
-	}
-	
-	/**
-	 * Convenience method for updating the cache.
-	 */
-	private void repopulateCache() {
-		cache = attendanceManagementPanel.attendanceRepository.getAll();
+		// Construct a SwingWorker to fetch data from the repository,
+		// and execute it.
+		new SwingWorker<List<Attendance>, Void>() {
+			@Override
+			protected List<Attendance> doInBackground() throws Exception {
+				// Fetch all data from the repository
+				return attendanceManagementPanel.attendanceRepository.getAll();
+			}
+			@Override
+			protected void done() {
+				try {
+					// Update the cache of this TableModel
+					cache = get();
+					// Notify JTable that data in this Model has changed
+					fireTableDataChanged();
+				} catch (InterruptedException e) {
+					// TODO: Sophisticated handling of InterruptedException
+					// maybe a message dialog.
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					// TODO: Sophisticated handling of InterruptedException
+					// maybe a message dialog.
+					e.printStackTrace();
+				}
+			}
+		}.execute();
 	}
 
 }
