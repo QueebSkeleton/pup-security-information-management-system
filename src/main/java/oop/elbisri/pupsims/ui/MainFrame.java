@@ -8,7 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import oop.elbisri.pupsims.repository.AttendanceJdbcRepositoryImpl;
-import oop.elbisri.pupsims.ui.attendance.AttendanceManagementPanel;
 
 /**
  * Main Frame of the Application. Every interaction possible for
@@ -40,7 +39,7 @@ public class MainFrame extends JFrame {
 	/**
 	 * Attendance management panel.
 	 */
-	protected AttendanceManagementPanel attendanceManagementPanel;
+	protected oop.elbisri.pupsims.ui.attendance.ManagementPanel attendanceManagementPanel;
 
 	/**
 	 * Construct the frame.
@@ -84,7 +83,7 @@ public class MainFrame extends JFrame {
 		jpnlContentPane.add(sidebarPanel);
 		
 		// Create the Attendance Management Panel
-		attendanceManagementPanel = new AttendanceManagementPanel();
+		attendanceManagementPanel = new oop.elbisri.pupsims.ui.attendance.ManagementPanel();
 	}
 	
 	/**

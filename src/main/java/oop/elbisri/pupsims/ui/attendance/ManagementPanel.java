@@ -29,7 +29,7 @@ import oop.elbisri.pupsims.repository.AttendanceJdbcRepositoryImpl;
  * @author Rian Carlo Reyes
  *
  */
-public class AttendanceManagementPanel extends JPanel {
+public class ManagementPanel extends JPanel {
 	
 	/**
 	 * Default Serial Version UID (for serializability, not important, placed to remove warnings)
@@ -49,17 +49,17 @@ public class AttendanceManagementPanel extends JPanel {
 	/**
 	 * TableModel of the main table.
 	 */
-	protected AttendanceTableModel attendanceTableModel;
+	protected PaginatingTableModel attendanceTableModel;
 	
 	/**
 	 * Add Form Dialog of this panel.
 	 */
-	protected AttendanceAddDialog attendanceAddDialog;
+	protected AddDialog attendanceAddDialog;
 
 	/**
 	 * Construct the panel.
 	 */
-	public AttendanceManagementPanel() {
+	public ManagementPanel() {
 		
 		// Set background to white
 		setBackground(Color.WHITE);
@@ -109,7 +109,7 @@ public class AttendanceManagementPanel extends JPanel {
 		jtblAttendance.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		
 		// Table Model
-		attendanceTableModel = new AttendanceTableModel();
+		attendanceTableModel = new PaginatingTableModel();
 		attendanceTableModel.attendanceManagementPanel = this;
 		jtblAttendance.setModel(attendanceTableModel);
 		
@@ -144,7 +144,7 @@ public class AttendanceManagementPanel extends JPanel {
 		/* END OF jcmbPageSize */
 
 		// Create the add form dialog
-		attendanceAddDialog = new AttendanceAddDialog();
+		attendanceAddDialog = new AddDialog();
 		attendanceAddDialog.attendanceManagementPanel = this;
 	}
 	

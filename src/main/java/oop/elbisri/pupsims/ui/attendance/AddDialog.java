@@ -22,7 +22,7 @@ import oop.elbisri.pupsims.domain.Attendance;
  * @author Rian Carlo Reyes
  *
  */
-public class AttendanceAddDialog extends JDialog {
+public class AddDialog extends JDialog {
 	
 	/**
 	 * Default Serial Version UID (for serializability, not important, placed to remove warnings)
@@ -32,7 +32,7 @@ public class AttendanceAddDialog extends JDialog {
 	/**
 	 * Attendance Management Panel that owns this dialog box.
 	 */
-	protected AttendanceManagementPanel attendanceManagementPanel;
+	protected ManagementPanel attendanceManagementPanel;
 
 	/**
 	 * Main Content Pane of this Frame
@@ -42,10 +42,10 @@ public class AttendanceAddDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public AttendanceAddDialog() {
+	public AddDialog() {
 		
 		// For reference later
-		AttendanceAddDialog thisDialog = this;
+		AddDialog thisDialog = this;
 		
 		// Set minimum size
 		setMinimumSize(new Dimension(300, 190));
