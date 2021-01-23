@@ -12,6 +12,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
 import oop.elbisri.pupsims.domain.Attendance;
@@ -160,10 +161,20 @@ public class AddDialog extends JDialog {
 			jtxtfldLogDate.setText("");
 			jtxtfldStatus.setText("");
 			
-			// Save the constructed attendance object
-			attendanceManagementPanel.attendanceRepository.save(attendance);
-			// Refresh the management panel table model
-			thisDialog.attendanceManagementPanel.attendanceTableModel.update();
+			// Save the constructed attendance object, with a SwingWorker
+			new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws Exception {
+					attendanceManagementPanel.attendanceRepository.save(attendance);
+					return null;
+				}
+				@Override
+				protected void done() {
+					// Refresh the management panel table model after the attendance has been saved
+					thisDialog.attendanceManagementPanel.attendanceTableModel.update();
+				}
+			}.execute();
+			
 			// Hide this add dialog
 			thisDialog.setVisible(false);
 		});
