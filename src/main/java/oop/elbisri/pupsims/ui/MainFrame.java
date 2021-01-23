@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import oop.elbisri.pupsims.repository.AttendanceJdbcRepositoryImpl;
+import oop.elbisri.pupsims.ui.attendance.AttendanceManagementPanel;
 
 /**
  * Main Frame of the Application. Every interaction possible for

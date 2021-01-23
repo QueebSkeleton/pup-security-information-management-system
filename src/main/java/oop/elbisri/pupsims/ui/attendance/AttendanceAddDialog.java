@@ -1,4 +1,4 @@
-package oop.elbisri.pupsims.ui;
+package oop.elbisri.pupsims.ui.attendance;
 
 import java.awt.Dimension;
 import java.awt.Font;

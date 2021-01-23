@@ -1,4 +1,4 @@
-package oop.elbisri.pupsims.ui;
+package oop.elbisri.pupsims.ui.attendance;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -156,6 +156,13 @@ public class AttendanceManagementPanel extends JPanel {
 	 */
 	public void setAttendanceRepository(AttendanceJdbcRepositoryImpl attendanceRepository) {
 		this.attendanceRepository = attendanceRepository;
+	}
+	
+	/**
+	 * Updates the table model and prompts for a JTable redraw.
+	 */
+	public void updateTable() {
+		attendanceTableModel.update();
 	}
 
 }
