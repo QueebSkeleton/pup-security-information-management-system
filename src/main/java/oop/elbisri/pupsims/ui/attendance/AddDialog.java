@@ -7,7 +7,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.time.LocalDate;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,6 +18,7 @@ import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
 import oop.elbisri.pupsims.domain.Attendance;
+import oop.elbisri.pupsims.domain.Attendance.Status;
 
 /**
  * Add form dialog for adding attendances.
@@ -39,11 +42,17 @@ public class AddDialog extends JDialog {
 	 * Main Content Pane of this Frame
 	 */
 	private JPanel jpnlContentPane;
+	
+	// Form Components
+	private JTextField jtxtfldSecurityGuard;
+	private JTextField jtxtfldLogDate;
+	private JComboBox<Attendance.Status> jcmbStatus;
 
 	/**
 	 * Create the dialog.
 	 */
 	public AddDialog() {
+		setResizable(false);
 		
 		// For reference later
 		AddDialog thisDialog = this;
@@ -64,8 +73,8 @@ public class AddDialog extends JDialog {
 		GridBagLayout gbl_jpnlContentPane = new GridBagLayout();
 		gbl_jpnlContentPane.columnWidths = new int[]{0, 0, 0};
 		gbl_jpnlContentPane.rowHeights = new int[]{0, 0, 0, 0, 0};
-		gbl_jpnlContentPane.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_jpnlContentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_jpnlContentPane.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
+		gbl_jpnlContentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		jpnlContentPane.setLayout(gbl_jpnlContentPane);
 		
 		/* jlblSecurityGuard - Security Guard Label */
@@ -80,7 +89,7 @@ public class AddDialog extends JDialog {
 		/* END OF jlblSecurityGuard */
 		
 		/* jtxtfldSecurityGuard - Security Guard Text Field Input */
-		JTextField jtxtfldSecurityGuard = new JTextField();
+		jtxtfldSecurityGuard = new JTextField();
 		jtxtfldSecurityGuard.setMargin(new Insets(4, 4, 4, 4));
 		jtxtfldSecurityGuard.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		GridBagConstraints gbc_jtxtfldSecurityGuard = new GridBagConstraints();
@@ -104,7 +113,7 @@ public class AddDialog extends JDialog {
 		/* END OF jlblLogDate */
 
 		/* jtxtfldLogDate - Log Date Text Field Input */
-		JTextField jtxtfldLogDate = new JTextField();
+		jtxtfldLogDate = new JTextField();
 		jtxtfldLogDate.setMargin(new Insets(4, 4, 4, 4));
 		jtxtfldLogDate.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		jtxtfldLogDate.setColumns(10);
@@ -125,25 +134,23 @@ public class AddDialog extends JDialog {
 		gbc_jlblStatus.gridx = 0;
 		gbc_jlblStatus.gridy = 2;
 		jpnlContentPane.add(jlblStatus, gbc_jlblStatus);
-		/* END OF jlblStatus */
-
-		/* jtxtfldStatus - Status Text Field Input */
-		JTextField jtxtfldStatus = new JTextField();
-		jtxtfldStatus.setMargin(new Insets(4, 4, 4, 4));
-		jtxtfldStatus.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		jtxtfldStatus.setColumns(10);
-		GridBagConstraints gbc_jtxtfldStatus = new GridBagConstraints();
-		gbc_jtxtfldStatus.insets = new Insets(0, 0, 5, 0);
-		gbc_jtxtfldStatus.fill = GridBagConstraints.HORIZONTAL;
-		gbc_jtxtfldStatus.gridx = 1;
-		gbc_jtxtfldStatus.gridy = 2;
-		jpnlContentPane.add(jtxtfldStatus, gbc_jtxtfldStatus);
 		/* END OF jtxtfldStatus */
+		
+		jcmbStatus = new JComboBox<>();
+		jcmbStatus.setModel(new DefaultComboBoxModel<>(Status.values()));
+		jcmbStatus.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		GridBagConstraints gbc_comboBox = new GridBagConstraints();
+		gbc_comboBox.insets = new Insets(0, 0, 5, 0);
+		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBox.gridx = 1;
+		gbc_comboBox.gridy = 2;
+		jpnlContentPane.add(jcmbStatus, gbc_comboBox);
 
 		/* jbtnSave - Save Button */
 		JButton jbtnSave = new JButton("Save");
 		jbtnSave.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		GridBagConstraints gbc_jbtnSave = new GridBagConstraints();
+		gbc_jbtnSave.anchor = GridBagConstraints.EAST;
 		gbc_jbtnSave.gridx = 1;
 		gbc_jbtnSave.gridy = 3;
 		
@@ -154,12 +161,7 @@ public class AddDialog extends JDialog {
 					null,
 					1L,
 					LocalDate.parse(jtxtfldLogDate.getText()),
-					Attendance.Status.valueOf(jtxtfldStatus.getText()));
-			
-			// Clear the input fields
-			jtxtfldSecurityGuard.setText("");
-			jtxtfldLogDate.setText("");
-			jtxtfldStatus.setText("");
+					(Attendance.Status) jcmbStatus.getSelectedItem());
 			
 			// Save the constructed attendance object, with a SwingWorker
 			new SwingWorker<Void, Void>() {
@@ -181,6 +183,15 @@ public class AddDialog extends JDialog {
 		
 		jpnlContentPane.add(jbtnSave, gbc_jbtnSave);
 		/* END OF jlblSecurityGuard */
+	}
+	
+	/**
+	 * Clears and resets the form.
+	 */
+	public void resetForm() {
+		jtxtfldSecurityGuard.setText("");
+		jtxtfldLogDate.setText(LocalDate.now().toString());
+		jcmbStatus.setSelectedIndex(0);
 	}
 
 }
