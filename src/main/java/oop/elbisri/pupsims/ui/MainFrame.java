@@ -7,6 +7,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import oop.elbisri.pupsims.ui.visitor.VisitorManagementPanel;
+
 /**
  * Main Frame of the Application. Every interaction possible for
  * this data-entry system is made in here.
@@ -28,11 +30,17 @@ public class MainFrame extends JFrame {
 	 * Main Content Pane of this Frame
 	 */
 	private JPanel jpnlContentPane;
+	
+	private JPanel jpnlCurrentShownPanel;
+	
+	private VisitorManagementPanel visitorManagementPanel;
 
 	/**
 	 * Construct the frame.
 	 */
 	public MainFrame() {
+		
+		visitorManagementPanel = new VisitorManagementPanel();
 		
 		// Set the applicable sizes
 		setMinimumSize(new Dimension(800, 550));
@@ -65,18 +73,20 @@ public class MainFrame extends JFrame {
 		
 		// Create the Sidebar Panel
 		SidebarPanel sidebarPanel = new SidebarPanel();
+		sidebarPanel.mainFrame = this;
 		// Add the Sidebar to the main sole pane of the frame
 		jpnlContentPane.add(sidebarPanel);
+	}
+	
+	public void showVisitorManagementPanel() {
+		if(jpnlCurrentShownPanel != null && jpnlCurrentShownPanel != visitorManagementPanel) {
+			remove(jpnlCurrentShownPanel);
+			jpnlCurrentShownPanel = visitorManagementPanel;
+		}
 		
-		// TODO: This is temporary. Create a separate class for each panel (e.g. Security Guard Panel)
-		// Create the main panel for content and main functionality
-		JPanel panel = new JPanel();
-		// Set background to white
-		panel.setBackground(Color.WHITE);
-		// (By default the max size of every JPanel is 32767, 32767. This will be read by the BoxLayout
-		// and accomodate the remaining space on the content pane)
-		// Add this to the main content pane
-		jpnlContentPane.add(panel);
+		add(visitorManagementPanel);
+		revalidate();
+		repaint();
 	}
 
 }
