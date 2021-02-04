@@ -39,6 +39,11 @@ public class ManagementPanel extends JPanel {
 	 * The main table of this panel.
 	 */
 	private JTable jtblViolation;
+	
+	/**
+	 * Add Form Dialog of this panel.
+	 */
+	protected AddDialog violationAddDialog;
 
 	/**
 	 * Construct the panel.
@@ -79,6 +84,9 @@ public class ManagementPanel extends JPanel {
 		/* jbtnShowAddForm - button for showing the add form dialog */
 		JButton jbtnShowAddForm = new JButton("Add");
 		jbtnShowAddForm.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		jbtnShowAddForm.addActionListener(event -> {
+			violationAddDialog.setVisible(true);
+		});
 		jpnlButtonActions.add(jbtnShowAddForm);
 		/* END OF jbtnShowAddForm */
 		
@@ -132,6 +140,10 @@ public class ManagementPanel extends JPanel {
 		jcmbPageSize.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		jpnlTablePagination.add(jcmbPageSize);
 		/* END OF jcmbPageSize */
+
+		// Create the add form dialog
+		violationAddDialog = new AddDialog();
+		violationAddDialog.violationManagementPanel = this;
 	}
 
 }
