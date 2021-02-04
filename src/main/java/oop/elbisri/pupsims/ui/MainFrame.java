@@ -42,6 +42,11 @@ public class MainFrame extends JFrame {
 	protected oop.elbisri.pupsims.ui.attendance.ManagementPanel attendanceManagementPanel;
 
 	/**
+	 * Violation management panel.
+	 */
+	protected oop.elbisri.pupsims.ui.violation.ManagementPanel violationManagementPanel;
+	
+	/**
 	 * Construct the frame.
 	 */
 	public MainFrame() {
@@ -84,6 +89,8 @@ public class MainFrame extends JFrame {
 		
 		// Create the Attendance Management Panel
 		attendanceManagementPanel = new oop.elbisri.pupsims.ui.attendance.ManagementPanel();
+		// Create the Violation Management Panel
+		violationManagementPanel = new oop.elbisri.pupsims.ui.violation.ManagementPanel();
 	}
 	
 	/**
@@ -104,6 +111,28 @@ public class MainFrame extends JFrame {
 		// Prompt revalidation of the containment hierarchy
 		// since we dynamically added a new component
 		// while this mainframe is shown.
+		revalidate();
+		repaint();
+	}
+	
+	/**
+	 * Show the violation management panel.
+	 */
+	public void showViolationManagementPanel() {
+		// If the current shown panel is the violation management panel, return.
+		if(jpnlCurrentShownPanel == violationManagementPanel)
+			return;
+		
+		// Else if the current shown panel is not,
+		// then remove it from the panel
+		else if(jpnlCurrentShownPanel != null)
+			jpnlContentPane.remove(jpnlCurrentShownPanel);
+		
+		// Set the violation management panel as the new panel
+		jpnlCurrentShownPanel = violationManagementPanel;
+		jpnlContentPane.add(violationManagementPanel);
+		
+		// Redraw the whole frame
 		revalidate();
 		repaint();
 	}

@@ -158,6 +158,9 @@ public class SidebarPanel extends JPanel {
 		
 		// Violator Logging Panel Button
 		JButton jbtnViolatorsReportPanel = new JButton("Violators Report");
+		jbtnViolatorsReportPanel.addActionListener(event -> {
+			mainFrame.showViolationManagementPanel();
+		});
 		jbtnViolatorsReportPanel.setBorderPainted(false);
 		jbtnViolatorsReportPanel.setHorizontalAlignment(SwingConstants.LEFT);
 		jbtnViolatorsReportPanel.setMaximumSize(new Dimension(32767, 40));
