@@ -356,6 +356,7 @@ public class AddDialog extends JDialog {
 
 		/* jtxtareaDescription - text area input for description */
 		jtxtareaDescription = new JTextArea();
+		jtxtareaDescription.setMargin(new Insets(4, 4, 4, 4));
 		jscrlpnDescription.setViewportView(jtxtareaDescription);
 		/* END OF jtxtareaDescription */
 
@@ -382,6 +383,7 @@ public class AddDialog extends JDialog {
 
 		/* jtxtareaViolatorStatement - text area input for violator statement */
 		jtxtareaViolatorStatement = new JTextArea();
+		jtxtareaViolatorStatement.setMargin(new Insets(4, 4, 4, 4));
 		jtxtareaViolatorStatement.setAlignmentY(0.0f);
 		jtxtareaViolatorStatement.setAlignmentX(0.0f);
 		jscrlpnViolatorStatement.setViewportView(jtxtareaViolatorStatement);
