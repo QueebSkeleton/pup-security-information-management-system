@@ -45,6 +45,11 @@ public class MainFrame extends JFrame {
 	 * Violation management panel.
 	 */
 	protected oop.elbisri.pupsims.ui.violation.ManagementPanel violationManagementPanel;
+
+	/**
+	 * Inpsection management panel.
+	 */
+	protected oop.elbisri.pupsims.ui.inspection.ManagementPanel inspectionManagementPanel;
 	
 	/**
 	 * Construct the frame.
@@ -91,6 +96,8 @@ public class MainFrame extends JFrame {
 		attendanceManagementPanel = new oop.elbisri.pupsims.ui.attendance.ManagementPanel();
 		// Create the Violation Management Panel
 		violationManagementPanel = new oop.elbisri.pupsims.ui.violation.ManagementPanel();
+		// Create the Building Inspection Management Panel
+		inspectionManagementPanel = new oop.elbisri.pupsims.ui.inspection.ManagementPanel();
 	}
 	
 	/**
@@ -131,6 +138,28 @@ public class MainFrame extends JFrame {
 		// Set the violation management panel as the new panel
 		jpnlCurrentShownPanel = violationManagementPanel;
 		jpnlContentPane.add(violationManagementPanel);
+		
+		// Redraw the whole frame
+		revalidate();
+		repaint();
+	}
+	
+	/**
+	 * Show the building inspection management panel.
+	 */
+	public void showInspectionManagementPanel() {
+		// If the current shown panel is the inspection management panel, return.
+		if(jpnlCurrentShownPanel == inspectionManagementPanel)
+			return;
+		
+		// Else if the current shown panel is not,
+		// then remove it from the panel
+		else if(jpnlCurrentShownPanel != null)
+			jpnlContentPane.remove(jpnlCurrentShownPanel);
+		
+		// Set the inspection management panel as the new panel
+		jpnlCurrentShownPanel = inspectionManagementPanel;
+		jpnlContentPane.add(inspectionManagementPanel);
 		
 		// Redraw the whole frame
 		revalidate();
