@@ -26,7 +26,7 @@ public class SidebarPanel extends JPanel {
 	 * Default Serial Version UID (for serializability, not important, placed to remove warnings)
 	 */
 	private static final long serialVersionUID = 1L;
-	
+  
 	private MainFrame mainFrame;
 
 	/**
@@ -118,6 +118,10 @@ public class SidebarPanel extends JPanel {
 		jbtnVisitorLogPanel.setFocusPainted(false);
 		jbtnVisitorLogPanel.setBorder(new EmptyBorder(0, 15, 0, 0));
 		jbtnVisitorLogPanel.setBackground(new Color(153, 0, 0));
+		
+		jbtnVisitorLogPanel.addActionListener(event -> {
+			mainFrame.showVisitorManagementPanel();
+		});
 		add(jbtnVisitorLogPanel);
 		
 		// Parking Slots Panel Button
