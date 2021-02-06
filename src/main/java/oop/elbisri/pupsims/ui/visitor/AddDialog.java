@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -37,7 +38,6 @@ public class AddDialog extends JDialog {
 	
 	//Form components
 	private JTextField jtxtfldNameOfVisitor;
-	private static String visitorType[] = {"Alumnus", "Parent"};
 	private JComboBox<String> comboBox;
 	private JLabel jlblPurposeOfVisit;
 	private JLabel lblTimeOfVisit;
@@ -111,7 +111,8 @@ public class AddDialog extends JDialog {
 		
 		//Create combo box for visitor type
 		//The use of combo box makes it appealing to the eyes of use
-		comboBox = new JComboBox<>(visitorType);
+		JComboBox<String> jcmbVisitorType = new JComboBox<>();
+		jcmbVisitorType.setModel(new DefaultComboBoxModel<>(new String[] {"Alumnus", "Parent"}));
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.anchor = GridBagConstraints.NORTH;
 		gbc_comboBox.insets = new Insets(0, 0, 5, 0);
