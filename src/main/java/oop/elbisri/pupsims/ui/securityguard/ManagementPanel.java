@@ -1,19 +1,24 @@
 package oop.elbisri.pupsims.ui.securityguard;
 
-import javax.swing.JPanel;
-import javax.swing.BoxLayout;
 import java.awt.Dimension;
-import javax.swing.JButton;
 import java.awt.FlowLayout;
-import javax.swing.border.EmptyBorder;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import javax.swing.border.TitledBorder;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 public class ManagementPanel extends JPanel {
+	
+	/**
+	 * Default Serial Version UID (for serializability, not important, placed to remove warnings)
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private JTable jtblTable;
 
 	/**

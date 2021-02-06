@@ -1,24 +1,28 @@
 package oop.elbisri.pupsims.ui.securityguard;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.GridBagLayout;
 import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import javax.swing.JTextField;
-import java.awt.Insets;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.BoxLayout;
-import java.awt.Font;
-import java.awt.Dimension;
+import javax.swing.border.EmptyBorder;
 
 public class ViewDialog extends JDialog {
-
+	
+	/**
+	 * Default Serial Version UID (for serializability, not important, placed to remove warnings)
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private final JPanel contentPanel = new JPanel();
 
 	/**

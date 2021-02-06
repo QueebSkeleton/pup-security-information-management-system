@@ -1,23 +1,27 @@
 package oop.elbisri.pupsims.ui.securityguard;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.GridBagLayout;
 import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import javax.swing.JTextField;
-import java.awt.Insets;
-import java.awt.Component;
-import javax.swing.Box;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JToggleButton;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 public class AddDialog extends JDialog {
+	
+	/**
+	 * Default Serial Version UID (for serializability, not important, placed to remove warnings)
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField jtxtfldFirstName;
