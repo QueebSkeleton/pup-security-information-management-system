@@ -6,11 +6,11 @@ import java.awt.Font;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 /**
  * Main sidebar panel of the whole application. The user
@@ -26,8 +26,8 @@ public class SidebarPanel extends JPanel {
 	 * Default Serial Version UID (for serializability, not important, placed to remove warnings)
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	protected MainFrame mainFrame;
+  
+	private MainFrame mainFrame;
 
 	/**
 	 * Create the panel.
@@ -94,6 +94,10 @@ public class SidebarPanel extends JPanel {
 		
 		// Attendance Panel Button
 		JButton jbtnAttendancePanel = new JButton("Attendance");
+		jbtnAttendancePanel.addActionListener(event -> {
+			mainFrame.showAttendanceManagementPanel();
+			mainFrame.attendanceManagementPanel.updateTable();
+		});
 		jbtnAttendancePanel.setBorderPainted(false);
 		jbtnAttendancePanel.setHorizontalAlignment(SwingConstants.LEFT);
 		jbtnAttendancePanel.setMaximumSize(new Dimension(32767, 40));
@@ -158,6 +162,9 @@ public class SidebarPanel extends JPanel {
 		
 		// Violator Logging Panel Button
 		JButton jbtnViolatorsReportPanel = new JButton("Violators Report");
+		jbtnViolatorsReportPanel.addActionListener(event -> {
+			mainFrame.showViolationManagementPanel();
+		});
 		jbtnViolatorsReportPanel.setBorderPainted(false);
 		jbtnViolatorsReportPanel.setHorizontalAlignment(SwingConstants.LEFT);
 		jbtnViolatorsReportPanel.setMaximumSize(new Dimension(32767, 40));
@@ -170,6 +177,9 @@ public class SidebarPanel extends JPanel {
 		
 		// Inspection Log Panel Button
 		JButton jbtnInspectionLogPanel = new JButton("Inspection Log");
+		jbtnInspectionLogPanel.addActionListener(event -> {
+			mainFrame.showInspectionManagementPanel();
+		});
 		jbtnInspectionLogPanel.setBorderPainted(false);
 		jbtnInspectionLogPanel.setHorizontalAlignment(SwingConstants.LEFT);
 		jbtnInspectionLogPanel.setMaximumSize(new Dimension(32767, 40));
@@ -180,6 +190,10 @@ public class SidebarPanel extends JPanel {
 		jbtnInspectionLogPanel.setBackground(new Color(153, 0, 0));
 		add(jbtnInspectionLogPanel);
 
+	}
+	
+	public void setMainFrame(MainFrame mainFrame) {
+		this.mainFrame = mainFrame;
 	}
 
 }

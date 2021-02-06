@@ -7,7 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import oop.elbisri.pupsims.ui.visitor.VisitorManagementPanel;
+import oop.elbisri.pupsims.repository.AttendanceJdbcRepositoryImpl;
 
 /**
  * Main Frame of the Application. Every interaction possible for
@@ -31,16 +31,30 @@ public class MainFrame extends JFrame {
 	 */
 	private JPanel jpnlContentPane;
 	
+	/**
+	 * Current shown panel.
+	 */
 	private JPanel jpnlCurrentShownPanel;
 	
-	private VisitorManagementPanel visitorManagementPanel;
+	/**
+	 * Attendance management panel.
+	 */
+	protected oop.elbisri.pupsims.ui.attendance.ManagementPanel attendanceManagementPanel;
 
+	/**
+	 * Violation management panel.
+	 */
+	protected oop.elbisri.pupsims.ui.violation.ManagementPanel violationManagementPanel;
+
+	/**
+	 * Inpsection management panel.
+	 */
+	protected oop.elbisri.pupsims.ui.inspection.ManagementPanel inspectionManagementPanel;
+	
 	/**
 	 * Construct the frame.
 	 */
 	public MainFrame() {
-		
-		visitorManagementPanel = new VisitorManagementPanel();
 		
 		// Set the applicable sizes
 		setMinimumSize(new Dimension(800, 550));
@@ -73,20 +87,97 @@ public class MainFrame extends JFrame {
 		
 		// Create the Sidebar Panel
 		SidebarPanel sidebarPanel = new SidebarPanel();
-		sidebarPanel.mainFrame = this;
+		// Set the Sidebar Panel hook to this MainFrame
+		sidebarPanel.setMainFrame(this);
 		// Add the Sidebar to the main sole pane of the frame
 		jpnlContentPane.add(sidebarPanel);
+		
+		// Create the Attendance Management Panel
+		attendanceManagementPanel = new oop.elbisri.pupsims.ui.attendance.ManagementPanel();
+		// Create the Violation Management Panel
+		violationManagementPanel = new oop.elbisri.pupsims.ui.violation.ManagementPanel();
+		// Create the Building Inspection Management Panel
+		inspectionManagementPanel = new oop.elbisri.pupsims.ui.inspection.ManagementPanel();
 	}
 	
-	public void showVisitorManagementPanel() {
-		if(jpnlCurrentShownPanel != null && jpnlCurrentShownPanel != visitorManagementPanel) {
-			remove(jpnlCurrentShownPanel);
-			jpnlCurrentShownPanel = visitorManagementPanel;
+	/**
+	 * Show the attendance management panel.
+	 */
+	public void showAttendanceManagementPanel() {
+		// If another panel is shown, remove it from the content pane
+		if(jpnlCurrentShownPanel != null) {
+			if(jpnlCurrentShownPanel == attendanceManagementPanel)
+				return;
+			jpnlContentPane.remove(jpnlCurrentShownPanel);
 		}
 		
-		add(visitorManagementPanel);
+		// Add the attendance management panel on the content pane
+		jpnlCurrentShownPanel = attendanceManagementPanel;
+		jpnlContentPane.add(attendanceManagementPanel);
+		
+		// Prompt revalidation of the containment hierarchy
+		// since we dynamically added a new component
+		// while this mainframe is shown.
 		revalidate();
 		repaint();
+	}
+	
+	/**
+	 * Show the violation management panel.
+	 */
+	public void showViolationManagementPanel() {
+		// If the current shown panel is the violation management panel, return.
+		if(jpnlCurrentShownPanel == violationManagementPanel)
+			return;
+		
+		// Else if the current shown panel is not,
+		// then remove it from the panel
+		else if(jpnlCurrentShownPanel != null)
+			jpnlContentPane.remove(jpnlCurrentShownPanel);
+		
+		// Set the violation management panel as the new panel
+		jpnlCurrentShownPanel = violationManagementPanel;
+		jpnlContentPane.add(violationManagementPanel);
+		
+		// Redraw the whole frame
+		revalidate();
+		repaint();
+	}
+	
+	/**
+	 * Show the building inspection management panel.
+	 */
+	public void showInspectionManagementPanel() {
+		// If the current shown panel is the inspection management panel, return.
+		if(jpnlCurrentShownPanel == inspectionManagementPanel)
+			return;
+		
+		// Else if the current shown panel is not,
+		// then remove it from the panel
+		else if(jpnlCurrentShownPanel != null)
+			jpnlContentPane.remove(jpnlCurrentShownPanel);
+		
+		// Set the inspection management panel as the new panel
+		jpnlCurrentShownPanel = inspectionManagementPanel;
+		jpnlContentPane.add(inspectionManagementPanel);
+		
+		// Redraw the whole frame
+		revalidate();
+		repaint();
+	}
+	
+	/**
+	 * Wires an attendance repository to this frame.<br><br>
+	 * 
+	 * Since the frame creates and manages the Attendance Panel
+	 * (and this panel needs an attendance repository),
+	 * either we also create the attendance repository in this class (but too tightly coupled),
+	 * or create a convenience function so we can simply wire it.
+	 * 
+	 * @param attendanceRepository the repository to set
+	 */
+	public void setAttendanceRepository(AttendanceJdbcRepositoryImpl attendanceRepository) {
+		attendanceManagementPanel.setAttendanceRepository(attendanceRepository);
 	}
 
 }
