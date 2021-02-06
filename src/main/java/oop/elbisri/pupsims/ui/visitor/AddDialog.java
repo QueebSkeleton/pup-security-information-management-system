@@ -49,6 +49,8 @@ public class AddDialog extends JDialog {
 	private JPanel panel;
 	private JButton jbtnOk;
 	private JButton jbtnCancel;
+
+	protected ManagementPanel visitorManagementPanel;
 	
 	public AddDialog() {
 		//prevent user to resize the dialog
