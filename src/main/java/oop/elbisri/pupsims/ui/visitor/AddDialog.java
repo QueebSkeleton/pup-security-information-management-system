@@ -203,14 +203,17 @@ public class AddDialog extends JDialog {
 		gbc_panel.fill = GridBagConstraints.BOTH;
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 5;
+		panel.setFocusable(false);
 		jpnlContentPane.add(panel, gbc_panel);
 		panel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		
 		//create and add buttons to the panel
 		jbtnCancel = new JButton("Cancel");
+		jbtnCancel.setFocusable(false);
 		panel.add(jbtnCancel);
 		
 		jbtnOk = new JButton("Ok");
+		jbtnOk.setFocusable(false);
 		panel.add(jbtnOk);
 		
 		
