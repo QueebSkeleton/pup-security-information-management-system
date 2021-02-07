@@ -16,11 +16,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 public class AddSuppliesDialog extends JDialog {
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
+	
 	private final JPanel contentPanel = new JPanel();
 	private JTextField jtxtfldProductCode;
 	private JTextField jtxtfldItemName;
@@ -90,8 +88,8 @@ public class AddSuppliesDialog extends JDialog {
 			contentPanel.add(jlblItemType, gbc_jlblItemType);
 		}
 		{
-			JList jlstItemType = new JList();
-			jlstItemType.setModel(new AbstractListModel() {
+			JList<String> jlstItemType = new JList<>();
+			jlstItemType.setModel(new AbstractListModel<>() {
 				/**
 				 * 
 				 */
@@ -100,7 +98,7 @@ public class AddSuppliesDialog extends JDialog {
 				public int getSize() {
 					return values.length;
 				}
-				public Object getElementAt(int index) {
+				public String getElementAt(int index) {
 					return values[index];
 				}
 			});
@@ -139,8 +137,8 @@ public class AddSuppliesDialog extends JDialog {
 			contentPanel.add(jlblCondition, gbc_jlblCondition);
 		}
 		{
-			JList jlstCondition = new JList();
-			jlstCondition.setModel(new AbstractListModel() {
+			JList<String> jlstCondition = new JList<>();
+			jlstCondition.setModel(new AbstractListModel<>() {
 				/**
 				 * 
 				 */
@@ -149,7 +147,7 @@ public class AddSuppliesDialog extends JDialog {
 				public int getSize() {
 					return values.length;
 				}
-				public Object getElementAt(int index) {
+				public String getElementAt(int index) {
 					return values[index];
 				}
 			});
