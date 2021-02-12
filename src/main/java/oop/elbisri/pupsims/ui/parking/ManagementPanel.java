@@ -102,8 +102,8 @@ public class ManagementPanel extends JPanel {
 					"Slot number", "Location", "Status"
 				}
 		));
-		jtblParking.getColumnModel().getColumn(0).setPreferredWidth(30);
-		jtblParking.getColumnModel().getColumn(1).setPreferredWidth(100);
+		jtblParking.getColumnModel().getColumn(0).setPreferredWidth(20);
+		jtblParking.getColumnModel().getColumn(1).setPreferredWidth(130);
 		jtblParking.getColumnModel().getColumn(2).setPreferredWidth(124);
 		jtblParking.setRowHeight(25);
 		jtblParking.setIntercellSpacing(new Dimension(10, 10));
