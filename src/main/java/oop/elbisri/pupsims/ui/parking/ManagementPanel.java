@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * Parking Slot Management Panel of this Application. Contains a Table
@@ -41,6 +42,7 @@ public class ManagementPanel extends JPanel {
 	 * Add Form Dialog of this panel.
 	 */
 	protected AddDialog parkingAddDialog;
+	private JTable jtblParking;
 	
 	/**
 	 * Construct the panel.
@@ -90,6 +92,23 @@ public class ManagementPanel extends JPanel {
 		JScrollPane jscrlpnParkingTable = new JScrollPane();
 		add(jscrlpnParkingTable);
 		/* END OF jscrlpnParkingTable */
+		
+		jtblParking = new JTable();
+		jtblParking.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Slot number", "Location", "Status"
+				}
+		));
+		jtblParking.getColumnModel().getColumn(0).setPreferredWidth(30);
+		jtblParking.getColumnModel().getColumn(1).setPreferredWidth(100);
+		jtblParking.getColumnModel().getColumn(2).setPreferredWidth(124);
+		jtblParking.setRowHeight(25);
+		jtblParking.setIntercellSpacing(new Dimension(10, 10));
+		jtblParking.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		jscrlpnParkingTable.setViewportView(jtblParking);
+			/* END OF jtblParking */
 		
 		/* jtblVisitorLog - Main Panel Table */
 		jtblVisitorLog = new JTable();
