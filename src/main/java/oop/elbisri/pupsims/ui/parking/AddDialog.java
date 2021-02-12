@@ -15,6 +15,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
+import javax.swing.JScrollPane;
 
 public class AddDialog extends JDialog{
 
@@ -41,7 +42,7 @@ public class AddDialog extends JDialog{
 		setResizable(false);
 		
 		// Set minimum size
-		setMinimumSize(new Dimension(460, 230));
+		setMinimumSize(new Dimension(460, 300));
 		
 		// Set title
 		setTitle("Add Parking Slot");
@@ -55,9 +56,9 @@ public class AddDialog extends JDialog{
 		setContentPane(jpnlContentPane);
 		GridBagLayout gbl_jpnlContentPane = new GridBagLayout();
 		gbl_jpnlContentPane.columnWidths = new int[]{131, 0, 0};
-		gbl_jpnlContentPane.rowHeights = new int[]{0, 0, 0, 28, 0};
+		gbl_jpnlContentPane.rowHeights = new int[]{0, 0, 0, 28, 0, 0};
 		gbl_jpnlContentPane.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-		gbl_jpnlContentPane.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_jpnlContentPane.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		jpnlContentPane.setLayout(gbl_jpnlContentPane);
 		
 		
@@ -91,20 +92,21 @@ public class AddDialog extends JDialog{
 		gbc_jlblLocationDescription.gridx = 0;
 		gbc_jlblLocationDescription.gridy = 1;
 		jpnlContentPane.add(jlblLocationDescription, gbc_jlblLocationDescription);
-		/*END OF jlblLocationDescription*/
-		
-		/*jtxtareaLocationDescription*/
-		JTextArea jtxtareaLocationDescription = new JTextArea();
-		jtxtareaLocationDescription.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		GridBagConstraints gbc_jtxtareaLocationDescription = new GridBagConstraints();
-		gbc_jtxtareaLocationDescription.insets = new Insets(0, 0, 5, 0);
-		gbc_jtxtareaLocationDescription.fill = GridBagConstraints.BOTH;
-		gbc_jtxtareaLocationDescription.gridx = 1;
-		gbc_jtxtareaLocationDescription.gridy = 1;
-		jpnlContentPane.add(jtxtareaLocationDescription, gbc_jtxtareaLocationDescription);
 		/*END OF jtxtareaLocationDescription*/
 		
 		/*jlblStatus Status*/
+		
+		JScrollPane scrollPane = new JScrollPane();
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 1;
+		gbc_scrollPane.gridy = 1;
+		jpnlContentPane.add(scrollPane, gbc_scrollPane);
+		
+		JTextArea jtxtareaLocationDescription = new JTextArea();
+		scrollPane.setViewportView(jtxtareaLocationDescription);
+		jtxtareaLocationDescription.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		JLabel jlblStatus = new JLabel("Status:");
 		jlblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		GridBagConstraints gbc_jlblStatus = new GridBagConstraints();
@@ -128,8 +130,8 @@ public class AddDialog extends JDialog{
 		//create panel that will hold the CANCEL and OK button
 		JPanel panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.insets = new Insets(0, 0, 5, 0);
 		gbc_panel.gridwidth = 2;
-		gbc_panel.insets = new Insets(0, 0, 0, 5);
 		gbc_panel.fill = GridBagConstraints.BOTH;
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 3;
