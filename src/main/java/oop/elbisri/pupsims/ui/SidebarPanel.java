@@ -122,6 +122,10 @@ public class SidebarPanel extends JPanel {
 		
 		// Parking Slots Panel Button
 		JButton jbtnParkingSlotsPanel = new JButton("Parking Slots");
+		jbtnParkingSlotsPanel.addActionListener(event -> {
+			mainFrame.showParkingSlotManagementPanel();
+			//mainFrame.parkingManagementPanel.updateTable();
+		});
 		jbtnParkingSlotsPanel.setBorderPainted(false);
 		jbtnParkingSlotsPanel.setHorizontalAlignment(SwingConstants.LEFT);
 		jbtnParkingSlotsPanel.setMaximumSize(new Dimension(32767, 40));

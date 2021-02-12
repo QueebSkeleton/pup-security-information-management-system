@@ -50,6 +50,10 @@ public class MainFrame extends JFrame {
 	 * Inpsection management panel.
 	 */
 	protected oop.elbisri.pupsims.ui.inspection.ManagementPanel inspectionManagementPanel;
+	/**
+	 * Parking slot management panel.
+	 */
+	protected oop.elbisri.pupsims.ui.parking.ManagementPanel parkingManagementPanel;
 	
 	/**
 	 * Construct the frame.
@@ -98,6 +102,8 @@ public class MainFrame extends JFrame {
 		violationManagementPanel = new oop.elbisri.pupsims.ui.violation.ManagementPanel();
 		// Create the Building Inspection Management Panel
 		inspectionManagementPanel = new oop.elbisri.pupsims.ui.inspection.ManagementPanel();
+		// Create the Parking Slot Management Panel
+		parkingManagementPanel = new oop.elbisri.pupsims.ui.parking.ManagementPanel();
 	}
 	
 	/**
@@ -146,6 +152,28 @@ public class MainFrame extends JFrame {
 	
 	/**
 	 * Show the building inspection management panel.
+	 */
+	public void showParkingSlotManagementPanel() {
+		// If the current shown panel is the inspection management panel, return.
+		if(jpnlCurrentShownPanel == parkingManagementPanel)
+			return;
+		
+		// Else if the current shown panel is not,
+		// then remove it from the panel
+		else if(jpnlCurrentShownPanel != null)
+			jpnlContentPane.remove(jpnlCurrentShownPanel);
+		
+		// Set the inspection management panel as the new panel
+		jpnlCurrentShownPanel = parkingManagementPanel;
+		jpnlContentPane.add(parkingManagementPanel);
+		
+		// Redraw the whole frame
+		revalidate();
+		repaint();
+	}
+	
+	/**
+	 * Show the parking slot management panel.
 	 */
 	public void showInspectionManagementPanel() {
 		// If the current shown panel is the inspection management panel, return.
