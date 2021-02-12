@@ -41,7 +41,7 @@ public class AddDialog extends JDialog{
 		setResizable(false);
 		
 		// Set minimum size
-		setMinimumSize(new Dimension(300, 190));
+		setMinimumSize(new Dimension(460, 230));
 		
 		// Set title
 		setTitle("Add Parking Slot");
