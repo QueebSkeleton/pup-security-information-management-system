@@ -93,6 +93,7 @@ public class ManagementPanel extends JPanel {
 		add(jscrlpnParkingTable);
 		/* END OF jscrlpnParkingTable */
 		
+		/* jtblParking - Main Panel Table */
 		jtblParking = new JTable();
 		jtblParking.setModel(new DefaultTableModel(
 				new Object[][] {
