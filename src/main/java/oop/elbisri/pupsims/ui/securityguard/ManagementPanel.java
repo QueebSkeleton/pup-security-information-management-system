@@ -12,6 +12,18 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * Security Guard Management Panel. Contains a Table
+ * showing all security guard, and  ADD Dialog
+ * shown by a button to create new entries.
+ * 
+ * An instance of this class is managed by MainFrame in itself, and is
+ * shown by clicking the Attendance Button in the MainFrame's sidebar.
+ * 
+ * @author Elmer M. Cuenca
+ *
+ */
+
 public class ManagementPanel extends JPanel {
 	
 	/**
