@@ -56,6 +56,11 @@ public class MainFrame extends JFrame {
 	protected oop.elbisri.pupsims.ui.parking.ManagementPanel parkingManagementPanel;
 	
 	/**
+	 * Security Guard Panel 
+	 */
+	protected oop.elbisri.pupsims.ui.securityguard.ManagementPanel securityGuardManagementPanel; 
+	
+	/**
 	 * Construct the frame.
 	 */
 	public MainFrame() {
@@ -104,6 +109,8 @@ public class MainFrame extends JFrame {
 		inspectionManagementPanel = new oop.elbisri.pupsims.ui.inspection.ManagementPanel();
 		// Create the Parking Slot Management Panel
 		parkingManagementPanel = new oop.elbisri.pupsims.ui.parking.ManagementPanel();
+		// Create the Security Guard Management Panel 
+		securityGuardManagementPanel = new oop.elbisri.pupsims.ui.securityguard.ManagementPanel(); 
 	}
 	
 	/**
@@ -190,6 +197,28 @@ public class MainFrame extends JFrame {
 		jpnlContentPane.add(inspectionManagementPanel);
 		
 		// Redraw the whole frame
+		revalidate();
+		repaint();
+	}
+	
+	/**
+	 * Show the security guard management panel. 
+	 */
+	public void showSecurityGuardManagementPanel() {
+		// Iff the current shown panel is the security guard management panel, do nothing
+		if (jpnlCurrentShownPanel == securityGuardManagementPanel)
+			return; 
+		
+		// Else iff the current shown panel is not,
+		// then remove it from the panel
+		else if (jpnlCurrentShownPanel != null)
+			jpnlContentPane.remove(jpnlCurrentShownPanel); 
+		
+		// Set the security guard management panel as the new panel
+		jpnlCurrentShownPanel = securityGuardManagementPanel; 
+		jpnlContentPane.add(securityGuardManagementPanel);
+		
+		//Redraw the whole frame
 		revalidate();
 		repaint();
 	}
