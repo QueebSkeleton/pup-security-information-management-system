@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * Visitor Management Panel of this Application. Contains a Table
@@ -97,6 +98,24 @@ public class ManagementPanel extends JPanel {
 		jtblVisitorLog.setIntercellSpacing(new Dimension(10, 10));
 		jtblVisitorLog.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		/* END OF jscrlpnVisitorTable */
+		
+		/* jtblVisitorLog - Main Panel Table */
+		jtblVisitorLog = new JTable();
+		jtblVisitorLog.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Name", "Type of Visitor", "Purpose of visit", "Time in", "Time out"
+			}
+		));
+		jtblVisitorLog.getColumnModel().getColumn(0).setPreferredWidth(100);
+		jtblVisitorLog.getColumnModel().getColumn(1).setPreferredWidth(100);
+		jtblVisitorLog.getColumnModel().getColumn(2).setPreferredWidth(120);
+		jtblVisitorLog.getColumnModel().getColumn(3).setPreferredWidth(70);
+		jtblVisitorLog.setRowHeight(25);
+		jtblVisitorLog.setIntercellSpacing(new Dimension(10, 10));
+		jtblVisitorLog.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		jscrlpnVisitorTable.setViewportView(jtblVisitorLog);
 		
 		/* jpnlTablePagination - Panel for Pagination Components */
 		JPanel jpnlTablePagination = new JPanel();
