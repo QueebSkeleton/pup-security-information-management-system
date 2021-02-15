@@ -153,6 +153,9 @@ public class SidebarPanel extends JPanel {
 		
 		// Incident Reporting Panel Button
 		JButton jbtnIncidentsReportPanel = new JButton("Incidents Report");
+		jbtnIncidentsReportPanel.addActionListener (event -> {
+			mainFrame.showIncidentManagementPanel();
+		});
 		jbtnIncidentsReportPanel.setBorderPainted(false);
 		jbtnIncidentsReportPanel.setHorizontalAlignment(SwingConstants.LEFT);
 		jbtnIncidentsReportPanel.setMaximumSize(new Dimension(32767, 40));
