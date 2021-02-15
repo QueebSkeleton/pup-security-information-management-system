@@ -16,12 +16,27 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+
+
+/**
+ * Add form dialog for adding security guards.
+ * 
+ * @author Elmer M. Cuenca
+ *
+ */
 public class AddDialog extends JDialog {
 	
 	/**
 	 * Default Serial Version UID (for serializability, not important, placed to remove warnings)
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Security Guard Management Panel that owns this dialog box.
+	 */
+	protected ManagementPanel securityGuardManagementPanel;
+	
+	
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField jtxtfldFirstName;
