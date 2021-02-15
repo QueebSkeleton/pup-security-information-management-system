@@ -58,6 +58,10 @@ public class MainFrame extends JFrame {
 	 * Visitor Log management panel.
 	 */
 	protected oop.elbisri.pupsims.ui.visitor.ManagementPanel visitorManagementPanel;
+	/**
+	 * Visitor Log management panel.
+	 */
+	protected oop.elbisri.pupsims.ui.car.ManagementPanel carManagementPanel;
 	
 	/**
 	 * Construct the frame.
@@ -109,6 +113,7 @@ public class MainFrame extends JFrame {
 		// Create the Parking Slot Management Panel
 		parkingManagementPanel = new oop.elbisri.pupsims.ui.parking.ManagementPanel();
 		visitorManagementPanel = new oop.elbisri.pupsims.ui.visitor.ManagementPanel();
+		carManagementPanel = new oop.elbisri.pupsims.ui.car.ManagementPanel();
 	}
 	
 	/**
@@ -180,7 +185,7 @@ public class MainFrame extends JFrame {
 	 * Show the parking slot management panel.
 	 */
 	public void showParkingSlotManagementPanel() {
-		// If the current shown panel is the inspection management panel, return.
+		// If the current shown panel is the parking slot management panel, return.
 		if(jpnlCurrentShownPanel == parkingManagementPanel)
 			return;
 		
@@ -189,7 +194,7 @@ public class MainFrame extends JFrame {
 		else if(jpnlCurrentShownPanel != null)
 			jpnlContentPane.remove(jpnlCurrentShownPanel);
 		
-		// Set the inspection management panel as the new panel
+		// Set the parking slot management panel as the new panel
 		jpnlCurrentShownPanel = parkingManagementPanel;
 		jpnlContentPane.add(parkingManagementPanel);
 		
@@ -201,7 +206,7 @@ public class MainFrame extends JFrame {
 	 * Show the visitor log management panel.
 	 */
 	public void showVisitorLogManagementPanel() {
-		// If the current shown panel is the inspection management panel, return.
+		// If the current shown panel is the visitor log management panel, return.
 		if(jpnlCurrentShownPanel == visitorManagementPanel)
 			return;
 		
@@ -210,9 +215,31 @@ public class MainFrame extends JFrame {
 		else if(jpnlCurrentShownPanel != null)
 			jpnlContentPane.remove(jpnlCurrentShownPanel);
 		
-		// Set the inspection management panel as the new panel
+		// Set the visitor log management panel as the new panel
 		jpnlCurrentShownPanel = visitorManagementPanel;
 		jpnlContentPane.add(visitorManagementPanel);
+		
+		// Redraw the whole frame
+		revalidate();
+		repaint();
+	}
+	
+	/**
+	 * Show the visitor log management panel.
+	 */
+	public void showCarManagementPanel() {
+		// If the current shown panel is the car management panel, return.
+		if(jpnlCurrentShownPanel == carManagementPanel)
+			return;
+		
+		// Else if the current shown panel is not,
+		// then remove it from the panel
+		else if(jpnlCurrentShownPanel != null)
+			jpnlContentPane.remove(jpnlCurrentShownPanel);
+		
+		// Set the car management panel as the new panel
+		jpnlCurrentShownPanel = carManagementPanel;
+		jpnlContentPane.add(carManagementPanel);
 		
 		// Redraw the whole frame
 		revalidate();
