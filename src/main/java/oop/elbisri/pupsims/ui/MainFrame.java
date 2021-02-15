@@ -66,6 +66,11 @@ public class MainFrame extends JFrame {
 	protected oop.elbisri.pupsims.ui.incidentreport.ManagementPanel incidentManagementPanel; 
 	
 	/**
+	 * Inventory Of Supplies Panel 
+	 */
+	protected oop.elbisri.pupsims.ui.inventoryofsupplies.ManagementPanel inventoryManagementPanel;
+	 
+	/**
 	 * Construct the frame.
 	 */
 	public MainFrame() {
@@ -118,6 +123,9 @@ public class MainFrame extends JFrame {
 		securityGuardManagementPanel = new oop.elbisri.pupsims.ui.securityguard.ManagementPanel(); 
 		// Create the Incident Report Management Panel 
 		incidentManagementPanel = new oop.elbisri.pupsims.ui.incidentreport.ManagementPanel();
+		// Create the Inventory of Supplies Management Panel
+		inventoryManagementPanel = new oop.elbisri.pupsims.ui.inventoryofsupplies.ManagementPanel();
+		
 	}
 	
 	/**
@@ -251,6 +259,29 @@ public class MainFrame extends JFrame {
 		revalidate();
 		repaint();
 	}
+	
+	/**
+	 * Show the inventory of supplies management panel.
+	 */
+	public void showInventoryManagementPanel() {
+		// Iff the current shown panel is the inventory management panel, do nothing
+		if (jpnlCurrentShownPanel == inventoryManagementPanel)
+			return;
+		
+		// Else iff the current shown panel is not,
+		// then remove it from the panel 
+		else if (jpnlCurrentShownPanel != null)
+			jpnlContentPane.remove(jpnlCurrentShownPanel);
+		
+		// Set the inventory management panel as the new panel
+		jpnlCurrentShownPanel = inventoryManagementPanel; 
+		jpnlContentPane.add(inventoryManagementPanel);
+		
+		// Redraw the whole frame
+		revalidate();
+		repaint();
+	}
+	
 	
 	/**
 	 * Wires an attendance repository to this frame.<br><br>
