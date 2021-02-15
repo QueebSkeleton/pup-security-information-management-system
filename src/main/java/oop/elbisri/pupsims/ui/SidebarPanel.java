@@ -197,6 +197,9 @@ public class SidebarPanel extends JPanel {
 		add(jbtnInspectionLogPanel);
 		
 		JButton jbtnInventory = new JButton("Inventory");
+		jbtnInventory.addActionListener(event -> {
+			mainFrame.showInventoryManagementPanel();
+		});
 		jbtnInventory.setMaximumSize(new Dimension(32767, 40));
 		jbtnInventory.setHorizontalAlignment(SwingConstants.LEFT);
 		jbtnInventory.setForeground(Color.WHITE);
