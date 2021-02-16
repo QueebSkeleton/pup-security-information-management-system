@@ -11,12 +11,30 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * Incident Report Management of this Application. Contains a Table
+ * showing all incident reports logged in the system, and a Dialog form
+ * shown by a button to log new entries.
+ * 
+ * An instance of this class is managed by MainFrame in itself, and is
+ * shown by clicking the Incidents Button in the MainFrame's sidebar.
+ * 
+ * @author Elmer M. Cuenca
+ *
+ */
+
 public class ManagementPanel extends JPanel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JTable jtblReportTable;
+	
+	/**
+	 * Add Form dialog of this panel
+	 */
+	protected AddReportDialog incidentAddDialog; 
+	
 
 	/**
 	 * Create the panel.
@@ -31,8 +49,12 @@ public class ManagementPanel extends JPanel {
 		jpnlButtons.setMaximumSize(new Dimension(32767, 150));
 		add(jpnlButtons);
 		
-		JButton jbtnView = new JButton("View Report");
-		jpnlButtons.add(jbtnView);
+		JButton jbtnAdd = new JButton("New Report");
+		jbtnAdd.addActionListener(event -> {
+			incidentAddDialog.setVisible(true);
+		});
+		jpnlButtons.add(jbtnAdd);
+		
 		
 		JButton jbtnDelete = new JButton("Delete");
 		jpnlButtons.add(jbtnDelete);
@@ -52,6 +74,10 @@ public class ManagementPanel extends JPanel {
 		jtblReportTable.getColumnModel().getColumn(1).setPreferredWidth(80);
 		jtblReportTable.getColumnModel().getColumn(4).setPreferredWidth(300);
 		jscrllpnReportTable.setViewportView(jtblReportTable);
+		
+		//Create the add form dialog
+		incidentAddDialog = new AddReportDialog();
+		incidentAddDialog.incidentManagementPanel = this; 
 
 	}
 

@@ -21,12 +21,23 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
+/**
+ * Add new form dialog for entering new incidents
+ * @author Elmer M. Cuenca
+ *
+ */
 public class AddReportDialog extends JDialog {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Incidents Report Management Panel that owns this dialog box
+	 */
+	protected ManagementPanel incidentManagementPanel; 
+	
 	private final JPanel contentPanel = new JPanel();
 	private JTextField jtxtfldIncidentID;
 	private JTextField jtxtfldTime;
