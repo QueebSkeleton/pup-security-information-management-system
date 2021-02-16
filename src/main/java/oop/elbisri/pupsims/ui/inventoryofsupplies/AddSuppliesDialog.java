@@ -15,9 +15,19 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * Add new form dialog for entering new supplies
+ * @author Elmer M. Cuenca
+ *
+ */
 public class AddSuppliesDialog extends JDialog {
 	
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Inventory of Supplies Management Panel that owns this dialog box
+	 */
+	protected ManagementPanel inventoryManagementPanel; 
 	
 	private final JPanel contentPanel = new JPanel();
 	private JTextField jtxtfldProductCode;

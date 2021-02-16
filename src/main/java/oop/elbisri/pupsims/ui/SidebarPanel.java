@@ -201,6 +201,20 @@ public class SidebarPanel extends JPanel {
 		jbtnInspectionLogPanel.setBorder(new EmptyBorder(0, 15, 0, 0));
 		jbtnInspectionLogPanel.setBackground(new Color(153, 0, 0));
 		add(jbtnInspectionLogPanel);
+		
+		JButton jbtnInventory = new JButton("Inventory");
+		jbtnInventory.addActionListener(event -> {
+			mainFrame.showInventoryManagementPanel();
+		});
+		jbtnInventory.setMaximumSize(new Dimension(32767, 40));
+		jbtnInventory.setHorizontalAlignment(SwingConstants.LEFT);
+		jbtnInventory.setForeground(Color.WHITE);
+		jbtnInventory.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		jbtnInventory.setFocusPainted(false);
+		jbtnInventory.setBorderPainted(false);
+		jbtnInventory.setBorder(new EmptyBorder(0, 15, 0, 0));
+		jbtnInventory.setBackground(new Color(153, 0, 0));
+		add(jbtnInventory);
 
 	}
 	
