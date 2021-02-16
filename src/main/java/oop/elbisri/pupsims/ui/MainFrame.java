@@ -16,7 +16,9 @@ import oop.elbisri.pupsims.repository.AttendanceJdbcRepositoryImpl;
  * Has a side navigator which dictates what current panel to
  * view, and a content panel.
  * 
- * @author Rian Reyes
+ * @author Rian Carlo Reyes
+ * @author Bismillah Constantino
+ * @author Elmer Cuenca
  *
  */
 public class MainFrame extends JFrame {
@@ -54,6 +56,14 @@ public class MainFrame extends JFrame {
 	 * Parking slot management panel.
 	 */
 	protected oop.elbisri.pupsims.ui.parking.ManagementPanel parkingManagementPanel;
+	/**
+	 * Visitor Log management panel.
+	 */
+	protected oop.elbisri.pupsims.ui.visitor.ManagementPanel visitorManagementPanel;
+	/**
+	 * Visitor Log management panel.
+	 */
+	protected oop.elbisri.pupsims.ui.car.ManagementPanel carManagementPanel;
 	
 	/**
 	 * Security Guard Panel 
@@ -118,6 +128,8 @@ public class MainFrame extends JFrame {
 		securityGuardManagementPanel = new oop.elbisri.pupsims.ui.securityguard.ManagementPanel(); 
 		// Create the Incident Report Management Panel 
 		incidentManagementPanel = new oop.elbisri.pupsims.ui.incidentreport.ManagementPanel();
+		visitorManagementPanel = new oop.elbisri.pupsims.ui.visitor.ManagementPanel();
+		carManagementPanel = new oop.elbisri.pupsims.ui.car.ManagementPanel();
 	}
 	
 	/**
@@ -167,28 +179,6 @@ public class MainFrame extends JFrame {
 	/**
 	 * Show the building inspection management panel.
 	 */
-	public void showParkingSlotManagementPanel() {
-		// If the current shown panel is the inspection management panel, return.
-		if(jpnlCurrentShownPanel == parkingManagementPanel)
-			return;
-		
-		// Else if the current shown panel is not,
-		// then remove it from the panel
-		else if(jpnlCurrentShownPanel != null)
-			jpnlContentPane.remove(jpnlCurrentShownPanel);
-		
-		// Set the inspection management panel as the new panel
-		jpnlCurrentShownPanel = parkingManagementPanel;
-		jpnlContentPane.add(parkingManagementPanel);
-		
-		// Redraw the whole frame
-		revalidate();
-		repaint();
-	}
-	
-	/**
-	 * Show the parking slot management panel.
-	 */
 	public void showInspectionManagementPanel() {
 		// If the current shown panel is the inspection management panel, return.
 		if(jpnlCurrentShownPanel == inspectionManagementPanel)
@@ -207,6 +197,74 @@ public class MainFrame extends JFrame {
 		revalidate();
 		repaint();
 	}
+	/**
+	 * Show the parking slot management panel.
+	 */
+	public void showParkingSlotManagementPanel() {
+		// If the current shown panel is the parking slot management panel, return.
+		if(jpnlCurrentShownPanel == parkingManagementPanel)
+			return;
+		
+		// Else if the current shown panel is not,
+		// then remove it from the panel
+		else if(jpnlCurrentShownPanel != null)
+			jpnlContentPane.remove(jpnlCurrentShownPanel);
+		
+		// Set the parking slot management panel as the new panel
+		jpnlCurrentShownPanel = parkingManagementPanel;
+		jpnlContentPane.add(parkingManagementPanel);
+		
+		// Redraw the whole frame
+		revalidate();
+		repaint();
+	}
+	/**
+	 * Show the visitor log management panel.
+	 */
+	public void showVisitorLogManagementPanel() {
+		// If the current shown panel is the visitor log management panel, return.
+		if(jpnlCurrentShownPanel == visitorManagementPanel)
+			return;
+		
+		// Else if the current shown panel is not,
+		// then remove it from the panel
+		else if(jpnlCurrentShownPanel != null)
+			jpnlContentPane.remove(jpnlCurrentShownPanel);
+		
+		// Set the visitor log management panel as the new panel
+		jpnlCurrentShownPanel = visitorManagementPanel;
+		jpnlContentPane.add(visitorManagementPanel);
+		
+		// Redraw the whole frame
+		revalidate();
+		repaint();
+	}
+	
+	/**
+	 * Show the visitor log management panel.
+	 */
+	public void showCarManagementPanel() {
+		// If the current shown panel is the car management panel, return.
+		if(jpnlCurrentShownPanel == carManagementPanel)
+			return;
+		
+		// Else if the current shown panel is not,
+		// then remove it from the panel
+		else if(jpnlCurrentShownPanel != null)
+			jpnlContentPane.remove(jpnlCurrentShownPanel);
+		
+		// Set the car management panel as the new panel
+		jpnlCurrentShownPanel = carManagementPanel;
+		jpnlContentPane.add(carManagementPanel);
+		
+		// Redraw the whole frame
+		revalidate();
+		repaint();
+	}
+	
+	
+	
+	
 	
 	/**
 	 * Show the security guard management panel. 
