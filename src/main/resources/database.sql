@@ -46,3 +46,4 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 DROP USER 'pupsims'@'localhost';
 CREATE USER 'pupsims'@'localhost' IDENTIFIED BY 'pupsimspass_123';
+GRANT ALL PRIVILEGES ON `pupsims_db`.* TO 'pupsims'@'localhost'
