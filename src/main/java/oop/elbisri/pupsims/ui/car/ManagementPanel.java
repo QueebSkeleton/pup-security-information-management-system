@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * Car Management Panel of this Application. Contains a Table
@@ -99,6 +100,23 @@ public class ManagementPanel extends JPanel {
 		jtblCarLog.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		/* END OF jscrlpnCarTable */
 		
+		/* jtblCarLog - Main Panel Table */
+		jtblCarLog = new JTable();
+		jtblCarLog.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Name", "Plate number", "Car model and color", "Time in", "Time out"
+			}
+		));
+		jtblCarLog.getColumnModel().getColumn(0).setPreferredWidth(100);
+		jtblCarLog.getColumnModel().getColumn(1).setPreferredWidth(100);
+		jtblCarLog.getColumnModel().getColumn(2).setPreferredWidth(200);
+		jtblCarLog.getColumnModel().getColumn(3).setPreferredWidth(70);
+		jtblCarLog.setRowHeight(25);
+		jtblCarLog.setIntercellSpacing(new Dimension(10, 10));
+		jtblCarLog.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		jscrlpnCarTable.setViewportView(jtblCarLog);
 		/* jpnlTablePagination - Panel for Pagination Components */
 		JPanel jpnlTablePagination = new JPanel();
 		jpnlTablePagination.setBorder(new EmptyBorder(10, 0, 0, 0));
