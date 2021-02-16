@@ -82,6 +82,9 @@ public class SidebarPanel extends JPanel {
 		
 		// Security Guard Panel Button
 		JButton jbtnSecurityGuardPanel = new JButton("Security Guards");
+		jbtnSecurityGuardPanel.addActionListener(event -> {
+			mainFrame.showSecurityGuardManagementPanel();
+		});
 		jbtnSecurityGuardPanel.setBorderPainted(false);
 		jbtnSecurityGuardPanel.setHorizontalAlignment(SwingConstants.LEFT);
 		jbtnSecurityGuardPanel.setMaximumSize(new Dimension(32767, 40));

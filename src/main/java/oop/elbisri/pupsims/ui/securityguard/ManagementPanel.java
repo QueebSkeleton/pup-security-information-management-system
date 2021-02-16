@@ -12,6 +12,21 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+
+
+
+/**
+ * Security Guard Management Panel. Contains a Table
+ * showing all security guard, and  ADD Dialog
+ * shown by a button to create new entries.
+ * 
+ * An instance of this class is managed by MainFrame in itself, and is
+ * shown by clicking the Attendance Button in the MainFrame's sidebar.
+ * 
+ * @author Elmer M. Cuenca
+ *
+ */
+
 public class ManagementPanel extends JPanel {
 	
 	/**
@@ -20,6 +35,12 @@ public class ManagementPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private JTable jtblTable;
+	
+	/**
+	 * Add form dialog for this panel
+	 */
+	protected AddDialog securityGuardAddDialog; 
+	
 
 	/**
 	 * Create the panel.
@@ -41,6 +62,9 @@ public class ManagementPanel extends JPanel {
 		jpnlButtons.add(jbtnView);
 		
 		JButton jbtnNew = new JButton("New");
+		jbtnNew.addActionListener(event -> {
+			securityGuardAddDialog.setVisible(true);
+		});
 		jpnlButtons.add(jbtnNew);
 		
 		/*
@@ -62,6 +86,9 @@ public class ManagementPanel extends JPanel {
 		jtblTable.getColumnModel().getColumn(5).setPreferredWidth(111);
 		jtblTable.getColumnModel().getColumn(6).setPreferredWidth(111);
 		jscrllpnTable.setViewportView(jtblTable);
+		
+		securityGuardAddDialog = new AddDialog();
+		securityGuardAddDialog.securityGuardManagementPanel = this;
 
 	}
 
