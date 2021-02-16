@@ -38,7 +38,6 @@ public class AddDialog extends JDialog {
 	
 	//Form components
 	private JTextField jtxtfldNameOfVisitor;
-	private JComboBox<String> comboBox;
 	private JLabel jlblPurposeOfVisit;
 	private JLabel lblTimeOfVisit;
 	private JScrollPane scrollPane;
@@ -119,8 +118,7 @@ public class AddDialog extends JDialog {
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBox.gridx = 1;
 		gbc_comboBox.gridy = 1;
-		comboBox.setVisible(rootPaneCheckingEnabled);
-		jpnlContentPane.add(comboBox, gbc_comboBox);
+		jpnlContentPane.add(jcmbVisitorType, gbc_comboBox);
 		/* END OF comboBox */
 		
 		/* jlblPurposeOfVisit Purpose of Visit */
