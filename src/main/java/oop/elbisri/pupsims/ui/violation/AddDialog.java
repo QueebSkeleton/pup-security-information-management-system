@@ -57,7 +57,7 @@ public class AddDialog extends JDialog {
 		
 		/* Dialog Properties */
 		setMinimumSize(new Dimension(700, 600));
-		setTitle("Add Attendance");
+		setTitle("Log new Violation");
 		/* END OF Dialog Properties */
 		
 		/* jpnlButtonActions - button actions panel */
