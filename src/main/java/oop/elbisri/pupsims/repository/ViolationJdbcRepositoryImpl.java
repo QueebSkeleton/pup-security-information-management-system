@@ -2,7 +2,13 @@ package oop.elbisri.pupsims.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -19,6 +25,7 @@ public class ViolationJdbcRepositoryImpl {
 	/* All queries and other DML statements are defined here. 
 	 * One per method defined in this repository.
 	 */
+	private static final String GET_ALL_QUERY = "SELECT * FROM violation";
 	private static final String SAVE_STATEMENT = "INSERT INTO violation VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	
 	/**
@@ -34,6 +41,54 @@ public class ViolationJdbcRepositoryImpl {
 	 */
 	public ViolationJdbcRepositoryImpl(DataSource dataSource) {
 		this.dataSource = dataSource;
+	}
+	
+	/**
+	 * Retrieves all Violations. <br><br>
+	 * 
+	 * This method executes a select all for the attendance table in the specified datasource,
+	 * and maps each record in the result to an Attendance object.
+	 * 
+	 * @return
+	 */
+	public List<Violation> getAll() {
+		// Final list of all retrieved violations
+		List<Violation> violationList = new LinkedList<>();
+		
+		try(
+			// Make a connection	
+			Connection connection = dataSource.getConnection();
+			// Create the statement to be executed later
+			Statement statement = connection.createStatement();
+			// Execute a SELECT all statement (GET_ALL_QUERY) and grab the result set
+			ResultSet violationResultSet = statement.executeQuery(GET_ALL_QUERY)) {
+			
+			// Loop through each record
+			// map it to a violation object,
+			// and add it to the final list
+			while(violationResultSet.next())
+				violationList.add(
+						new Violation(
+								violationResultSet.getLong(1),
+								violationResultSet.getString(2),
+								violationResultSet.getString(3),
+								violationResultSet.getString(4),
+								violationResultSet.getString(5),
+								violationResultSet.getString(6),
+								LocalDateTime.parse(violationResultSet.getString(7),
+										DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+								Violation.Status.valueOf(violationResultSet.getString(8)),
+								violationResultSet.getString(9),
+								violationResultSet.getString(10),
+								violationResultSet.getString(11)));
+			
+		} catch(SQLException e) {
+			// TODO: Handle exceptions in a sophisticated manner.
+			e.printStackTrace();
+		}
+		
+		// Return the list.
+		return violationList;
 	}
 	
 	/**

@@ -121,6 +121,7 @@ public class AddDialog extends JDialog {
 								"Success!",
 								JOptionPane.INFORMATION_MESSAGE);
 						// Refresh the management panel table model
+						violationManagementPanel.updateTable();
 					}
 				}.execute();
 				
