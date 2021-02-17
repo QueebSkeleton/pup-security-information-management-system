@@ -5,6 +5,7 @@ import javax.swing.SwingUtilities;
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 
 import oop.elbisri.pupsims.repository.AttendanceJdbcRepositoryImpl;
+import oop.elbisri.pupsims.repository.ViolationJdbcRepositoryImpl;
 import oop.elbisri.pupsims.ui.MainFrame;
 
 /**
@@ -27,10 +28,13 @@ public class PupSimsApplication {
 		
 		// Create Attendance Repository
 		AttendanceJdbcRepositoryImpl attendanceRepository = new AttendanceJdbcRepositoryImpl(dataSource);
+		// Create Violation Repository
+		ViolationJdbcRepositoryImpl violationRepository = new ViolationJdbcRepositoryImpl(dataSource);
 		
 		SwingUtilities.invokeLater(() -> {
 			MainFrame mainFrame = new MainFrame();
 			mainFrame.setAttendanceRepository(attendanceRepository);
+			mainFrame.setViolationRepository(violationRepository);
 			mainFrame.setVisible(true);
 		});
 		

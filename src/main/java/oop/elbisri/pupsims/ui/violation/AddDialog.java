@@ -7,17 +7,24 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
+
+import oop.elbisri.pupsims.domain.Violation;
 
 /**
  * Add form dialog for logging new Violations.
@@ -45,7 +52,7 @@ public class AddDialog extends JDialog {
 	private JTextField jtxtfldViolationType;
 	private JTextField jtxtfldDate;
 	private JTextField jtxtfldTime;
-	private JComboBox<String> jcmbStatus;
+	private JComboBox<Violation.Status> jcmbStatus;
 	private JTextField jtxtfldViolatedLaw;
 	private JTextArea jtxtareaDescription;
 	private JTextArea jtxtareaViolatorStatement;
@@ -54,6 +61,9 @@ public class AddDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public AddDialog() {
+		
+		// For reference later
+		AddDialog thisDialog = this;
 		
 		/* Dialog Properties */
 		setMinimumSize(new Dimension(700, 600));
@@ -77,6 +87,60 @@ public class AddDialog extends JDialog {
 		/* jbtnLog - save button */
 		JButton jbtnLog = new JButton("Log");
 		jbtnLog.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		
+		// Attach Action Listener (Click)
+		jbtnLog.addActionListener(event -> {
+			try {
+				// Construct a violation domain object from the inputs
+				Violation violation = new Violation(
+						jtxtfldCompleteName.getText(),
+						jtxtfldAddress.getText(),
+						jtxtfldContactNumber.getText(),
+						jtxtfldCompany.getText(),
+						jtxtfldViolationType.getText(),
+						LocalDateTime.parse(jtxtfldDate.getText() + "T" + jtxtfldTime.getText(),
+								DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+						jcmbStatus.getItemAt(jcmbStatus.getSelectedIndex()),
+						jtxtfldViolatedLaw.getText(),
+						jtxtareaDescription.getText(),
+						jtxtareaViolatorStatement.getText());
+				
+				// Save the constructed violation object, with a SwingWorker
+				new SwingWorker<Void, Void>() {
+					@Override
+					protected Void doInBackground() throws Exception {
+						violationManagementPanel.violationRepository.save(violation);
+						return null;
+					}
+					@Override
+					protected void done() {
+						// After the violation object has been saved, show a friendly dialog box
+						JOptionPane.showMessageDialog(
+								thisDialog,
+								"Successfully logged violation.\n",
+								"Success!",
+								JOptionPane.INFORMATION_MESSAGE);
+						// Refresh the management panel table model
+					}
+				}.execute();
+				
+				// Hide this add dialog
+				thisDialog.setVisible(false);
+				
+				// Reset this form
+				thisDialog.resetForm();
+			} catch(DateTimeParseException e) {
+				// If an error occured while parsing the datetime fields,
+				// output a friendly message
+				JOptionPane.showMessageDialog(
+						thisDialog,
+						"Please check your date and time inputs. It must follow ISO Time.\n"
+						+ "Date must be of format: yyyy-MM-dd,\n"
+						+ "and Time must be of format: HH:mm:ss.",
+						"Check your inputs!",
+						JOptionPane.WARNING_MESSAGE);
+			}
+		});
 		jpnlButtonActions.add(jbtnLog);
 		/* END OF jbtnLog */
 
@@ -285,7 +349,7 @@ public class AddDialog extends JDialog {
 
 		/* jcmbStatus - combo box input for status */
 		jcmbStatus = new JComboBox<>();
-		jcmbStatus.setModel(new DefaultComboBoxModel<>(new String[] {"Pending", "Viewed", "Discarded"}));
+		jcmbStatus.setModel(new DefaultComboBoxModel<>(Violation.Status.values()));
 		jcmbStatus.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		GridBagConstraints gbc_jcmbStatus = new GridBagConstraints();
 		gbc_jcmbStatus.insets = new Insets(0, 0, 5, 0);
@@ -388,6 +452,23 @@ public class AddDialog extends JDialog {
 		jtxtareaViolatorStatement.setAlignmentX(0.0f);
 		jscrlpnViolatorStatement.setViewportView(jtxtareaViolatorStatement);
 		/* END OF jtxtareaViolatorStatement */
+	}
+	
+	/**
+	 * Clears and resets the form.
+	 */
+	public void resetForm() {
+		jtxtfldCompleteName.setText("");
+		jtxtfldAddress.setText("");
+		jtxtfldContactNumber.setText("");
+		jtxtfldCompany.setText("");
+		jtxtfldViolationType.setText("");
+		jtxtfldDate.setText("");
+		jtxtfldTime.setText("");
+		jcmbStatus.setSelectedIndex(0);
+		jtxtfldViolatedLaw.setText("");
+		jtxtareaDescription.setText("");
+		jtxtareaViolatorStatement.setText("");
 	}
 
 }

@@ -36,6 +36,27 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+-- -----------------------------------------------------
+-- Table `pupsims_db`.`violation`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pupsims_db`.`violation`;
+
+CREATE TABLE `pupsims_db`.`violation` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `violator_name` varchar(100) NOT NULL,
+  `violator_address` varchar(200) DEFAULT NULL,
+  `violator_contact_number` varchar(30) NOT NULL,
+  `violator_company` varchar(100) DEFAULT NULL,
+  `type` varchar(45) NOT NULL,
+  `committed_on` datetime NOT NULL,
+  `status` char(10) NOT NULL,
+  `violated_law` varchar(100) NOT NULL,
+  `description` varchar(500) NOT NULL,
+  `violator_statement` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
