@@ -7,6 +7,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -48,6 +52,10 @@ public class AddDialog extends JDialog {
 	private JTextField jtxtfldTimeFinished;
 	private JTextArea jtxtareaDescription;
 	private JTextArea jtxtareaOtherNotes;
+	private List<JTextField> issueTextFieldList;
+	
+	// Panel container for issue input fields
+	private JPanel jpnlIssueList;
 
 	/**
 	 * Create the dialog.
@@ -344,6 +352,43 @@ public class AddDialog extends JDialog {
 
 		/* jbtnAddIssue - button for adding issues */
 		JButton jbtnAddIssue = new JButton("Add Issue");
+		
+		// jbtnAddIssue Click Listener
+		jbtnAddIssue.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Create a JLabel - JTextField pair for this issue input
+				
+				/* jlblIssue - the label for this pair */
+				JLabel jlblIssue = new JLabel("Issue #" + (issueTextFieldList.size() + 1));
+				jlblIssue.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+				GridBagConstraints gbc_jlblIssue = new GridBagConstraints();
+				gbc_jlblIssue.anchor = GridBagConstraints.NORTHWEST;
+				gbc_jlblIssue.gridx = 0;
+				gbc_jlblIssue.gridy = issueTextFieldList.size();
+				jpnlIssueList.add(jlblIssue, gbc_jlblIssue);
+				/* END OF jlblIssue */
+				
+				/* jtxtIssue - the input field for this pair */
+				JTextField jtxtIssue = new JTextField();
+				jtxtIssue.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+				GridBagConstraints gbc_jtxtIssue = new GridBagConstraints();
+				gbc_jtxtIssue.anchor = GridBagConstraints.NORTHWEST;
+				gbc_jtxtIssue.fill = GridBagConstraints.HORIZONTAL;
+				gbc_jtxtIssue.gridx = 1;
+				gbc_jtxtIssue.gridy = issueTextFieldList.size();
+				jpnlIssueList.add(jtxtIssue, gbc_jtxtIssue);
+				/* END OF jtxtIssue */
+				
+				// Add jtxtIssue to the list of JTextFields for issues.
+				// This is to reference them later
+				issueTextFieldList.add(jtxtIssue);
+				
+				// Revalidate the dialog component hierarchy
+				revalidate();
+			}
+		});
+		
 		jbtnAddIssue.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		GridBagConstraints gbc_jbtnAddIssue = new GridBagConstraints();
 		gbc_jbtnAddIssue.anchor = GridBagConstraints.EAST;
@@ -365,13 +410,13 @@ public class AddDialog extends JDialog {
 		/* END OF jscrlpnIssueList */
 
 		/* jpnlIssueList - main container panel for issue list form */
-		JPanel jpnlIssueList = new JPanel();
+		jpnlIssueList = new JPanel();
 		jpnlIssueList.setBorder(new EmptyBorder(5, 5, 5, 5));
 		jscrlpnIssueList.setViewportView(jpnlIssueList);
 		GridBagLayout gbl_jpnlIssueList = new GridBagLayout();
 		gbl_jpnlIssueList.columnWidths = new int[]{0};
 		gbl_jpnlIssueList.rowHeights = new int[]{0};
-		gbl_jpnlIssueList.columnWeights = new double[]{Double.MIN_VALUE};
+		gbl_jpnlIssueList.columnWeights = new double[]{0.30, 0.70};
 		gbl_jpnlIssueList.rowWeights = new double[]{Double.MIN_VALUE};
 		jpnlIssueList.setLayout(gbl_jpnlIssueList);
 		/* END OF jpnlIssueList */
@@ -403,6 +448,9 @@ public class AddDialog extends JDialog {
 		jtxtareaOtherNotes.setMargin(new Insets(4, 4, 4, 4));
 		jscrlpnOtherNotes.setViewportView(jtxtareaOtherNotes);
 		/* END OF jtxtareaOtherNotes */
+		
+		/* issueTextFieldList - text field inputs for issues */
+		issueTextFieldList = new ArrayList<>();
 	}
 
 }
