@@ -5,10 +5,11 @@ import java.time.LocalTime;
 import java.util.List;
 
 /**
- * Domain class for an inspection.<br><br>
+ * Domain class for an inspection.<br>
+ * <br>
  * 
- * Contains necessary information for an inspection
- * done by a security guard, for a specific building and floor.
+ * Contains necessary information for an inspection done by a security guard,
+ * for a specific building and floor.
  * 
  * @author Rian Carlo Reyes
  *
@@ -39,27 +40,27 @@ public class Inspection {
 
 	// Database id
 	private Long id;
-	
+
 	// Information about the building that was inspected
 	private Building building;
 	private int floorNumber;
 	private String roomNumbers;
-	
+
 	// General information about the inspection
 	private GeneralCondition generalCondition;
-	
+
 	// Who performed the inspection
 	private Long securityGuardId;
-	
+
 	// When this inspection was conducted
 	private LocalDate date;
 	private LocalTime timeStarted;
 	private LocalTime timeFinished;
-	
+
 	// Descriptive information about this information
 	private String description;
 	private String otherNotes;
-	
+
 	// Necessary issues tracked here
 	private List<String> issues;
 
@@ -82,6 +83,42 @@ public class Inspection {
 			Long securityGuardId, LocalDate date, LocalTime timeStarted, LocalTime timeFinished, String description,
 			String otherNotes, List<String> issues) {
 		super();
+		this.building = building;
+		this.floorNumber = floorNumber;
+		this.roomNumbers = roomNumbers;
+		this.generalCondition = generalCondition;
+		this.securityGuardId = securityGuardId;
+		this.date = date;
+		this.timeStarted = timeStarted;
+		this.timeFinished = timeFinished;
+		this.description = description;
+		this.otherNotes = otherNotes;
+		this.issues = issues;
+	}
+
+	/**
+	 * Constructs an Inspection object with pre-initialized data.<br>
+	 * <br>
+	 * 
+	 * Only used by JDBC code when fetching inspections from the database.
+	 * 
+	 * @param id                    the database id
+	 * @param violatorName
+	 * @param violatorAddress
+	 * @param violatorContactNumber
+	 * @param violatorCompany
+	 * @param type
+	 * @param committedOn
+	 * @param status
+	 * @param violatedLaw
+	 * @param description
+	 * @param violatorStatement
+	 */
+	public Inspection(Long id, Building building, int floorNumber, String roomNumbers,
+			GeneralCondition generalCondition, Long securityGuardId, LocalDate date, LocalTime timeStarted,
+			LocalTime timeFinished, String description, String otherNotes, List<String> issues) {
+		super();
+		this.id = id;
 		this.building = building;
 		this.floorNumber = floorNumber;
 		this.roomNumbers = roomNumbers;

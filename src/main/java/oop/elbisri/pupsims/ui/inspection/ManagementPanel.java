@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 
 import oop.elbisri.pupsims.repository.InspectionJdbcRepositoryImpl;
 
@@ -51,6 +50,11 @@ public class ManagementPanel extends JPanel {
 	 * Add Form Dialog of this panel.
 	 */
 	protected AddDialog inspectionAddDialog;
+	
+	/**
+	 * Table Model of the main table.
+	 */
+	protected InspectionTableModel inspectionTableModel;
 
 	/**
 	 * Construct the panel.
@@ -104,20 +108,15 @@ public class ManagementPanel extends JPanel {
 		
 		/* jtblInspection - Main Panel Table */
 		jtblInspection = new JTable();
-		jtblInspection.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Date", "Building-Floor", "Rooms", "# of Issues", "Condition"
-			}
-		));
-		jtblInspection.getColumnModel().getColumn(0).setPreferredWidth(52);
-		jtblInspection.getColumnModel().getColumn(1).setPreferredWidth(112);
-		jtblInspection.getColumnModel().getColumn(2).setPreferredWidth(60);
-		jtblInspection.getColumnModel().getColumn(3).setPreferredWidth(65);
 		jtblInspection.setRowHeight(25);
 		jtblInspection.setIntercellSpacing(new Dimension(10, 10));
 		jtblInspection.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		
+		// Table Model
+		inspectionTableModel = new InspectionTableModel();
+		inspectionTableModel.inspectionManagementPanel = this;
+		jtblInspection.setModel(inspectionTableModel);
+		
 		jscrlpnInspectionTable.setViewportView(jtblInspection);
 		/* END OF jtblInspection */
 		
@@ -161,6 +160,13 @@ public class ManagementPanel extends JPanel {
 	 */
 	public void setInspectionRepository(InspectionJdbcRepositoryImpl inspectionRepository) {
 		this.inspectionRepository = inspectionRepository;
+	}
+	
+	/**
+	 * Updates the table model and prompts for a JTable redraw.
+	 */
+	public void updateTable() {
+		inspectionTableModel.update();
 	}
 
 }

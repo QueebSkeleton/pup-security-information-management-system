@@ -132,8 +132,8 @@ public class AddDialog extends JDialog {
 								"Successfully logged inspection.\n",
 								"Success!",
 								JOptionPane.INFORMATION_MESSAGE);
-						// Refresh the management panel table model after the attendance has been saved
-						// thisDialog.attendanceManagementPanel.attendanceTableModel.update();
+						// Refresh the management panel table model
+						thisDialog.inspectionManagementPanel.updateTable();
 					}
 				}.execute();
 				
