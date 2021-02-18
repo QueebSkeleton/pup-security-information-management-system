@@ -192,6 +192,7 @@ public class SidebarPanel extends JPanel {
 		JButton jbtnInspectionLogPanel = new JButton("Inspection Log");
 		jbtnInspectionLogPanel.addActionListener(event -> {
 			mainFrame.showInspectionManagementPanel();
+			mainFrame.inspectionManagementPanel.updateTable();
 		});
 		jbtnInspectionLogPanel.setBorderPainted(false);
 		jbtnInspectionLogPanel.setHorizontalAlignment(SwingConstants.LEFT);
