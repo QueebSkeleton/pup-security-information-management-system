@@ -8,9 +8,6 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
--- -----------------------------------------------------
 -- Schema pupsims_db
 -- -----------------------------------------------------
 DROP SCHEMA IF EXISTS `pupsims_db` ;
@@ -54,6 +51,42 @@ CREATE TABLE `pupsims_db`.`violation` (
   `description` varchar(500) NOT NULL,
   `violator_statement` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id`))
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
+
+-- -----------------------------------------------------
+-- Table `pupsims_db`.`inspection`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pupsims_db`.`inspection`;
+
+CREATE TABLE `pupsims_db`.`inspection` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `building_name` varchar(45) NOT NULL,
+  `floor_number` int NOT NULL,
+  `room_numbers` varchar(90) NOT NULL,
+  `general_condition` char(10) NOT NULL,
+  `security_guard_id` bigint DEFAULT NULL,
+  `date` date NOT NULL,
+  `time_started` time NOT NULL,
+  `time_finished` time NOT NULL,
+  `description` varchar(300) NOT NULL,
+  `other_notes` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
+
+-- -----------------------------------------------------
+-- Table `pupsims_db`.`inspection`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pupsims_db`.`inspection_issue`;
+
+CREATE TABLE `pupsims_db`.`inspection_issue` (
+  `inspection_id` bigint NOT NULL,
+  `description` varchar(100) NOT NULL,
+  KEY `FK_ISSUE_INSPECTION_idx` (`inspection_id`),
+  CONSTRAINT `FK_ISSUE_INSPECTION` FOREIGN KEY (`inspection_id`) REFERENCES `inspection` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4
 COLLATE=utf8mb4_0900_ai_ci;

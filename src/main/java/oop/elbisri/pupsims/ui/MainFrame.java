@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import oop.elbisri.pupsims.repository.AttendanceJdbcRepositoryImpl;
+import oop.elbisri.pupsims.repository.InspectionJdbcRepositoryImpl;
 import oop.elbisri.pupsims.repository.ViolationJdbcRepositoryImpl;
 
 /**
@@ -362,6 +363,15 @@ public class MainFrame extends JFrame {
 	 */
 	public void setViolationRepository(ViolationJdbcRepositoryImpl violationRepository) {
 		violationManagementPanel.setViolationRepository(violationRepository);
+	}
+	
+	/**
+	 * Wires an inspection repository to this frame.<br><br>
+	 * 
+	 * @param inspectionRepository the repository to set
+	 */
+	public void setInspectionRepository(InspectionJdbcRepositoryImpl inspectionRepository) {
+		inspectionManagementPanel.setInspectionRepository(inspectionRepository);
 	}
 
 }
