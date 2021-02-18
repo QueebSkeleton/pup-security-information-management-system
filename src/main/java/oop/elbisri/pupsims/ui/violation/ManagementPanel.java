@@ -15,7 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
+
+import oop.elbisri.pupsims.repository.ViolationJdbcRepositoryImpl;
 
 /**
  * Violation Management Panel of this Application. Contains a Table
@@ -39,6 +40,16 @@ public class ManagementPanel extends JPanel {
 	 * The main table of this panel.
 	 */
 	private JTable jtblViolation;
+	
+	/**
+	 * Violation Repository.
+	 */
+	protected ViolationJdbcRepositoryImpl violationRepository;
+	
+	/**
+	 * TableModel of the main table.
+	 */
+	protected ViolationTableModel violationTableModel;
 	
 	/**
 	 * Add Form Dialog of this panel.
@@ -97,20 +108,15 @@ public class ManagementPanel extends JPanel {
 		
 		/* jtblViolation - Main Panel Table */
 		jtblViolation = new JTable();
-		jtblViolation.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"#", "Type", "Brief Description", "When", "Status"
-			}
-		));
-		jtblViolation.getColumnModel().getColumn(0).setPreferredWidth(26);
-		jtblViolation.getColumnModel().getColumn(1).setPreferredWidth(72);
-		jtblViolation.getColumnModel().getColumn(2).setPreferredWidth(124);
-		jtblViolation.getColumnModel().getColumn(3).setPreferredWidth(82);
 		jtblViolation.setRowHeight(25);
 		jtblViolation.setIntercellSpacing(new Dimension(10, 10));
 		jtblViolation.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		
+		// Table Model
+		violationTableModel = new ViolationTableModel();
+		violationTableModel.violationManagementPanel = this;
+		jtblViolation.setModel(violationTableModel);
+		
 		jscrlpnViolationTable.setViewportView(jtblViolation);
 		/* END OF jtblViolation */
 		
@@ -144,6 +150,23 @@ public class ManagementPanel extends JPanel {
 		// Create the add form dialog
 		violationAddDialog = new AddDialog();
 		violationAddDialog.violationManagementPanel = this;
+	}
+	
+	/**
+	 * Sets the violation repository of the internal TableModel that this panel manages,
+	 * and the add form dialog box.
+	 * 
+	 * @param violationRepository the repository to set for the TableModel
+	 */
+	public void setViolationRepository(ViolationJdbcRepositoryImpl violationRepository) {
+		this.violationRepository = violationRepository;
+	}
+	
+	/**
+	 * Updates the table model and prompts for a JTable redraw.
+	 */
+	public void updateTable() {
+		violationTableModel.update();
 	}
 
 }
