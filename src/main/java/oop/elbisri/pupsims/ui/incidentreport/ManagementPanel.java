@@ -1,15 +1,18 @@
 package oop.elbisri.pupsims.ui.incidentreport;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.Font;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import java.awt.FlowLayout;
+import java.awt.Color;
 
 /**
  * Incident Report Management of this Application. Contains a Table
@@ -40,26 +43,43 @@ public class ManagementPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public ManagementPanel() {
+		setBackground(Color.WHITE);
+		setBorder(new EmptyBorder(10, 10, 10, 10));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		JPanel jpnlButtons = new JPanel();
-		jpnlButtons.setBorder(new EmptyBorder(20, 0, 0, 10));
-		FlowLayout flowLayout = (FlowLayout) jpnlButtons.getLayout();
-		flowLayout.setAlignment(FlowLayout.TRAILING);
-		jpnlButtons.setMaximumSize(new Dimension(32767, 150));
-		add(jpnlButtons);
+		JPanel jpnlHeader = new JPanel();
+		jpnlHeader.setBackground(Color.WHITE);
+		jpnlHeader.setAlignmentY(0.0f);
+		jpnlHeader.setAlignmentX(0.0f);
+		jpnlHeader.setBorder(new EmptyBorder(0, 0, 10, 0));
+		jpnlHeader.setMaximumSize(new Dimension(32767, 150));
+		add(jpnlHeader);
+		jpnlHeader.setLayout(new BoxLayout(jpnlHeader, BoxLayout.X_AXIS));
+		
+		/* jlblHeader - Header label */
+		JLabel jlblHeader = new JLabel("Manage Incidents");
+		jlblHeader.setFont(new Font("Segoe UI Semibold", Font.BOLD, 24));
+		jpnlHeader.add(jlblHeader);
+		/* END OF jlblHeader */
+		
+		JPanel jpnlButtonActions = new JPanel();
+		jpnlButtonActions.setBackground(Color.WHITE);
+		jpnlButtonActions.setAlignmentX(0.0f);
+		FlowLayout flowLayout = (FlowLayout) jpnlButtonActions.getLayout();
+		flowLayout.setAlignment(FlowLayout.RIGHT);
+		jpnlHeader.add(jpnlButtonActions);
 		
 		JButton jbtnAdd = new JButton("New Report");
+		jbtnAdd.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		jbtnAdd.setAlignmentY(0.0f);
+		jpnlButtonActions.add(jbtnAdd);
 		jbtnAdd.addActionListener(event -> {
 			incidentAddDialog.setVisible(true);
 		});
-		jpnlButtons.add(jbtnAdd);
-		
-		
-		JButton jbtnDelete = new JButton("Delete");
-		jpnlButtons.add(jbtnDelete);
 		
 		JScrollPane jscrllpnReportTable = new JScrollPane();
+		jscrllpnReportTable.setAlignmentY(0.0f);
+		jscrllpnReportTable.setAlignmentX(0.0f);
 		add(jscrllpnReportTable);
 		
 		jtblReportTable = new JTable();

@@ -5,11 +5,14 @@ import java.awt.FlowLayout;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import java.awt.Font;
+import java.awt.Color;
 
 /**
  * Inventory of Supplies of this Application. Contains a Table
@@ -40,23 +43,36 @@ public class ManagementPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public ManagementPanel() {
+		setBackground(Color.WHITE);
+		setBorder(new EmptyBorder(10, 10, 10, 10));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		JPanel jpnlButtons = new JPanel();
-		jpnlButtons.setBorder(new EmptyBorder(20, 0, 10, 10));
-		FlowLayout flowLayout = (FlowLayout) jpnlButtons.getLayout();
-		flowLayout.setAlignment(FlowLayout.TRAILING);
-		jpnlButtons.setMaximumSize(new Dimension(32767, 50));
-		add(jpnlButtons);
+		JPanel jpnlHeader = new JPanel();
+		jpnlHeader.setBackground(Color.WHITE);
+		jpnlHeader.setBorder(new EmptyBorder(0, 0, 10, 0));
+		jpnlHeader.setMaximumSize(new Dimension(32767, 50));
+		add(jpnlHeader);
+		jpnlHeader.setLayout(new BoxLayout(jpnlHeader, BoxLayout.X_AXIS));
 		
-		JButton jbtnView = new JButton("View ");
-		jpnlButtons.add(jbtnView);
+		/* jlblHeader - Main Header Label */
+		jpnlHeader.setLayout(new BoxLayout(jpnlHeader, BoxLayout.X_AXIS));
+		JLabel jlblHeader = new JLabel("Manage Supplies");
+		jlblHeader.setFont(new Font("Segoe UI Semibold", Font.BOLD, 24));
+		jpnlHeader.add(jlblHeader);
+		/* END OF jlblHeader */
+		
+		JPanel jpnlButtonActions = new JPanel();
+		jpnlButtonActions.setBackground(Color.WHITE);
+		FlowLayout fl_jpnlButtonActions = (FlowLayout) jpnlButtonActions.getLayout();
+		fl_jpnlButtonActions.setAlignment(FlowLayout.RIGHT);
+		jpnlHeader.add(jpnlButtonActions);
 		
 		JButton jbtnAdd = new JButton("Add");
+		jpnlButtonActions.add(jbtnAdd);
+		jbtnAdd.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		jbtnAdd.addActionListener(event ->{
 			inventoryAddDialog.setVisible(true);
 		});
-		jpnlButtons.add(jbtnAdd);
 		
 		JScrollPane jscrllpnTable = new JScrollPane();
 		add(jscrllpnTable);
