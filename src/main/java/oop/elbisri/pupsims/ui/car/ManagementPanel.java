@@ -5,11 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import javax.swing.Box;
+
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -117,32 +115,7 @@ public class ManagementPanel extends JPanel {
 		jtblCarLog.setIntercellSpacing(new Dimension(10, 10));
 		jtblCarLog.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		jscrlpnCarTable.setViewportView(jtblCarLog);
-		/* jpnlTablePagination - Panel for Pagination Components */
-		JPanel jpnlTablePagination = new JPanel();
-		jpnlTablePagination.setBorder(new EmptyBorder(10, 0, 0, 0));
-		jpnlTablePagination.setBackground(Color.WHITE);
-		jpnlTablePagination.setMaximumSize(new Dimension(32767, 60));
-		jpnlTablePagination.setMinimumSize(new Dimension(10, 50));
-		add(jpnlTablePagination);
-		jpnlTablePagination.setLayout(new BoxLayout(jpnlTablePagination, BoxLayout.X_AXIS));
-		/* END OF jpnlTablePagination */
-		
-		/* jlblPageSize - Pagination Size Label */
-		JLabel jlblPageSize = new JLabel("Limit:");
-		jlblPageSize.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		jpnlTablePagination.add(jlblPageSize);
-		/* END OF jlblPageSize */
-		
-		// Spacing
-		jpnlTablePagination.add(Box.createRigidArea(new Dimension(10, 0)));
-		
-		/* jcmbPageSize - Pagination Size Choice Box */
-		JComboBox<String> jcmbPageSize = new JComboBox<>();
-		jcmbPageSize.setMaximumSize(new Dimension(100, 25));
-		jcmbPageSize.setModel(new DefaultComboBoxModel<>(new String[] {"10", "20", "50", "100", "200"}));
-		jcmbPageSize.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		jpnlTablePagination.add(jcmbPageSize);
-		/* END OF jcmbPageSize */
+		/* END OF jtblCarLog */
 		
 		// Create the add form dialog
 		carAddDialog = new AddDialog();

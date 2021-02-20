@@ -1,15 +1,17 @@
 package oop.elbisri.pupsims.ui.securityguard;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -46,32 +48,48 @@ public class ManagementPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public ManagementPanel() {
+		setBackground(Color.WHITE);
+		setBorder(new EmptyBorder(10, 10, 10, 10));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		/*
 		 * Panel made for the buttons needed for Security Guards table 
 		 */
+		JPanel jpnlHeader = new JPanel();
+		jpnlHeader.setBackground(Color.WHITE);
+		jpnlHeader.setMinimumSize(new Dimension(10, 45));
+		jpnlHeader.setAlignmentY(0.0f);
+		jpnlHeader.setAlignmentX(0.0f);
+		jpnlHeader.setBorder(new EmptyBorder(0, 0, 10, 0));
+		jpnlHeader.setMaximumSize(new Dimension(32767, 55));
+		add(jpnlHeader);
+		jpnlHeader.setLayout(new BoxLayout(jpnlHeader, BoxLayout.X_AXIS));
+		
+		JLabel jlblHeader = new JLabel("Manage Security Guards");
+		jlblHeader.setAlignmentX(0.0f);
+		jlblHeader.setFont(new Font("Segoe UI Semibold", Font.BOLD, 24));
+		jpnlHeader.add(jlblHeader);
+		
 		JPanel jpnlButtons = new JPanel();
-		jpnlButtons.setBorder(new EmptyBorder(20, 0, 20, 10));
+		jpnlButtons.setAlignmentX(0.0f);
+		jpnlButtons.setBackground(Color.WHITE);
 		FlowLayout flowLayout = (FlowLayout) jpnlButtons.getLayout();
-		flowLayout.setAlignment(FlowLayout.TRAILING);
-		jpnlButtons.setMaximumSize(new Dimension(32767, 100));
-		add(jpnlButtons);
+		flowLayout.setAlignment(FlowLayout.RIGHT);
+		jpnlHeader.add(jpnlButtons);
 		
-		JButton jbtnView = new JButton("View");
-		jpnlButtons.add(jbtnView);
-		
-		JButton jbtnNew = new JButton("New");
-		jbtnNew.addActionListener(event -> {
+		JButton jbtnAdd = new JButton("Add");
+		jbtnAdd.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		jbtnAdd.addActionListener(event -> {
 			securityGuardAddDialog.setVisible(true);
 		});
-		jpnlButtons.add(jbtnNew);
+		jpnlButtons.add(jbtnAdd);
 		
 		/*
 		 * Panel made for the output of list of Security Guards in the database 
 		 */
 		JScrollPane jscrllpnTable = new JScrollPane();
-		jscrllpnTable.setViewportBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		jscrllpnTable.setAlignmentY(0.0f);
+		jscrllpnTable.setAlignmentX(0.0f);
 		add(jscrllpnTable);
 		
 		jtblTable = new JTable();
@@ -82,9 +100,6 @@ public class ManagementPanel extends JPanel {
 				"ID", "First Name", "Middle Name", "Last Name", "Age", "Contact Number", "SSS ID"
 			}
 		));
-		jtblTable.getColumnModel().getColumn(4).setPreferredWidth(44);
-		jtblTable.getColumnModel().getColumn(5).setPreferredWidth(111);
-		jtblTable.getColumnModel().getColumn(6).setPreferredWidth(111);
 		jscrllpnTable.setViewportView(jtblTable);
 		
 		securityGuardAddDialog = new AddDialog();
