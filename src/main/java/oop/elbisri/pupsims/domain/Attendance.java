@@ -1,6 +1,7 @@
 package oop.elbisri.pupsims.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Domain class for a Security Guard Attendance Log.
@@ -39,6 +40,21 @@ public class Attendance {
 	private LocalDate logDate;
 	
 	/**
+	 * Work in.
+	 */
+	private LocalDateTime workIn;
+	
+	/**
+	 * Work out.
+	 */
+	private LocalDateTime workOut;
+	
+	/**
+	 * Additional remarks.
+	 */
+	private String remarks;
+	
+	/**
 	 * Whether the guard has worked or not for the specified logDate.
 	 */
 	private Status status;
@@ -52,22 +68,25 @@ public class Attendance {
 	 * @param id
 	 * @param securityGuardId
 	 * @param logDate
+	 * @param workIn
+	 * @param workOut
+	 * @param remarks
 	 * @param status
 	 */
-	public Attendance(Long id, Long securityGuardId, LocalDate logDate, Status status) {
+	public Attendance(Long id, Long securityGuardId, LocalDate logDate, LocalDateTime workIn, LocalDateTime workOut,
+			String remarks, Status status) {
 		super();
 		this.id = id;
 		this.securityGuardId = securityGuardId;
 		this.logDate = logDate;
+		this.workIn = workIn;
+		this.workOut = workOut;
+		this.remarks = remarks;
 		this.status = status;
 	}
 
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public Long getSecurityGuardId() {
@@ -84,6 +103,30 @@ public class Attendance {
 
 	public void setLogDate(LocalDate logDate) {
 		this.logDate = logDate;
+	}
+
+	public LocalDateTime getWorkIn() {
+		return workIn;
+	}
+
+	public void setWorkIn(LocalDateTime workIn) {
+		this.workIn = workIn;
+	}
+
+	public LocalDateTime getWorkOut() {
+		return workOut;
+	}
+
+	public void setWorkOut(LocalDateTime workOut) {
+		this.workOut = workOut;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 
 	public Status getStatus() {
