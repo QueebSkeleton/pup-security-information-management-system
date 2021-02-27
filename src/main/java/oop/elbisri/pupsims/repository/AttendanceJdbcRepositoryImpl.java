@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class AttendanceJdbcRepositoryImpl {
 	 * One per method defined in this repository.
 	 */
 	private static final String GET_ALL_QUERY = "SELECT * FROM attendance";
-	private static final String SAVE_STATEMENT = "INSERT INTO attendance VALUES (null, ?, ?, ?)";
+	private static final String SAVE_STATEMENT = "INSERT INTO attendance VALUES (null, ?, ?, ?, ?, ?, ?)";
 	
 	/**
 	 * The main datasource that this repository retrieves and manipulates data.
@@ -72,6 +74,11 @@ public class AttendanceJdbcRepositoryImpl {
 							attendanceResultSet.getLong("id"),
 							attendanceResultSet.getLong("security_guard_id"),
 							LocalDate.parse(attendanceResultSet.getString("log_date")),
+							LocalDateTime.parse(attendanceResultSet.getString("work_in"),
+									DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+							LocalDateTime.parse(attendanceResultSet.getString("work_out"),
+									DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+							attendanceResultSet.getString("remarks"),
 							Attendance.Status.valueOf(attendanceResultSet.getString("log_status"))));
 			
 		} catch(SQLException e) {
@@ -98,7 +105,10 @@ public class AttendanceJdbcRepositoryImpl {
 			// Bind the attendance fields to the prepared statement
 			insertAttendanceStatement.setLong(1, attendance.getSecurityGuardId());
 			insertAttendanceStatement.setString(2, attendance.getLogDate().toString());
-			insertAttendanceStatement.setString(3, attendance.getStatus().toString());
+			insertAttendanceStatement.setString(3, attendance.getWorkIn().toString());
+			insertAttendanceStatement.setString(4, attendance.getWorkOut().toString());
+			insertAttendanceStatement.setString(5, attendance.getRemarks());
+			insertAttendanceStatement.setString(6, attendance.getStatus().toString());
 			
 			// Execute the insert statement
 			insertAttendanceStatement.execute();

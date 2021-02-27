@@ -27,6 +27,9 @@ CREATE TABLE IF NOT EXISTS `pupsims_db`.`attendance` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `security_guard_id` BIGINT NOT NULL,
   `log_date` DATE NOT NULL,
+  `work_in` DATETIME NOT NULL,
+  `work_out` DATETIME NOT NULL,
+  `remarks` VARCHAR(300) NULL,
   `log_status` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
@@ -100,4 +103,4 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 DROP USER 'pupsims'@'localhost';
 CREATE USER 'pupsims'@'localhost' IDENTIFIED BY 'pupsimspass_123';
-GRANT ALL PRIVILEGES ON `pupsims_db`.* TO 'pupsims'@'localhost'
+GRANT ALL PRIVILEGES ON `pupsims_db`.* TO 'pupsims'@'localhost';
