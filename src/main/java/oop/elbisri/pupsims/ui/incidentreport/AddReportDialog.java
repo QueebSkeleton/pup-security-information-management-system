@@ -10,11 +10,17 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -45,12 +51,19 @@ public class AddReportDialog extends JDialog {
 	private JTextField jtxtfldInjuredPersonAge;
 	private JTextField jtxtfldInjuredPersonMedicalNotes;
 	private JTextField jtxtfldDate;
+	private JTextArea  jtxtarDescriptiveDetails;
 
 	/**
 	 * Create the dialog.
 	 */
 	public AddReportDialog() {
+		
+		// For referencing later
+		AddReportDialog thisDialog = this; 
+		
+		
 		setTitle("New Incident");
+		
 		setBounds(100, 100, 530, 530);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -228,7 +241,7 @@ public class AddReportDialog extends JDialog {
 			contentPanel.add(jpnlDescriptiveDetails);
 			jpnlDescriptiveDetails.setLayout(null);
 			{
-				JTextArea jtxtarDescriptiveDetails = new JTextArea();
+				jtxtarDescriptiveDetails = new JTextArea();
 				jtxtarDescriptiveDetails.setFont(new Font("Tahoma", Font.PLAIN, 12));
 				jtxtarDescriptiveDetails.setLineWrap(true);
 				jtxtarDescriptiveDetails.setWrapStyleWord(true);
@@ -241,15 +254,35 @@ public class AddReportDialog extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton jrdbtnSave = new JButton("SAVE");
-				jrdbtnSave.setActionCommand("OK");
-				buttonPane.add(jrdbtnSave);
-				getRootPane().setDefaultButton(jrdbtnSave);
+				JButton jbtnSave = new JButton("SAVE");
+				jbtnSave.addActionListener(event -> {
+					try {
+						Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db", "pupsims", "pupsimspass_123");
+						Statement statement = connection.createStatement();
+						
+						statement.execute("INSERT INTO incident_report VALUES ('" + jtxtfldIncidentID.getText() + "','" + jtxtfldDate.getText() + "','" 
+									       										  + jtxtfldTime.getText() + "','" + jtxtfldInjuredPersonName.getText() + "','" 
+									       										  + jtxtfldInjuredPersonAge.getText() + "','" + jtxtfldInjuredPersonMedicalNotes.getText() + "','"
+									       										  + jtxtarDescriptiveDetails.getText() + "')");
+					
+						JOptionPane.showMessageDialog(null, "Report successfully saved!");
+						
+					} catch(SQLException e) {
+					  JOptionPane.showMessageDialog(null, "An error occured while saving.\n\n Details:" + e);
+					}
+
+					// Dialog will close right after creation
+					this.setVisible(false);
+				});
+				buttonPane.add(jbtnSave);
+				getRootPane().setDefaultButton(jbtnSave);
 			}
 			{
-				JButton jrdbtnCancel = new JButton("CANCEL");
-				jrdbtnCancel.setActionCommand("Cancel");
-				buttonPane.add(jrdbtnCancel);
+				JButton jbtnCancel = new JButton("CANCEL");
+				jbtnCancel.addActionListener(event -> {
+					thisDialog.setVisible(false);
+				});
+				buttonPane.add(jbtnCancel);
 			}
 		}
 	}
