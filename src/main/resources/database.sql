@@ -99,6 +99,21 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- -----------------------------------------------------
+-- Table `pupsims_db`.`security_guard`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pupsims_db`.`security_guard`;
+
+CREATE TABLE IF NOT EXISTS `pupsims_db`.`security_guard` (
+	`id` BIGINT NOT NULL AUTO_INCREMENT, 
+	`employee_id` BIGINT NOT NULL, 
+	`first_name` VARCHAR(45) NOT NULL, 
+	`middle_name` VARCHAR(45), 
+	`last_name` VARCHAR(45), 
+	`sex` CHAR(10), 
+	`sss_id` BIGINT, 
+	`tin_number` BIGINT, 
+	PRIMARY KEY (`id`))	
+-- -----------------------------------------------------
 -- Main application user
 -- -----------------------------------------------------
 DROP USER 'pupsims'@'localhost';
