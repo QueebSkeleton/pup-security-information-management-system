@@ -253,12 +253,12 @@ public class AddDialog extends JDialog {
 						 else
 							 strSexInput = "No sex selected";
 						 
-						 statement.execute("INSERT INTO security_guard VALUES(" + jtxtfldEmployeeID.getText() + "," + 
-								 			jtxtfldFirstName.getText() + "," + jtxtfldMiddleName.getText() + "," + 
-								 			jtxtfldLastName.getText() + "," + strSexInput + "," + 
-								 			jtxtfldSSSID.getText() + "," + jtxtfldTINNumber.getText() );
+						 statement.execute("INSERT INTO security_guard VALUES('" + jtxtfldEmployeeID.getText() + "','" + 
+								 			jtxtfldFirstName.getText() + "','" + jtxtfldMiddleName.getText() + "','" + 
+								 			jtxtfldLastName.getText() + "','" + strSexInput + "','" + 
+								 			jtxtfldSSSID.getText() + "','" + jtxtfldTINNumber.getText() + "')");
 
-						  JOptionPane.showMessageDialog(null, "Successfully created new security guard!");
+						  JOptionPane.showMessageDialog(null, "Security guard successfully created!");
 						} catch(SQLException e) {
 						  JOptionPane.showMessageDialog(null, "An error occured while saving.\n\n Details:" + e);
 					}
@@ -271,7 +271,6 @@ public class AddDialog extends JDialog {
 			}
 			{
 				JButton jbtnCancelButton = new JButton("Cancel");
-				jbtnCancelButton.setActionCommand("Cancel");
 				jbtnCancelButton.addActionListener(event -> {
 					thisDialog.setVisible(false);
 				});
