@@ -44,6 +44,7 @@ public class AddReportDialog extends JDialog {
 	private JTextField jtxtfldInjuredPersonName;
 	private JTextField jtxtfldInjuredPersonAge;
 	private JTextField jtxtfldInjuredPersonMedicalNotes;
+	private JTextField jtxtfldDate;
 
 	/**
 	 * Create the dialog.
@@ -98,6 +99,16 @@ public class AddReportDialog extends JDialog {
 			/*
 			 * TO DO: A selection Pane where user can choose date from predefined choices (Month/Day/Year) 
 			 */
+			{
+				jtxtfldDate = new JTextField();
+				GridBagConstraints gbc_jtxtfldDate = new GridBagConstraints();
+				gbc_jtxtfldDate.insets = new Insets(0, 0, 5, 0);
+				gbc_jtxtfldDate.fill = GridBagConstraints.HORIZONTAL;
+				gbc_jtxtfldDate.gridx = 1;
+				gbc_jtxtfldDate.gridy = 1;
+				jpnlIncidentDetails.add(jtxtfldDate, gbc_jtxtfldDate);
+				jtxtfldDate.setColumns(10);
+			}
 			{
 				JLabel jlblTime = new JLabel("Time:");
 				GridBagConstraints gbc_jlblTime = new GridBagConstraints();
@@ -230,15 +241,15 @@ public class AddReportDialog extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				JButton jrdbtnSave = new JButton("SAVE");
+				jrdbtnSave.setActionCommand("OK");
+				buttonPane.add(jrdbtnSave);
+				getRootPane().setDefaultButton(jrdbtnSave);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				JButton jrdbtnCancel = new JButton("CANCEL");
+				jrdbtnCancel.setActionCommand("Cancel");
+				buttonPane.add(jrdbtnCancel);
 			}
 		}
 	}
