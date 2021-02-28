@@ -81,22 +81,20 @@ DEFAULT CHARSET=utf8mb4
 COLLATE=utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
--- Table `pupsims_db`.`inspection`
+-- Table `pupsims_db`.`incident_report`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `pupsims_db`.`inspection_issue`;
+DROP TABLE IF EXISTS `pupsims_db`.`incident_report`;
 
-CREATE TABLE `pupsims_db`.`inspection_issue` (
-  `inspection_id` bigint NOT NULL,
-  `description` varchar(100) NOT NULL,
-  KEY `FK_ISSUE_INSPECTION_idx` (`inspection_id`),
-  CONSTRAINT `FK_ISSUE_INSPECTION` FOREIGN KEY (`inspection_id`) REFERENCES `inspection` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
-ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_0900_ai_ci;
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+CREATE TABLE IF NOT EXISTS `pupsims_db`.`incident_report` (
+	`id` BIGINT NOT NULL AUTO_INCREMENT,
+	`incident_id` BIGINT NOT NULL,
+	`incident_date` VARCHAR (20) NOT NULL,
+	`incident_time` VARCHAR (20) NOT NULL,
+	`injured_name`	VARCHAR (45),
+	`age` SMALLINT,
+	`medical_notes` VARCHAR (150),
+	`descriptive_details` VARCHAR(300) NOT NULL,
+	PRIMARY KEY (`id`))
 
 -- -----------------------------------------------------
 -- Main application user
