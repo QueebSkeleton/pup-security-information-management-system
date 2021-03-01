@@ -128,6 +128,22 @@ CREATE TABLE `pupsims_db`.`inventory_of_supplies` (
 	`item_condition` CHAR(15) NOT NULL,
 	`price` DOUBLE NOT NULL,
 	PRIMARY KEY (`product_code`));
+    
+    -- -----------------------------------------------------
+-- Table `pupsims_db`.`visitor_log'
+-- -----------------------------------------------------
+
+DROP TABLE IF EXISTS `pupsims_db`.`visitor_log`;
+
+CREATE TABLE `pupsims_db`.`visitor_log`(
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `name_of_visitor` VARCHAR(50) NOT NULL,
+  `visitor_type` VARCHAR(10) NOT NULL,
+  `purpose_of_visit` VARCHAR(100) NOT NULL,
+  `time_of_visit` VARCHAR(20) NOT NULL,
+  `time_of_leave` VARCHAR(20) NOT NULL,
+  PRIMARY KEY(`id`)
+);
 	
 -- -----------------------------------------------------
 -- Table `pupsims_db`.`inspection`
@@ -142,7 +158,7 @@ CREATE TABLE `pupsims_db`.`inspection_issue` (
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4
 COLLATE=utf8mb4_0900_ai_ci;
-	
+
 -- -----------------------------------------------------
 -- Main application user
 -- -----------------------------------------------------

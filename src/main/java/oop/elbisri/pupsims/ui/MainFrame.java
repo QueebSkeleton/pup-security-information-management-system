@@ -236,6 +236,8 @@ public class MainFrame extends JFrame {
 		else if(jpnlCurrentShownPanel != null)
 			jpnlContentPane.remove(jpnlCurrentShownPanel);
 		
+		// Refresh the table
+		visitorManagementPanel.updateTable();
 		// Set the visitor log management panel as the new panel
 		jpnlCurrentShownPanel = visitorManagementPanel;
 		jpnlContentPane.add(visitorManagementPanel);

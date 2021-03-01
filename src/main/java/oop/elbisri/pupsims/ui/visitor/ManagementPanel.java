@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * Visitor Management Panel of this Application. Contains a Table
@@ -40,6 +39,8 @@ public class ManagementPanel extends JPanel {
 	 * Add Form Dialog of this panel.
 	 */
 	protected AddDialog visitorAddDialog;
+	
+	protected VisitorTableModel visitorTableModel;
 	
 	/**
 	 * Construct the panel.
@@ -80,6 +81,7 @@ public class ManagementPanel extends JPanel {
 		JButton jbtnShowAddForm = new JButton("Add");
 		jbtnShowAddForm.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		jbtnShowAddForm.addActionListener(event -> {
+			visitorAddDialog.resetForm();
 			visitorAddDialog.setVisible(true);
 		});
 		jpnlButtonActions.add(jbtnShowAddForm);
@@ -99,17 +101,8 @@ public class ManagementPanel extends JPanel {
 		
 		/* jtblVisitorLog - Main Panel Table */
 		jtblVisitorLog = new JTable();
-		jtblVisitorLog.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Name", "Type of Visitor", "Purpose of visit", "Time in", "Time out"
-			}
-		));
-		jtblVisitorLog.getColumnModel().getColumn(0).setPreferredWidth(100);
-		jtblVisitorLog.getColumnModel().getColumn(1).setPreferredWidth(100);
-		jtblVisitorLog.getColumnModel().getColumn(2).setPreferredWidth(120);
-		jtblVisitorLog.getColumnModel().getColumn(3).setPreferredWidth(70);
+		visitorTableModel = new VisitorTableModel();
+		jtblVisitorLog.setModel(visitorTableModel);
 		jtblVisitorLog.setRowHeight(25);
 		jtblVisitorLog.setIntercellSpacing(new Dimension(10, 10));
 		jtblVisitorLog.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -118,6 +111,10 @@ public class ManagementPanel extends JPanel {
 		// Create the add form dialog
 		visitorAddDialog = new AddDialog();
 		visitorAddDialog.visitorManagementPanel = this;
+	}
+	
+	public void updateTable() {
+		visitorTableModel.refresh();
 	}
 
 }
