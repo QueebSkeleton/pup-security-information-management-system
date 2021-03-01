@@ -288,6 +288,8 @@ public class MainFrame extends JFrame {
 		else if (jpnlCurrentShownPanel != null)
 			jpnlContentPane.remove(jpnlCurrentShownPanel); 
 		
+		// Refresh the table
+		securityGuardManagementPanel.updateTable();
 		// Set the security guard management panel as the new panel
 		jpnlCurrentShownPanel = securityGuardManagementPanel; 
 		jpnlContentPane.add(securityGuardManagementPanel);

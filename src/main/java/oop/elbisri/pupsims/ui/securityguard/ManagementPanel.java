@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 
 
 
@@ -42,6 +41,8 @@ public class ManagementPanel extends JPanel {
 	 * Add form dialog for this panel
 	 */
 	protected AddDialog securityGuardAddDialog; 
+	
+	protected SecurityGuardTableModel securityGuardTableModel;
 	
 
 	/**
@@ -93,18 +94,17 @@ public class ManagementPanel extends JPanel {
 		add(jscrllpnTable);
 		
 		jtblTable = new JTable();
-		jtblTable.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"ID", "First Name", "Middle Name", "Last Name", "Age", "Contact Number", "SSS ID"
-			}
-		));
+		securityGuardTableModel = new SecurityGuardTableModel();
+		jtblTable.setModel(securityGuardTableModel);
 		jscrllpnTable.setViewportView(jtblTable);
 		
 		securityGuardAddDialog = new AddDialog();
 		securityGuardAddDialog.securityGuardManagementPanel = this;
 
+	}
+	
+	public void updateTable() {
+		securityGuardTableModel.refresh();
 	}
 
 }

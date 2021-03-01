@@ -7,9 +7,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -265,6 +265,9 @@ public class AddDialog extends JDialog {
 					
 					// To close the dialog prompt right after creation
 					this.setVisible(false);
+					
+					// Update the table
+					securityGuardManagementPanel.updateTable();
 				});
 				buttonPane.add(jbtnSaveButton);
 				getRootPane().setDefaultButton(jbtnSaveButton);
