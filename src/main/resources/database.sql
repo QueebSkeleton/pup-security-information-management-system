@@ -136,7 +136,7 @@ CREATE TABLE `pupsims_db`.`inventory_of_supplies` (
 DROP TABLE IF EXISTS `pupsims_db`.`visitor_log`;
 
 CREATE TABLE `pupsims_db`.`visitor_log`(
-  `id` BIGINT NOT NULL,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name_of_visitor` VARCHAR(50) NOT NULL,
   `visitor_type` VARCHAR(10) NOT NULL,
   `purpose_of_visit` VARCHAR(100) NOT NULL,

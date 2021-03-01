@@ -53,6 +53,7 @@ public class AddDialog extends JDialog {
 	private JPanel buttonPane;
 	private JButton jbtnOk;
 	private JButton jbtnCancel;
+	private JComboBox<String> jcmbVisitorType;
 
 	protected ManagementPanel visitorManagementPanel;
 	
@@ -118,7 +119,7 @@ public class AddDialog extends JDialog {
 		
 		//Create combo box for visitor type
 		//The use of combo box makes it appealing to the eyes of use
-		JComboBox<String> jcmbVisitorType = new JComboBox<>();
+		jcmbVisitorType = new JComboBox<>();
 		jcmbVisitorType.setModel(new DefaultComboBoxModel<>(new String[] {"Alumnus", "Parent"}));
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.anchor = GridBagConstraints.NORTH;
@@ -223,14 +224,20 @@ public class AddDialog extends JDialog {
 				 Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db", "pupsims", "pupsimspass_123"); 
 				 Statement statement = connection.createStatement();
 				 
-				statement.execute("INSERT INTO visitor_log VALUES ('"+ jtxtfldNameOfVisitor.getText() +"','"+ visitorType +"', '"+ txtPurposeOfVisit.getText() +"', '"
+				statement.execute("INSERT INTO visitor_log VALUES (NULL, '"+ jtxtfldNameOfVisitor.getText() +"','"+ visitorType +"', '"+ txtPurposeOfVisit.getText() +"', '"
 						+ jtxtfldTimeOfVisit.getText() + "', '"+ jtxtfldTimeOfLeave.getText() +"')");
 				JOptionPane.showMessageDialog(thisDialog, "Visitor added!");
+				// Refresh the table
+				visitorManagementPanel.updateTable();
+				
+				//Close the dialog after saving
+				this.setVisible(false);
+				
+				statement.close();
+				connection.close();
 			}catch(SQLException e) {
 				JOptionPane.showMessageDialog(thisDialog,"An error occured while saving... \n \n Details: "+e );
 			}
-			//Close the dialog after saving
-			this.setVisible(false);
 			
 		});
 		buttonPane.add(jbtnOk);
@@ -243,5 +250,13 @@ public class AddDialog extends JDialog {
 		});
 		buttonPane.add(jbtnCancel);
 		
+	}
+	
+	public void resetForm() {
+		jtxtfldNameOfVisitor.setText("");
+		jcmbVisitorType.setSelectedIndex(0);
+		txtPurposeOfVisit.setText("");
+		jtxtfldTimeOfVisit.setText("");
+		jtxtfldTimeOfLeave.setText("");
 	}
 }
