@@ -19,24 +19,6 @@ CREATE SCHEMA IF NOT EXISTS `pupsims_db` DEFAULT CHARACTER SET utf8mb4 COLLATE u
 USE `pupsims_db` ;
 
 -- -----------------------------------------------------
--- Table `pupsims_db`.`attendance`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `pupsims_db`.`attendance` ;
-
-CREATE TABLE IF NOT EXISTS `pupsims_db`.`attendance` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `security_guard_id` BIGINT NOT NULL,
-  `log_date` DATE NOT NULL,
-  `work_in` DATETIME NOT NULL,
-  `work_out` DATETIME NOT NULL,
-  `remarks` VARCHAR(300) NULL,
-  `log_status` VARCHAR(10) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
--- -----------------------------------------------------
 -- Table `pupsims_db`.`violation`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `pupsims_db`.`violation`;
@@ -109,6 +91,30 @@ CREATE TABLE IF NOT EXISTS `pupsims_db`.`security_guard` (
 	`sss_id` BIGINT, 
 	`tin_number` BIGINT, 
 	PRIMARY KEY (`employee_id`));
+
+-- -----------------------------------------------------
+-- Table `pupsims_db`.`attendance`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pupsims_db`.`attendance` ;
+
+CREATE TABLE IF NOT EXISTS `pupsims_db`.`attendance` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `security_guard_id` BIGINT NOT NULL,
+  `log_date` DATE NOT NULL,
+  `work_in` TIME NOT NULL,
+  `work_out` TIME NOT NULL,
+  `remarks` VARCHAR(300) NULL,
+  `log_status` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `FK_ATTENDANCE_SECURITY_GUARD`
+    FOREIGN KEY (`security_guard_id`)
+    REFERENCES `pupsims_db`.`security_guard` (`employee_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
 -- -----------------------------------------------------
 -- Table `pupsims_db`.`inventory_of_supplies`
 -- -----------------------------------------------------
@@ -130,12 +136,28 @@ CREATE TABLE `pupsims_db`.`inventory_of_supplies` (
 DROP TABLE IF EXISTS `pupsims_db`.`visitor_log`;
 
 CREATE TABLE `pupsims_db`.`visitor_log`(
-`name_of_visitor` VARCHAR(50) NOT NULL,
-`visitor_type` VARCHAR(10) NOT NULL,
-`purpose_of_visit` VARCHAR(100) NOT NULL,
-`time_of_visit` VARCHAR(20) NOT NULL,
-`time_of_leave` VARCHAR(20) NOT NULL
+  `id` BIGINT NOT NULL,
+  `name_of_visitor` VARCHAR(50) NOT NULL,
+  `visitor_type` VARCHAR(10) NOT NULL,
+  `purpose_of_visit` VARCHAR(100) NOT NULL,
+  `time_of_visit` VARCHAR(20) NOT NULL,
+  `time_of_leave` VARCHAR(20) NOT NULL,
+  PRIMARY KEY(`id`)
 );
+	
+-- -----------------------------------------------------
+-- Table `pupsims_db`.`inspection`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pupsims_db`.`inspection_issue`;
+
+CREATE TABLE `pupsims_db`.`inspection_issue` (
+  `inspection_id` bigint NOT NULL,
+  `description` varchar(100) NOT NULL,
+  KEY `FK_ISSUE_INSPECTION_idx` (`inspection_id`),
+  CONSTRAINT `FK_ISSUE_INSPECTION` FOREIGN KEY (`inspection_id`) REFERENCES `inspection` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
 -- Main application user

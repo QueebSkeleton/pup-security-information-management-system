@@ -13,8 +13,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
-import oop.elbisri.pupsims.repository.AttendanceJdbcRepositoryImpl;
-
 /**
  * Attendance Management Panel of this Application. Contains a Table
  * showing all logged attendances of each security guard, and a Dialog
@@ -39,14 +37,9 @@ public class ManagementPanel extends JPanel {
 	private JTable jtblAttendance;
 	
 	/**
-	 * Attendance Repository.
-	 */
-	protected AttendanceJdbcRepositoryImpl attendanceRepository;
-	
-	/**
 	 * TableModel of the main table.
 	 */
-	protected PaginatingTableModel attendanceTableModel;
+	protected AttendanceTableModel attendanceTableModel;
 	
 	/**
 	 * Add Form Dialog of this panel.
@@ -107,7 +100,7 @@ public class ManagementPanel extends JPanel {
 		jtblAttendance.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		
 		// Table Model
-		attendanceTableModel = new PaginatingTableModel();
+		attendanceTableModel = new AttendanceTableModel();
 		attendanceTableModel.attendanceManagementPanel = this;
 		jtblAttendance.setModel(attendanceTableModel);
 		
@@ -117,16 +110,6 @@ public class ManagementPanel extends JPanel {
 		// Create the add form dialog
 		attendanceAddDialog = new AddDialog();
 		attendanceAddDialog.attendanceManagementPanel = this;
-	}
-	
-	/**
-	 * Sets the attendance repository of the internal TableModel that this panel manages,
-	 * and the add form dialog box.
-	 * 
-	 * @param attendanceRepository the repository to set for the TableModel
-	 */
-	public void setAttendanceRepository(AttendanceJdbcRepositoryImpl attendanceRepository) {
-		this.attendanceRepository = attendanceRepository;
 	}
 	
 	/**

@@ -7,10 +7,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import oop.elbisri.pupsims.repository.AttendanceJdbcRepositoryImpl;
-import oop.elbisri.pupsims.repository.InspectionJdbcRepositoryImpl;
-import oop.elbisri.pupsims.repository.ViolationJdbcRepositoryImpl;
-
 /**
  * Main Frame of the Application. Every interaction possible for
  * this data-entry system is made in here.
@@ -345,39 +341,6 @@ public class MainFrame extends JFrame {
 		// Redraw the whole frame
 		revalidate();
 		repaint();
-	}
-	
-	
-	/**
-	 * Wires an attendance repository to this frame.<br><br>
-	 * 
-	 * Since the frame creates and manages the Attendance Panel
-	 * (and this panel needs an attendance repository),
-	 * either we also create the attendance repository in this class (but too tightly coupled),
-	 * or create a convenience function so we can simply wire it.
-	 * 
-	 * @param attendanceRepository the repository to set
-	 */
-	public void setAttendanceRepository(AttendanceJdbcRepositoryImpl attendanceRepository) {
-		attendanceManagementPanel.setAttendanceRepository(attendanceRepository);
-	}
-	
-	/**
-	 * Wires a violation repository to this frame.<br><br>
-	 * 
-	 * @param violationRepository the repository to set
-	 */
-	public void setViolationRepository(ViolationJdbcRepositoryImpl violationRepository) {
-		violationManagementPanel.setViolationRepository(violationRepository);
-	}
-	
-	/**
-	 * Wires an inspection repository to this frame.<br><br>
-	 * 
-	 * @param inspectionRepository the repository to set
-	 */
-	public void setInspectionRepository(InspectionJdbcRepositoryImpl inspectionRepository) {
-		inspectionManagementPanel.setInspectionRepository(inspectionRepository);
 	}
 
 }

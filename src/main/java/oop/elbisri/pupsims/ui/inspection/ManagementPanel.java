@@ -13,8 +13,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
-import oop.elbisri.pupsims.repository.InspectionJdbcRepositoryImpl;
-
 /**
  * Building Inspection Management Panel of this Application. Contains a Table
  * showing all logged building inspection each night, and a Dialog
@@ -37,11 +35,6 @@ public class ManagementPanel extends JPanel {
 	 * The main table of this panel.
 	 */
 	private JTable jtblInspection;
-	
-	/**
-	 * Inspection Repository.
-	 */
-	protected InspectionJdbcRepositoryImpl inspectionRepository;
 	
 	/**
 	 * Add Form Dialog of this panel.
@@ -93,6 +86,7 @@ public class ManagementPanel extends JPanel {
 		JButton jbtnShowAddForm = new JButton("Add");
 		jbtnShowAddForm.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		jbtnShowAddForm.addActionListener(event -> {
+			inspectionAddDialog.resetForm();
 			inspectionAddDialog.setVisible(true);
 		});
 		jpnlButtonActions.add(jbtnShowAddForm);
@@ -120,16 +114,6 @@ public class ManagementPanel extends JPanel {
 		// Create the add form dialog
 		inspectionAddDialog = new AddDialog();
 		inspectionAddDialog.inspectionManagementPanel = this;
-	}
-	
-	/**
-	 * Sets the inspection repository of the internal TableModel that this panel manages,
-	 * and the add form dialog box.
-	 * 
-	 * @param inspectionRepository the repository to set
-	 */
-	public void setInspectionRepository(InspectionJdbcRepositoryImpl inspectionRepository) {
-		this.inspectionRepository = inspectionRepository;
 	}
 	
 	/**

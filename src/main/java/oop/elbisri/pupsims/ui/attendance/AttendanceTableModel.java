@@ -1,4 +1,4 @@
-package oop.elbisri.pupsims.ui.inspection;
+package oop.elbisri.pupsims.ui.attendance;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,19 +6,19 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 
-public class InspectionTableModel extends AbstractTableModel {
+public class AttendanceTableModel extends AbstractTableModel {
 
-	private class InspectionRecord {
+	private class AttendanceRecord {
+		String securityGuardName;
 		String date;
-		String buildingFloor;
-		String roomNumbers;
-		int numberOfIssues;
-		String condition;
+		String status;
+		String workIn;
+		String workOut;
 	}
 
 	/**
@@ -28,14 +28,9 @@ public class InspectionTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Column names for this model.
+	 * Attendance Management Panel that owns this dialog box.
 	 */
-	private static final String[] columnNames = { "#", "Date", "Building-Floor", "Rooms", "# of Issues", "Condition" };
-
-	/**
-	 * Inspection Management Panel that owns this dialog box.
-	 */
-	protected ManagementPanel inspectionManagementPanel;
+	protected ManagementPanel attendanceManagementPanel;
 
 	/**
 	 * Internal cache of this model.<br>
@@ -44,9 +39,9 @@ public class InspectionTableModel extends AbstractTableModel {
 	 * A call to update() will update this cache, and prompts redraw of the
 	 * listening JTable.
 	 */
-	private List<InspectionRecord> internalCache;
+	private List<AttendanceRecord> internalCache;
 
-	public InspectionTableModel() {
+	public AttendanceTableModel() {
 		super();
 		internalCache = new ArrayList<>();
 	}
@@ -62,7 +57,7 @@ public class InspectionTableModel extends AbstractTableModel {
 		 * Since the number of columns of this table is the same as the number of
 		 * elements in the columnNames array, just return its length field.
 		 */
-		return columnNames.length;
+		return 6;
 	}
 
 	/**
@@ -73,7 +68,30 @@ public class InspectionTableModel extends AbstractTableModel {
 	 */
 	@Override
 	public String getColumnName(int columnIndex) {
-		return columnNames[columnIndex];
+		switch (columnIndex) {
+
+		case 0:
+			return "#";
+
+		case 1:
+			return "Name";
+
+		case 2:
+			return "Date";
+
+		case 3:
+			return "Status";
+
+		case 4:
+			return "Work In";
+
+		case 5:
+			return "Work Out";
+
+		default:
+			return null;
+
+		}
 	}
 
 	/**
@@ -89,7 +107,7 @@ public class InspectionTableModel extends AbstractTableModel {
 
 	/**
 	 * Gets the value at the specified row and column. Since it has a backing
-	 * repository as its source of data of inspections, a cache is implemented that
+	 * repository as its source of data of attendances, a cache is implemented that
 	 * gets updated only for certain events.
 	 * 
 	 * @param rowIndex    the row index of the value
@@ -101,8 +119,8 @@ public class InspectionTableModel extends AbstractTableModel {
 		// Since each row in the Table refers to each element in the cache,
 		// and apparently the indexing scheme of JTable is zero-based
 		// (which is the same as the definition of the List ADT),
-		// we can easily retrieve the inspection at the specified rowIndex.
-		InspectionRecord inspectionRecord = internalCache.get(rowIndex);
+		// we can easily retrieve the attendance at the specified rowIndex.
+		AttendanceRecord attendanceRecord = internalCache.get(rowIndex);
 
 		// Depending on the column specified,
 		// return the appropriate field of this attendance record.
@@ -112,28 +130,29 @@ public class InspectionTableModel extends AbstractTableModel {
 		case 0:
 			return rowIndex + 1;
 
-		// Second Column - Date
+		// Second Column - Security Guard Name
+		// TODO: Update this to output the name
 		case 1:
-			return inspectionRecord.date;
+			return attendanceRecord.securityGuardName;
 
-		// Third Column - Building - Floor
+		// Third Column - Date of this attendance log
 		case 2:
-			return inspectionRecord.buildingFloor;
+			return attendanceRecord.date;
 
-		// Fourth Column - Room Numbers
+		// Fourth Column - Status of this attendance log
 		case 3:
-			return inspectionRecord.roomNumbers;
+			return attendanceRecord.status;
 
-		// Fifth Column - Issue Count
+		// Fifth Column - Work in of this attendance log
 		case 4:
-			return inspectionRecord.numberOfIssues;
+			return attendanceRecord.workIn;
 
-		// Sixth Column - General Condition
+		// Sixth Column - Work out of this attendance log
 		case 5:
-			return inspectionRecord.condition;
+			return attendanceRecord.workOut;
 
 		default:
-			return null;
+			throw new IllegalArgumentException("Invalid column index.");
 
 		}
 	}
@@ -145,28 +164,26 @@ public class InspectionTableModel extends AbstractTableModel {
 	public void update() {
 		// Construct a SwingWorker to fetch data from the repository,
 		// and execute it.
-		new SwingWorker<List<InspectionRecord>, Void>() {
+		new SwingWorker<List<AttendanceRecord>, Void>() {
 			@Override
-			protected List<InspectionRecord> doInBackground() throws Exception {
+			protected List<AttendanceRecord> doInBackground() throws Exception {
 				try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db",
 						"pupsims", "pupsimspass_123");
 						Statement retrieveStatement = connection.createStatement();
-						ResultSet inspectionsResultSet = retrieveStatement.executeQuery(
-								"SELECT inspection.*, COUNT(inspection_issue.description) FROM inspection LEFT JOIN inspection_issue ON inspection_issue.inspection_id = inspection.id GROUP BY inspection.id")) {
+						ResultSet attendancesResultSet = retrieveStatement.executeQuery("SELECT * FROM attendance LEFT JOIN security_guard ON security_guard.employee_id = attendance.security_guard_id")) {
 
-					List<InspectionRecord> inspections = new ArrayList<>();
-					while (inspectionsResultSet.next()) {
-						InspectionRecord inspectionRecord = new InspectionRecord();
-						inspectionRecord.date = inspectionsResultSet.getString("date");
-						inspectionRecord.buildingFloor = inspectionsResultSet.getString("building_name") + " Floor: "
-								+ inspectionsResultSet.getString("floor_number");
-						inspectionRecord.roomNumbers = inspectionsResultSet.getString("room_numbers");
-						inspectionRecord.numberOfIssues = inspectionsResultSet.getInt("COUNT(inspection_issue.description)");
-						inspectionRecord.condition = inspectionsResultSet.getString("general_condition");
-						inspections.add(inspectionRecord);
+					List<AttendanceRecord> attendances = new ArrayList<>();
+					while (attendancesResultSet.next()) {
+						AttendanceRecord attendanceRecord = new AttendanceRecord();
+						attendanceRecord.securityGuardName = attendancesResultSet.getString("first_name") + " " + attendancesResultSet.getString("last_name");
+						attendanceRecord.date = attendancesResultSet.getString("log_date");
+						attendanceRecord.status = attendancesResultSet.getString("log_status");
+						attendanceRecord.workIn = attendancesResultSet.getString("work_in");
+						attendanceRecord.workOut = attendancesResultSet.getString("work_out");
+						attendances.add(attendanceRecord);
 					}
 
-					return inspections;
+					return attendances;
 				}
 			}
 
@@ -177,14 +194,9 @@ public class InspectionTableModel extends AbstractTableModel {
 					internalCache = get();
 					// Notify JTable that data in this Model has changed
 					fireTableDataChanged();
-				} catch (InterruptedException e) {
-					// TODO: Sophisticated handling of InterruptedException
-					// maybe a message dialog.
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO: Sophisticated handling of InterruptedException
-					// maybe a message dialog.
-					e.printStackTrace();
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null,
+							"An error occured while trying to load attendances.\n\nMessage: " + e);
 				}
 			}
 		}.execute();
