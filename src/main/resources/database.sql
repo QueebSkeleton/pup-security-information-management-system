@@ -87,14 +87,13 @@ DROP TABLE IF EXISTS `pupsims_db`.`incident_report`;
 
 CREATE TABLE IF NOT EXISTS `pupsims_db`.`incident_report` (
 	`id` BIGINT NOT NULL AUTO_INCREMENT,
-	`incident_id` BIGINT NOT NULL,
 	`incident_date` VARCHAR (20) NOT NULL,
 	`incident_time` VARCHAR (20) NOT NULL,
 	`injured_name`	VARCHAR (45),
 	`age` SMALLINT,
 	`medical_notes` VARCHAR (150),
 	`descriptive_details` VARCHAR(300) NOT NULL,
-	PRIMARY KEY (`id`))
+	PRIMARY KEY (`id`));
 
 -- -----------------------------------------------------
 -- Main application user
