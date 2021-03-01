@@ -99,6 +99,20 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- -----------------------------------------------------
+-- Table `pupsims_db`.`inventory_of_supplies`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pupsims_db`.`inventory_of_supplies`;
+
+CREATE TABLE `pupsims_db`.`inventory_of_supplies` (
+	`id` BIGINT NOT NULL AUTO_INCREMENT,
+	`product_code` BIGINT NOt NULL,
+	`ìtem_name` CHARVAR(50) NOT NULL,
+	`item_type` CHAR(20),
+	`quantity` INT,
+	`item_condition` CHAR(15),
+	`price` INT,
+	PRIMARY KEY (`id`))
+-- -----------------------------------------------------
 -- Main application user
 -- -----------------------------------------------------
 DROP USER 'pupsims'@'localhost';
