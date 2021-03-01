@@ -229,6 +229,7 @@ public class AddDialog extends JDialog {
 			}catch(SQLException e) {
 				JOptionPane.showMessageDialog(thisDialog,"An error occured while saving... \n \n Details: "+e );
 			}
+			//Close the dialog after saving
 			this.setVisible(false);
 			
 		});
@@ -242,5 +243,5 @@ public class AddDialog extends JDialog {
 		});
 		buttonPane.add(jbtnCancel);
 		
-	}// AddDialog();
-}// class AddDialog
+	}
+}
