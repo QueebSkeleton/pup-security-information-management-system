@@ -1,6 +1,8 @@
 package oop.elbisri.pupsims.ui.incidentreport;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.BoxLayout;
@@ -10,13 +12,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-import java.awt.FlowLayout;
-import java.awt.Color;
 
 /**
- * Incident Report Management of this Application. Contains a Table
- * showing all incident reports logged in the system, and a Dialog form
+ * Incident port java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPll incident reports logged in the system, and a Dialog form
  * shown by a button to log new entries.
  * 
  * An instance of this class is managed by MainFrame in itself, and is
@@ -36,7 +41,9 @@ public class ManagementPanel extends JPanel {
 	/**
 	 * Add Form dialog of this panel
 	 */
-	protected AddReportDialog incidentAddDialog; 
+	protected AddReportDialog incidentAddDialog;
+	
+	protected IncidentTableModel incidentTableModel;
 	
 
 	/**
@@ -83,22 +90,18 @@ public class ManagementPanel extends JPanel {
 		add(jscrllpnReportTable);
 		
 		jtblReportTable = new JTable();
-		jtblReportTable.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Report ID", "Date", "Time", "Location", "Detailed Description"
-			}
-		));
-		jtblReportTable.getColumnModel().getColumn(0).setPreferredWidth(84);
-		jtblReportTable.getColumnModel().getColumn(1).setPreferredWidth(80);
-		jtblReportTable.getColumnModel().getColumn(4).setPreferredWidth(300);
+		incidentTableModel = new IncidentTableModel();
+		jtblReportTable.setModel(incidentTableModel);
 		jscrllpnReportTable.setViewportView(jtblReportTable);
 		
 		//Create the add form dialog
 		incidentAddDialog = new AddReportDialog();
 		incidentAddDialog.incidentManagementPanel = this; 
 
+	}
+	
+	public void updateTable() {
+		incidentTableModel.refresh();
 	}
 
 }

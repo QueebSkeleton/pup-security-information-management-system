@@ -310,6 +310,8 @@ public class MainFrame extends JFrame {
 		else if (jpnlCurrentShownPanel != null)
 			jpnlContentPane.remove(jpnlCurrentShownPanel);
 		
+		// Refresh the table
+		incidentManagementPanel.updateTable();
 		// Set the incident report management panel as the new panel 
 		jpnlCurrentShownPanel = incidentManagementPanel; 
 		jpnlContentPane.add(incidentManagementPanel); 

@@ -9,11 +9,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
 import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -253,6 +252,9 @@ public class AddReportDialog extends JDialog {
 
 					// Dialog will close right after creation
 					this.setVisible(false);
+					
+					// Refresh the table
+					incidentManagementPanel.updateTable();
 				});
 				buttonPane.add(jbtnSave);
 				getRootPane().setDefaultButton(jbtnSave);
