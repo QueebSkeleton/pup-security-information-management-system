@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `pupsims_db`.`incident_report` (
 DROP TABLE IF EXISTS `pupsims_db`.`security_guard`;
 
 CREATE TABLE IF NOT EXISTS `pupsims_db`.`security_guard` (
-	`employee_id` BIGINT NOT NULL,
+	`employee_id` BIGINT NOT NULL AUTO_INCREMENT,
 	`first_name` VARCHAR(45) NOT NULL, 
 	`middle_name` VARCHAR(45), 
 	`last_name` VARCHAR(45), 

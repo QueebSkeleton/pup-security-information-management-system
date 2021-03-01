@@ -22,8 +22,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-
-
 /**
  * Add form dialog for adding security guards.
  * 
@@ -31,23 +29,22 @@ import javax.swing.border.EmptyBorder;
  *
  */
 public class AddDialog extends JDialog {
-	
+
 	/**
-	 * Default Serial Version UID (for serializability, not important, placed to remove warnings)
+	 * Default Serial Version UID (for serializability, not important, placed to
+	 * remove warnings)
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Security Guard Management Panel that owns this dialog box.
 	 */
 	protected ManagementPanel securityGuardManagementPanel;
-	
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField jtxtfldFirstName;
 	private JTextField jtxtfldMiddleName;
 	private JTextField jtxtfldLastName;
-	private JTextField jtxtfldEmployeeID;
 	private JTextField jtxtfldSSSID;
 	private JTextField jtxtfldTINNumber;
 	private JRadioButton jrdbtnFemale;
@@ -57,44 +54,23 @@ public class AddDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public AddDialog() {
-		
+
 		// For reference later
 		AddDialog thisDialog = this;
-		
+
 		// Title Details
 		setTitle("New Employee Details");
-		
-	
-		
+
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[]{0, 0, 0};
-		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPanel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.columnWidths = new int[] { 0, 0, 0 };
+		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_contentPanel.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
-		{
-			JLabel jlblEmployeeID = new JLabel("Employee ID:");
-			GridBagConstraints gbc_jlblEmployeeID = new GridBagConstraints();
-			gbc_jlblEmployeeID.anchor = GridBagConstraints.EAST;
-			gbc_jlblEmployeeID.insets = new Insets(0, 0, 5, 5);
-			gbc_jlblEmployeeID.gridx = 0;
-			gbc_jlblEmployeeID.gridy = 0;
-			contentPanel.add(jlblEmployeeID, gbc_jlblEmployeeID);
-		}
-		{
-			jtxtfldEmployeeID = new JTextField();
-			GridBagConstraints gbc_jtxtfldEmployeeID = new GridBagConstraints();
-			gbc_jtxtfldEmployeeID.insets = new Insets(0, 0, 5, 0);
-			gbc_jtxtfldEmployeeID.fill = GridBagConstraints.HORIZONTAL;
-			gbc_jtxtfldEmployeeID.gridx = 1;
-			gbc_jtxtfldEmployeeID.gridy = 0;
-			contentPanel.add(jtxtfldEmployeeID, gbc_jtxtfldEmployeeID);
-			jtxtfldEmployeeID.setColumns(10);
-		}
 		{
 			Component verticalStrut = Box.createVerticalStrut(20);
 			GridBagConstraints gbc_verticalStrut = new GridBagConstraints();
@@ -171,7 +147,7 @@ public class AddDialog extends JDialog {
 			contentPanel.add(jlblSex, gbc_jlblSex);
 		}
 		{
-			
+
 			JPanel jpnlSex = new JPanel();
 			GridBagConstraints gbc_jpnlSex = new GridBagConstraints();
 			gbc_jpnlSex.insets = new Insets(0, 0, 5, 0);
@@ -190,9 +166,7 @@ public class AddDialog extends JDialog {
 				jpnlSex.add(jrdbtnMale);
 				bttngrpSex.add(jrdbtnMale);
 			}
-			
-			
-			
+
 		}
 		{
 			JLabel jlblSSSID = new JLabel("SSS ID:");
@@ -239,35 +213,39 @@ public class AddDialog extends JDialog {
 				JButton jbtnSaveButton = new JButton("SAVE");
 				jbtnSaveButton.addActionListener(event -> {
 					try {
-						 Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db", "pupsims", "pupsimspass_123"); 
-						 Statement statement = connection.createStatement();
-						 
-						 /* Sex option */ 
-						 //String holder for user input for sex
-						 String strSexInput = " ";
-						 
-						 if (jrdbtnFemale.isSelected())
-							 strSexInput = "Female"; 
-						 else if (jrdbtnMale.isSelected())
-							 strSexInput = "Male";
-						 else
-							 strSexInput = "No sex selected";
-						 
-						 statement.execute("INSERT INTO security_guard VALUES('" + jtxtfldEmployeeID.getText() + "','" + 
-								 			jtxtfldFirstName.getText() + "','" + jtxtfldMiddleName.getText() + "','" + 
-								 			jtxtfldLastName.getText() + "','" + strSexInput + "','" + 
-								 			jtxtfldSSSID.getText() + "','" + jtxtfldTINNumber.getText() + "')");
+						Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db",
+								"pupsims", "pupsimspass_123");
+						Statement statement = connection.createStatement();
 
-						  JOptionPane.showMessageDialog(null, "Security guard successfully created!");
-						} catch(SQLException e) {
-						  JOptionPane.showMessageDialog(null, "An error occured while saving.\n\n Details:" + e);
+						/* Sex option */
+						// String holder for user input for sex
+						String strSexInput = " ";
+
+						if (jrdbtnFemale.isSelected())
+							strSexInput = "Female";
+						else if (jrdbtnMale.isSelected())
+							strSexInput = "Male";
+						else
+							strSexInput = "No sex selected";
+
+						statement.execute("INSERT INTO security_guard VALUES(NULL,'" + jtxtfldFirstName.getText()
+								+ "','" + jtxtfldMiddleName.getText() + "','" + jtxtfldLastName.getText() + "','"
+								+ strSexInput + "','" + jtxtfldSSSID.getText() + "','" + jtxtfldTINNumber.getText()
+								+ "')");
+						
+						statement.close();
+						connection.close();
+
+						JOptionPane.showMessageDialog(null, "Security guard successfully created!");
+
+						// To close the dialog prompt right after creation
+						this.setVisible(false);
+
+						// Update the table
+						securityGuardManagementPanel.updateTable();
+					} catch (SQLException e) {
+						JOptionPane.showMessageDialog(null, "An error occured while saving.\n\n Details:" + e);
 					}
-					
-					// To close the dialog prompt right after creation
-					this.setVisible(false);
-					
-					// Update the table
-					securityGuardManagementPanel.updateTable();
 				});
 				buttonPane.add(jbtnSaveButton);
 				getRootPane().setDefaultButton(jbtnSaveButton);
@@ -280,6 +258,14 @@ public class AddDialog extends JDialog {
 				buttonPane.add(jbtnCancelButton);
 			}
 		}
+	}
+
+	public void resetForm() {
+		jtxtfldFirstName.setText("");
+		jtxtfldMiddleName.setText("");
+		jtxtfldLastName.setText("");
+		jtxtfldSSSID.setText("");
+		jtxtfldTINNumber.setText("");
 	}
 
 }

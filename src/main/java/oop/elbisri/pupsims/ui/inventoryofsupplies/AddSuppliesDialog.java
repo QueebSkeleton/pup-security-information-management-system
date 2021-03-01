@@ -24,52 +24,51 @@ import javax.swing.border.EmptyBorder;
 
 /**
  * Add new form dialog for entering new supplies
+ * 
  * @author Elmer M. Cuenca
  *
  */
 public class AddSuppliesDialog extends JDialog {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Inventory of Supplies Management Panel that owns this dialog box
 	 */
-	protected ManagementPanel inventoryManagementPanel; 
-	
+	protected ManagementPanel inventoryManagementPanel;
+
 	private final JPanel contentPanel = new JPanel();
 	private JTextField jtxtfldProductCode;
 	private JTextField jtxtfldItemName;
 	private JTextField jtxtfldQuantity;
 	private JTextField jtxtfldPrice;
 	private JTextField jtxtfldOthers;
-	private JRadioButton jrdbtnStationery; 
+	private JRadioButton jrdbtnStationery;
 	private JRadioButton jrdbtnConsumables;
 	private JRadioButton jrdbtnOthers;
 	private JRadioButton jrdbtnGoodCondition;
 	private JRadioButton jrdbtnBadCondition;
 	private JRadioButton jrdbtnNeedsAttention;
 	private JRadioButton jrdbtnOutOfStock;
-	
-	
 
 	/**
 	 * Create the dialog.
 	 */
 	public AddSuppliesDialog() {
-		
-		// For referencing later 
+
+		// For referencing later
 		AddSuppliesDialog thisDialog = this;
-		
+
 		setTitle("New Supplies");
 		setBounds(100, 100, 492, 321);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[]{0, 0, 0};
-		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 67, 0, 0};
-		gbl_contentPanel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.columnWidths = new int[] { 0, 0, 0 };
+		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 67, 0, 0 };
+		gbl_contentPanel.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JLabel jlblProductCode = new JLabel("Product Code:");
@@ -127,7 +126,7 @@ public class AddSuppliesDialog extends JDialog {
 			gbc_jpnlItemType.gridy = 2;
 			contentPanel.add(jpnlItemType, gbc_jpnlItemType);
 			jpnlItemType.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-			
+
 			ButtonGroup btngrpItemType = new ButtonGroup();
 			{
 				jrdbtnStationery = new JRadioButton("Stationery");
@@ -191,11 +190,11 @@ public class AddSuppliesDialog extends JDialog {
 			gbc_jpnlItemCondition.gridy = 4;
 			contentPanel.add(jpnlItemCondition, gbc_jpnlItemCondition);
 			GridBagLayout gbl_jpnlItemCondition = new GridBagLayout();
-			gbl_jpnlItemCondition.columnWidths = new int[]{0, 0, 0, 0, 0};
-			gbl_jpnlItemCondition.rowHeights = new int[]{0, 0, 0};
-			gbl_jpnlItemCondition.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-			gbl_jpnlItemCondition.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-			
+			gbl_jpnlItemCondition.columnWidths = new int[] { 0, 0, 0, 0, 0 };
+			gbl_jpnlItemCondition.rowHeights = new int[] { 0, 0, 0 };
+			gbl_jpnlItemCondition.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+			gbl_jpnlItemCondition.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
+
 			ButtonGroup btngrpItemCondition = new ButtonGroup();
 			jpnlItemCondition.setLayout(gbl_jpnlItemCondition);
 			{
@@ -261,59 +260,62 @@ public class AddSuppliesDialog extends JDialog {
 				JButton jbtnSaveButton = new JButton("SAVE");
 				jbtnSaveButton.addActionListener(event -> {
 					try {
-						Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db", "pupsims", "pupsimspass_123");
+						Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db",
+								"pupsims", "pupsimspass_123");
 						Statement statement = connection.createStatement();
-						
-						/*Condition set for item type button group*/
-						
-						//String holder for user input in item type
-						String strItemTypeInput = " "; 
-						
+
+						/* Condition set for item type button group */
+
+						// String holder for user input in item type
+						String strItemTypeInput = " ";
+
 						if (jrdbtnStationery.isSelected())
 							strItemTypeInput = "Stationery";
 						else if (jrdbtnConsumables.isSelected())
 							strItemTypeInput = "Consumables";
 						else if (jrdbtnOthers.isSelected())
 							strItemTypeInput = jtxtfldOthers.getText();
-						else 
+						else
 							strItemTypeInput = "no status selected";
-						
-						/*Condition set for item condition button group*/
-						
-					
-						//String holder for user input in item condition
+
+						/* Condition set for item condition button group */
+
+						// String holder for user input in item condition
 						String strItemConditionInput = " ";
-						
+
 						if (jrdbtnGoodCondition.isSelected())
 							strItemConditionInput = "Good Condition";
 						else if (jrdbtnBadCondition.isSelected())
 							strItemConditionInput = "Bad Condition";
 						else if (jrdbtnNeedsAttention.isSelected())
 							strItemConditionInput = "Needs Attention";
-						else if(jrdbtnOutOfStock.isSelected())
+						else if (jrdbtnOutOfStock.isSelected())
 							strItemConditionInput = "Out Of Stock";
-						else 
+						else
 							strItemConditionInput = "no status selected";
-							
-						statement.execute("INSERT INTO inventory_of_supplies VALUES ('" + jtxtfldProductCode.getText() + "','" + jtxtfldItemName.getText() +
-																						"','" + strItemTypeInput + "','" + jtxtfldQuantity.getText() + 
-																						"','" + strItemConditionInput + "','" + jtxtfldPrice.getText() + "')");
-						
-						JOptionPane.showMessageDialog(null, "Supply item successfully saved!");
-					} catch(SQLException e) {
-					  JOptionPane.showMessageDialog(null, "An error occured while saving.\n\n Details:" + e);
-					}
 
-					// Closes this dialog right after creation
-					this.setVisible(false);
-					
-					// Refresh the table
-					inventoryManagementPanel.updateTable();
+						statement.execute("INSERT INTO inventory_of_supplies VALUES ('" + jtxtfldProductCode.getText()
+								+ "','" + jtxtfldItemName.getText() + "','" + strItemTypeInput + "','"
+								+ jtxtfldQuantity.getText() + "','" + strItemConditionInput + "','"
+								+ jtxtfldPrice.getText() + "')");
+
+						statement.close();
+						connection.close();
+
+						JOptionPane.showMessageDialog(null, "Supply item successfully saved!");
+
+						// Closes this dialog right after creation
+						this.setVisible(false);
+
+						// Refresh the table
+						inventoryManagementPanel.updateTable();
+					} catch (SQLException e) {
+						JOptionPane.showMessageDialog(null, "An error occured while saving.\n\n Details:" + e);
+					}
 				});
 				buttonPane.add(jbtnSaveButton);
-				}
-				
-				
+			}
+
 			{
 				JButton jbtnCancelButton = new JButton("CANCEL");
 				jbtnCancelButton.addActionListener(event -> {
@@ -322,6 +324,14 @@ public class AddSuppliesDialog extends JDialog {
 				buttonPane.add(jbtnCancelButton);
 			}
 		}
+	}
+
+	public void resetForm() {
+		jtxtfldProductCode.setText("");
+		jtxtfldItemName.setText("");
+		jtxtfldQuantity.setText("");
+		jtxtfldPrice.setText("");
+		jtxtfldOthers.setText("");
 	}
 
 }

@@ -28,6 +28,7 @@ import javax.swing.border.EtchedBorder;
 
 /**
  * Add new form dialog for entering new incidents
+ * 
  * @author Elmer M. Cuenca
  *
  */
@@ -37,31 +38,30 @@ public class AddReportDialog extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Incidents Report Management Panel that owns this dialog box
 	 */
-	protected ManagementPanel incidentManagementPanel; 
-	
+	protected ManagementPanel incidentManagementPanel;
+
 	private final JPanel contentPanel = new JPanel();
 	private JTextField jtxtfldTime;
 	private JTextField jtxtfldInjuredPersonName;
 	private JTextField jtxtfldInjuredPersonAge;
 	private JTextField jtxtfldInjuredPersonMedicalNotes;
 	private JTextField jtxtfldDate;
-	private JTextArea  jtxtarDescriptiveDetails;
+	private JTextArea jtxtarDescriptiveDetails;
 
 	/**
 	 * Create the dialog.
 	 */
 	public AddReportDialog() {
-		
+
 		// For referencing later
-		AddReportDialog thisDialog = this; 
-		
-		
+		AddReportDialog thisDialog = this;
+
 		setTitle("New Incident");
-		
+
 		setBounds(100, 100, 530, 530);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -73,10 +73,11 @@ public class AddReportDialog extends JDialog {
 			jpnlIncidentDetails.setMaximumSize(new Dimension(32767, 250));
 			contentPanel.add(jpnlIncidentDetails);
 			GridBagLayout gbl_jpnlIncidentDetails = new GridBagLayout();
-			gbl_jpnlIncidentDetails.columnWidths = new int[]{0, 0, 0};
-			gbl_jpnlIncidentDetails.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-			gbl_jpnlIncidentDetails.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-			gbl_jpnlIncidentDetails.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+			gbl_jpnlIncidentDetails.columnWidths = new int[] { 0, 0, 0 };
+			gbl_jpnlIncidentDetails.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+			gbl_jpnlIncidentDetails.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+			gbl_jpnlIncidentDetails.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+					Double.MIN_VALUE };
 			jpnlIncidentDetails.setLayout(gbl_jpnlIncidentDetails);
 			{
 				JLabel jlblDate = new JLabel("Date:");
@@ -87,9 +88,10 @@ public class AddReportDialog extends JDialog {
 				gbc_jlblDate.gridy = 0;
 				jpnlIncidentDetails.add(jlblDate, gbc_jlblDate);
 			}
-			
+
 			/*
-			 * TO DO: A selection Pane where user can choose date from predefined choices (Month/Day/Year) 
+			 * TO DO: A selection Pane where user can choose date from predefined choices
+			 * (Month/Day/Year)
 			 */
 			{
 				jtxtfldDate = new JTextField();
@@ -236,25 +238,29 @@ public class AddReportDialog extends JDialog {
 				JButton jbtnSave = new JButton("SAVE");
 				jbtnSave.addActionListener(event -> {
 					try {
-						Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db", "pupsims", "pupsimspass_123");
+						Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db",
+								"pupsims", "pupsimspass_123");
 						Statement statement = connection.createStatement();
-						
-						statement.execute("INSERT INTO incident_report VALUES (NULL, '" + jtxtfldDate.getText() + "','" 
-									       										  + jtxtfldTime.getText() + "','" + jtxtfldInjuredPersonName.getText() + "','" 
-									       										  + jtxtfldInjuredPersonAge.getText() + "','" + jtxtfldInjuredPersonMedicalNotes.getText() + "','"
-									       										  + jtxtarDescriptiveDetails.getText() + "')");
-					
-						JOptionPane.showMessageDialog(null, "Report successfully saved!");
-						
-					} catch(SQLException e) {
-					  JOptionPane.showMessageDialog(null, "An error occured while saving.\n\n Details:" + e);
-					}
 
-					// Dialog will close right after creation
-					this.setVisible(false);
-					
-					// Refresh the table
-					incidentManagementPanel.updateTable();
+						statement.execute("INSERT INTO incident_report VALUES (NULL, '" + jtxtfldDate.getText() + "','"
+								+ jtxtfldTime.getText() + "','" + jtxtfldInjuredPersonName.getText() + "','"
+								+ jtxtfldInjuredPersonAge.getText() + "','" + jtxtfldInjuredPersonMedicalNotes.getText()
+								+ "','" + jtxtarDescriptiveDetails.getText() + "')");
+
+						statement.close();
+						connection.close();
+
+						JOptionPane.showMessageDialog(null, "Report successfully saved!");
+
+						// Dialog will close right after creation
+						this.setVisible(false);
+
+						// Refresh the table
+						incidentManagementPanel.updateTable();
+
+					} catch (SQLException e) {
+						JOptionPane.showMessageDialog(null, "An error occured while saving.\n\n Details:" + e);
+					}
 				});
 				buttonPane.add(jbtnSave);
 				getRootPane().setDefaultButton(jbtnSave);
@@ -267,6 +273,15 @@ public class AddReportDialog extends JDialog {
 				buttonPane.add(jbtnCancel);
 			}
 		}
+	}
+
+	public void resetForm() {
+		jtxtfldTime.setText("");
+		jtxtfldInjuredPersonName.setText("");
+		jtxtfldInjuredPersonAge.setText("");
+		jtxtfldInjuredPersonMedicalNotes.setText("");
+		jtxtfldDate.setText("");
+		jtxtarDescriptiveDetails.setText("");
 	}
 
 }

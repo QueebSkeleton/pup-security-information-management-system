@@ -81,6 +81,7 @@ public class ManagementPanel extends JPanel {
 		JButton jbtnAdd = new JButton("Add");
 		jbtnAdd.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		jbtnAdd.addActionListener(event -> {
+			securityGuardAddDialog.resetForm();
 			securityGuardAddDialog.setVisible(true);
 		});
 		jpnlButtons.add(jbtnAdd);

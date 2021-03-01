@@ -81,6 +81,7 @@ public class ManagementPanel extends JPanel {
 		jbtnAdd.setAlignmentY(0.0f);
 		jpnlButtonActions.add(jbtnAdd);
 		jbtnAdd.addActionListener(event -> {
+			incidentAddDialog.resetForm();
 			incidentAddDialog.setVisible(true);
 		});
 		
