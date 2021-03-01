@@ -305,14 +305,14 @@ public class AddDialog extends JDialog {
 
 						// Reset this form
 						thisDialog.resetForm();
+
+						// Hide this add dialog
+						thisDialog.setVisible(false);
 					} catch (InterruptedException | ExecutionException e) {
 						JOptionPane.showMessageDialog(thisDialog, "An error occured while saving.\n\nMessage:" + e);
 					}
 				}
 			}.execute();
-
-			// Hide this add dialog
-			thisDialog.setVisible(false);
 		});
 		jbtnLog.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		jpnlButtonActions.add(jbtnLog);

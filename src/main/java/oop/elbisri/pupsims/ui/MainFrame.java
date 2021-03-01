@@ -8,7 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import oop.elbisri.pupsims.repository.InspectionJdbcRepositoryImpl;
-import oop.elbisri.pupsims.repository.ViolationJdbcRepositoryImpl;
 
 /**
  * Main Frame of the Application. Every interaction possible for
@@ -344,15 +343,6 @@ public class MainFrame extends JFrame {
 		// Redraw the whole frame
 		revalidate();
 		repaint();
-	}
-	
-	/**
-	 * Wires a violation repository to this frame.<br><br>
-	 * 
-	 * @param violationRepository the repository to set
-	 */
-	public void setViolationRepository(ViolationJdbcRepositoryImpl violationRepository) {
-		violationManagementPanel.setViolationRepository(violationRepository);
 	}
 	
 	/**

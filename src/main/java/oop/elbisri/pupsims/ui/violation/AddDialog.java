@@ -7,9 +7,13 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -24,8 +28,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
-import oop.elbisri.pupsims.domain.Violation;
-
 /**
  * Add form dialog for logging new Violations.
  * 
@@ -33,17 +35,18 @@ import oop.elbisri.pupsims.domain.Violation;
  *
  */
 public class AddDialog extends JDialog {
-	
+
 	/**
-	 * Default Serial Version UID (for serializability, not important, placed to remove warnings)
+	 * Default Serial Version UID (for serializability, not important, placed to
+	 * remove warnings)
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Violator Management Panel that owns this dialog box.
 	 */
 	protected ManagementPanel violationManagementPanel;
-	
+
 	// Form Components (Field Inputs)
 	private JTextField jtxtfldCompleteName;
 	private JTextField jtxtfldAddress;
@@ -52,7 +55,7 @@ public class AddDialog extends JDialog {
 	private JTextField jtxtfldViolationType;
 	private JTextField jtxtfldDate;
 	private JTextField jtxtfldTime;
-	private JComboBox<Violation.Status> jcmbStatus;
+	private JComboBox<String> jcmbStatus;
 	private JTextField jtxtfldViolatedLaw;
 	private JTextArea jtxtareaDescription;
 	private JTextArea jtxtareaViolatorStatement;
@@ -61,15 +64,15 @@ public class AddDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public AddDialog() {
-		
+
 		// For reference later
 		AddDialog thisDialog = this;
-		
+
 		/* Dialog Properties */
 		setMinimumSize(new Dimension(700, 600));
 		setTitle("Log new Violation");
 		/* END OF Dialog Properties */
-		
+
 		/* jpnlButtonActions - button actions panel */
 		JPanel jpnlButtonActions = new JPanel();
 		jpnlButtonActions.setBorder(new EmptyBorder(0, 0, 10, 15));
@@ -77,70 +80,78 @@ public class AddDialog extends JDialog {
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		getContentPane().add(jpnlButtonActions, BorderLayout.SOUTH);
 		/* END OF jpnlButtonActions */
-		
+
 		/* jbtnCancel - cancel button to hide dialog */
 		JButton jbtnCancel = new JButton("Cancel");
 		jbtnCancel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		jpnlButtonActions.add(jbtnCancel);
 		/* END OF jbtnCancel */
-		
+
 		/* jbtnLog - save button */
 		JButton jbtnLog = new JButton("Log");
 		jbtnLog.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		
+
 		// Attach Action Listener (Click)
 		jbtnLog.addActionListener(event -> {
-			try {
-				// Construct a violation domain object from the inputs
-				Violation violation = new Violation(
-						jtxtfldCompleteName.getText(),
-						jtxtfldAddress.getText(),
-						jtxtfldContactNumber.getText(),
-						jtxtfldCompany.getText(),
-						jtxtfldViolationType.getText(),
-						LocalDateTime.parse(jtxtfldDate.getText() + "T" + jtxtfldTime.getText(),
-								DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-						jcmbStatus.getItemAt(jcmbStatus.getSelectedIndex()),
-						jtxtfldViolatedLaw.getText(),
-						jtxtareaDescription.getText(),
-						jtxtareaViolatorStatement.getText());
-				
-				// Save the constructed violation object, with a SwingWorker
-				new SwingWorker<Void, Void>() {
-					@Override
-					protected Void doInBackground() throws Exception {
-						violationManagementPanel.violationRepository.save(violation);
-						return null;
+			// Save the constructed attendance object, with a SwingWorker
+			new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws Exception {
+					try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db",
+							"pupsims", "pupsimspass_123");
+							PreparedStatement insertStatement = connection.prepareStatement(
+									"INSERT INTO violation VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+
+						insertStatement.setString(1, jtxtfldCompleteName.getText());
+						insertStatement.setString(2, jtxtfldAddress.getText());
+						insertStatement.setString(3, jtxtfldContactNumber.getText());
+						insertStatement.setString(4, jtxtfldCompany.getText());
+						insertStatement.setString(5, jtxtfldViolationType.getText());
+						insertStatement.setString(6, LocalDateTime.parse(jtxtfldDate.getText() + "T" + jtxtfldTime.getText()).toString());
+						insertStatement.setString(7, (String) jcmbStatus.getSelectedItem());
+						insertStatement.setString(8, jtxtfldViolatedLaw.getText());
+						insertStatement.setString(9, jtxtareaDescription.getText());
+						insertStatement.setString(10, jtxtareaViolatorStatement.getText());
+
+						insertStatement.execute();
+					} catch (DateTimeParseException e) {
+						// If an error occured while parsing the datetime fields,
+						// output a friendly message
+						JOptionPane.showMessageDialog(thisDialog,
+								"Please check your date and time inputs. It must follow ISO Time.\n"
+										+ "Date must be yyyy-MM-dd, time fields (work-in, work-out) must be HH:mm:ss",
+								"Check your inputs!", JOptionPane.WARNING_MESSAGE);
+						throw new RuntimeException(e);
+					} catch (SQLException e) {
+						JOptionPane.showMessageDialog(thisDialog,
+								"An error occured while trying to save attendance.\n\nMessage: " + e);
+						throw new RuntimeException(e);
 					}
-					@Override
-					protected void done() {
-						// After the violation object has been saved, show a friendly dialog box
-						JOptionPane.showMessageDialog(
-								thisDialog,
-								"Successfully logged violation.\n",
-								"Success!",
+
+					return null;
+				}
+
+				@Override
+				protected void done() {
+					try {
+						get();
+
+						// After the violation has been saved, show a friendly dialog box
+						JOptionPane.showMessageDialog(thisDialog, "Successfully logged violation.\n", "Success!",
 								JOptionPane.INFORMATION_MESSAGE);
 						// Refresh the management panel table model
 						violationManagementPanel.updateTable();
+
+						// Reset this form
+						thisDialog.resetForm();
+
+						// Hide this add dialog
+						thisDialog.setVisible(false);
+					} catch (InterruptedException | ExecutionException e) {
+						JOptionPane.showMessageDialog(thisDialog, "An error occured while saving.\n\nMessage:" + e);
 					}
-				}.execute();
-				
-				// Hide this add dialog
-				thisDialog.setVisible(false);
-				
-				// Reset this form
-				thisDialog.resetForm();
-			} catch(DateTimeParseException e) {
-				// If an error occured while parsing the datetime fields,
-				// output a friendly message
-				JOptionPane.showMessageDialog(
-						thisDialog,
-						"Please check your date and time inputs. It must follow ISO Time.\n"
-						+ "Date must be of format: yyyy-MM-dd,\n"
-						+ "and Time must be of format: HH:mm:ss.",
-						"Check your inputs!",
-						JOptionPane.WARNING_MESSAGE);
-			}
+				}
+			}.execute();
 		});
 		jpnlButtonActions.add(jbtnLog);
 		/* END OF jbtnLog */
@@ -150,10 +161,10 @@ public class AddDialog extends JDialog {
 		jpnlForm.setBorder(new EmptyBorder(20, 20, 0, 20));
 		getContentPane().add(jpnlForm, BorderLayout.CENTER);
 		GridBagLayout gbl_jpnlForm = new GridBagLayout();
-		gbl_jpnlForm.columnWidths = new int[]{0, 0, 0, 0, 0};
-		gbl_jpnlForm.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_jpnlForm.columnWeights = new double[]{0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
-		gbl_jpnlForm.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_jpnlForm.columnWidths = new int[] { 0, 0, 0, 0, 0 };
+		gbl_jpnlForm.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_jpnlForm.columnWeights = new double[] { 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_jpnlForm.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE };
 		jpnlForm.setLayout(gbl_jpnlForm);
 		/* END OF jpnlForm */
 
@@ -350,7 +361,7 @@ public class AddDialog extends JDialog {
 
 		/* jcmbStatus - combo box input for status */
 		jcmbStatus = new JComboBox<>();
-		jcmbStatus.setModel(new DefaultComboBoxModel<>(Violation.Status.values()));
+		jcmbStatus.setModel(new DefaultComboBoxModel<>(new String[] { "Recent", "Viewed", "Discarded" }));
 		jcmbStatus.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		GridBagConstraints gbc_jcmbStatus = new GridBagConstraints();
 		gbc_jcmbStatus.insets = new Insets(0, 0, 5, 0);
@@ -454,7 +465,7 @@ public class AddDialog extends JDialog {
 		jscrlpnViolatorStatement.setViewportView(jtxtareaViolatorStatement);
 		/* END OF jtxtareaViolatorStatement */
 	}
-	
+
 	/**
 	 * Clears and resets the form.
 	 */
