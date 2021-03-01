@@ -306,6 +306,9 @@ public class AddSuppliesDialog extends JDialog {
 
 					// Closes this dialog right after creation
 					this.setVisible(false);
+					
+					// Refresh the table
+					inventoryManagementPanel.updateTable();
 				});
 				buttonPane.add(jbtnSaveButton);
 				}

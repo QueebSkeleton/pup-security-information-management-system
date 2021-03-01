@@ -332,6 +332,8 @@ public class MainFrame extends JFrame {
 		else if (jpnlCurrentShownPanel != null)
 			jpnlContentPane.remove(jpnlCurrentShownPanel);
 		
+		// Refresh the table
+		inventoryManagementPanel.updateTable();
 		// Set the inventory management panel as the new panel
 		jpnlCurrentShownPanel = inventoryManagementPanel; 
 		jpnlContentPane.add(inventoryManagementPanel);
