@@ -7,8 +7,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import oop.elbisri.pupsims.repository.InspectionJdbcRepositoryImpl;
-
 /**
  * Main Frame of the Application. Every interaction possible for
  * this data-entry system is made in here.
@@ -343,15 +341,6 @@ public class MainFrame extends JFrame {
 		// Redraw the whole frame
 		revalidate();
 		repaint();
-	}
-	
-	/**
-	 * Wires an inspection repository to this frame.<br><br>
-	 * 
-	 * @param inspectionRepository the repository to set
-	 */
-	public void setInspectionRepository(InspectionJdbcRepositoryImpl inspectionRepository) {
-		inspectionManagementPanel.setInspectionRepository(inspectionRepository);
 	}
 
 }

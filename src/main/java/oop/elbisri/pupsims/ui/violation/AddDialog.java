@@ -142,9 +142,6 @@ public class AddDialog extends JDialog {
 						// Refresh the management panel table model
 						violationManagementPanel.updateTable();
 
-						// Reset this form
-						thisDialog.resetForm();
-
 						// Hide this add dialog
 						thisDialog.setVisible(false);
 					} catch (InterruptedException | ExecutionException e) {

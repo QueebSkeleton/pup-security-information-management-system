@@ -86,6 +86,7 @@ public class ManagementPanel extends JPanel {
 		JButton jbtnShowAddForm = new JButton("Add");
 		jbtnShowAddForm.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		jbtnShowAddForm.addActionListener(event -> {
+			violationAddDialog.resetForm();
 			violationAddDialog.setVisible(true);
 		});
 		jpnlButtonActions.add(jbtnShowAddForm);

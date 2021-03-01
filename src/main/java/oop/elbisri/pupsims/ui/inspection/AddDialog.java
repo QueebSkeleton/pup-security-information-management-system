@@ -9,12 +9,18 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -29,8 +35,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
-import oop.elbisri.pupsims.domain.Inspection;
-
 /**
  * Add form dialog for logging new inspections.
  * 
@@ -38,22 +42,23 @@ import oop.elbisri.pupsims.domain.Inspection;
  *
  */
 public class AddDialog extends JDialog {
-	
+
 	/**
-	 * Default Serial Version UID (for serializability, not important, placed to remove warnings)
+	 * Default Serial Version UID (for serializability, not important, placed to
+	 * remove warnings)
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Building Inspection Management Panel that owns this dialog box.
 	 */
 	protected ManagementPanel inspectionManagementPanel;
-	
+
 	// Form Components (Field Inputs)
-	private JComboBox<Inspection.Building> jcmbBuildingName;
+	private JComboBox<String> jcmbBuildingName;
 	private JTextField jtxtfldFloorNumber;
 	private JTextField jtxtfldRoomNumbers;
-	private JComboBox<Inspection.GeneralCondition> jcmbGeneralCondition;
+	private JComboBox<String> jcmbGeneralCondition;
 	private JComboBox<String> jcmbInspector;
 	private JTextField jtxtfldDate;
 	private JTextField jtxtfldTimeStarted;
@@ -61,7 +66,7 @@ public class AddDialog extends JDialog {
 	private JTextArea jtxtareaDescription;
 	private JTextArea jtxtareaOtherNotes;
 	private List<JTextField> issueTextFieldList;
-	
+
 	// Panel container for issue input fields
 	private JPanel jpnlIssueList;
 
@@ -69,15 +74,15 @@ public class AddDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public AddDialog() {
-		
+
 		// For reference later
 		AddDialog thisDialog = this;
-		
+
 		/* Dialog Properties */
 		setMinimumSize(new Dimension(700, 600));
 		setTitle("Add Attendance");
 		/* END OF Dialog Properties */
-		
+
 		/* jpnlButtonActions - button actions panel */
 		JPanel jpnlButtonActions = new JPanel();
 		jpnlButtonActions.setBorder(new EmptyBorder(0, 0, 10, 15));
@@ -85,76 +90,96 @@ public class AddDialog extends JDialog {
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		getContentPane().add(jpnlButtonActions, BorderLayout.SOUTH);
 		/* END OF jpnlButtonActions */
-		
+
 		/* jbtnCancel - cancel button to hide dialog */
 		JButton jbtnCancel = new JButton("Cancel");
 		jbtnCancel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		jpnlButtonActions.add(jbtnCancel);
 		/* END OF jbtnCancel */
-		
+
 		/* jbtnLog - save button */
 		JButton jbtnLog = new JButton("Log");
 		jbtnLog.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		
+
 		// Attach Action Listener (Click)
 		jbtnLog.addActionListener(event -> {
-			try {
-				// Construct an inspection domain object from the inputs
-				List<String> issueList =
-						issueTextFieldList.parallelStream()
-							.map(jtxtfldIssue -> jtxtfldIssue.getText())
-							.collect(Collectors.toList());
-				Inspection inspection = new Inspection(
-						jcmbBuildingName.getItemAt(jcmbBuildingName.getSelectedIndex()),
-						Integer.parseInt(jtxtfldFloorNumber.getText()),
-						jtxtfldRoomNumbers.getText(),
-						jcmbGeneralCondition.getItemAt(jcmbGeneralCondition.getSelectedIndex()),
-						0L,
-						LocalDate.parse(jtxtfldDate.getText()),
-						LocalTime.parse(jtxtfldTimeStarted.getText()),
-						LocalTime.parse(jtxtfldTimeFinished.getText()),
-						jtxtareaDescription.getText(),
-						jtxtareaOtherNotes.getText(),
-						issueList);
-				
-				// Save the constructed attendance object, with a SwingWorker
-				new SwingWorker<Void, Void>() {
-					@Override
-					protected Void doInBackground() throws Exception {
-						inspectionManagementPanel.inspectionRepository.save(inspection);
-						return null;
+			// Save the constructed attendance object, with a SwingWorker
+			new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws Exception {
+					try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db",
+							"pupsims", "pupsimspass_123");
+							PreparedStatement insertStatement = connection.prepareStatement(
+									"INSERT INTO inspection VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+							PreparedStatement insertIssuesStatement = connection.prepareStatement("INSERT INTO inspection_issue VALUES (?, ?)")) {
+						
+						connection.setAutoCommit(false);
+
+						insertStatement.setString(1, (String) jcmbBuildingName.getSelectedItem());
+						insertStatement.setInt(2, Integer.parseInt(jtxtfldFloorNumber.getText()));
+						insertStatement.setString(3, jtxtfldRoomNumbers.getText());
+						insertStatement.setString(4, (String) jcmbGeneralCondition.getSelectedItem());
+						insertStatement.setLong(5, Long.parseLong(((String) jcmbInspector.getSelectedItem()).split(" ")[0]));
+						insertStatement.setString(6, LocalDate.parse(jtxtfldDate.getText()).toString());
+						insertStatement.setString(7, LocalTime.parse(jtxtfldTimeStarted.getText()).toString());
+						insertStatement.setString(8, LocalTime.parse(jtxtfldTimeFinished.getText()).toString());
+						insertStatement.setString(9, jtxtareaDescription.getText());
+						insertStatement.setString(10, jtxtareaOtherNotes.getText());
+						
+						insertStatement.execute();
+						
+						int inspectionId = 0;
+						try(ResultSet generatedKeys = insertStatement.getGeneratedKeys()) {
+							generatedKeys.next();
+							inspectionId = generatedKeys.getInt(1);
+						}
+						
+						for(JTextField jtxtfldIssue : issueTextFieldList) {
+							insertIssuesStatement.setInt(1, inspectionId);
+							insertIssuesStatement.setString(2, jtxtfldIssue.getText());
+							insertIssuesStatement.addBatch();
+						}
+						
+						insertIssuesStatement.executeBatch();
+						
+						connection.commit();
+					} catch (DateTimeParseException e) {
+						// If an error occured while parsing the datetime fields,
+						// output a friendly message
+						JOptionPane.showMessageDialog(thisDialog,
+								"Please check your date and time inputs. It must follow ISO Time.\n"
+										+ "Date must be yyyy-MM-dd, time fields (work-in, work-out) must be HH:mm:ss",
+								"Check your inputs!", JOptionPane.WARNING_MESSAGE);
+						throw new RuntimeException(e);
+					} catch (SQLException e) {
+						JOptionPane.showMessageDialog(thisDialog,
+								"An error occured while trying to save inspection.\n\nMessage: " + e);
+						throw new RuntimeException(e);
 					}
-					@Override
-					protected void done() {
-						// After the inspection object has been saved, show a friendly dialog box
-						JOptionPane.showMessageDialog(
-								thisDialog,
-								"Successfully logged inspection.\n",
-								"Success!",
+
+					return null;
+				}
+
+				@Override
+				protected void done() {
+					try {
+						get();
+
+						// After the inspection has been saved, show a friendly dialog box
+						JOptionPane.showMessageDialog(thisDialog, "Successfully logged inspection.\n", "Success!",
 								JOptionPane.INFORMATION_MESSAGE);
 						// Refresh the management panel table model
-						thisDialog.inspectionManagementPanel.updateTable();
+						inspectionManagementPanel.updateTable();
+
+						// Hide this add dialog
+						thisDialog.setVisible(false);
+					} catch (InterruptedException | ExecutionException e) {
+						JOptionPane.showMessageDialog(thisDialog, "An error occured while saving.\n\nMessage:" + e);
 					}
-				}.execute();
-				
-				// Hide this add dialog
-				thisDialog.setVisible(false);
-				
-				// Reset this form
-				thisDialog.resetForm();
-			} catch(DateTimeParseException e) {
-				// If an error occured while parsing the datetime fields,
-				// output a friendly message
-				JOptionPane.showMessageDialog(
-						thisDialog,
-						"Please check your date and time inputs. It must follow ISO Time.\n"
-						+ "Date must be of format: yyyy-MM-dd,\n"
-						+ "and Time must be of format: HH:mm:ss.",
-						"Check your inputs!",
-						JOptionPane.WARNING_MESSAGE);
-			}
+				}
+			}.execute();
 		});
-		
+
 		jpnlButtonActions.add(jbtnLog);
 		/* END OF jbtnLog */
 
@@ -163,8 +188,8 @@ public class AddDialog extends JDialog {
 		jpnlForm.setBorder(new EmptyBorder(20, 20, 0, 20));
 		getContentPane().add(jpnlForm, BorderLayout.CENTER);
 		GridBagLayout gbl_jpnlForm = new GridBagLayout();
-		gbl_jpnlForm.columnWeights = new double[]{0.10, 0.40, 0.10, 1.0};
-		gbl_jpnlForm.rowWeights = new double[]{0, 0, 0, 0, 0, 0, 0.05, 1.0, 0.40};
+		gbl_jpnlForm.columnWeights = new double[] { 0.10, 0.40, 0.10, 1.0 };
+		gbl_jpnlForm.rowWeights = new double[] { 0, 0, 0, 0, 0, 0, 0.05, 1.0, 0.40 };
 		jpnlForm.setLayout(gbl_jpnlForm);
 		/* END OF jpnlForm */
 
@@ -193,7 +218,10 @@ public class AddDialog extends JDialog {
 
 		/* jcmbBuildingName - combo box input for building name */
 		jcmbBuildingName = new JComboBox<>();
-		jcmbBuildingName.setModel(new DefaultComboBoxModel<>(Inspection.Building.values()));
+		jcmbBuildingName.setModel(new DefaultComboBoxModel<>(new String[] { "MAIN_NORTH_WING", "MAIN_EAST_WING",
+				"MAIN_SOUTH_WING", "MAIN_WEST_WING", "MAIN_CHK", "MAIN_ALUMNUS_BUILDING", "MAIN_OVAL_TAHANAN_NG_ALUMNI",
+				"MAIN_OVAL_STAGE", "COLLEGE_OF_COMMUNICATION", "COLLEGE_OF_ENGINEERING_AND_ARCHITECTURE",
+				"INSTITUTE_OF_TECHNOLOGY", "CONDOTEL", "HASMIN" }));
 		jcmbBuildingName.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		GridBagConstraints gbc_jcmbBuildingName = new GridBagConstraints();
 		gbc_jcmbBuildingName.insets = new Insets(0, 0, 5, 10);
@@ -216,7 +244,6 @@ public class AddDialog extends JDialog {
 
 		/* jcmbInspector - combo box input for inspector (security guard) */
 		jcmbInspector = new JComboBox<String>();
-		jcmbInspector.setModel(new DefaultComboBoxModel<>(new String[] {"Security Guard 1", "Security Guard 2", "Security Guard 3", "Security Guard 4"}));
 		jcmbInspector.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		GridBagConstraints gbc_jcmbInspector = new GridBagConstraints();
 		gbc_jcmbInspector.insets = new Insets(0, 0, 5, 0);
@@ -308,7 +335,7 @@ public class AddDialog extends JDialog {
 		gbc_jlblTimeStarted.gridy = 3;
 		jpnlForm.add(jlblTimeStarted, gbc_jlblTimeStarted);
 		/* END OF jlblTimeStarted */
-		
+
 		/* jtxtfldTimeStarted - text field input for time started */
 		jtxtfldTimeStarted = new JTextField();
 		jtxtfldTimeStarted.setMargin(new Insets(4, 4, 4, 4));
@@ -335,7 +362,7 @@ public class AddDialog extends JDialog {
 
 		/* jcmbGeneralCondition - combo box input for general condition */
 		jcmbGeneralCondition = new JComboBox<>();
-		jcmbGeneralCondition.setModel(new DefaultComboBoxModel<>(Inspection.GeneralCondition.values()));
+		jcmbGeneralCondition.setModel(new DefaultComboBoxModel<>(new String[] { "Good", "Mediocre", "Bad" }));
 		jcmbGeneralCondition.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		GridBagConstraints gbc_jcmbGeneralCondition = new GridBagConstraints();
 		gbc_jcmbGeneralCondition.insets = new Insets(0, 0, 5, 10);
@@ -423,13 +450,13 @@ public class AddDialog extends JDialog {
 
 		/* jbtnAddIssue - button for adding issues */
 		JButton jbtnAddIssue = new JButton("Add Issue");
-		
+
 		// jbtnAddIssue Click Listener
 		jbtnAddIssue.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Create a JLabel - JTextField pair for this issue input
-				
+
 				/* jlblIssue - the label for this pair */
 				JLabel jlblIssue = new JLabel("Issue #" + (issueTextFieldList.size() + 1));
 				jlblIssue.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -439,7 +466,7 @@ public class AddDialog extends JDialog {
 				gbc_jlblIssue.gridy = issueTextFieldList.size();
 				jpnlIssueList.add(jlblIssue, gbc_jlblIssue);
 				/* END OF jlblIssue */
-				
+
 				/* jtxtIssue - the input field for this pair */
 				JTextField jtxtIssue = new JTextField();
 				jtxtIssue.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -450,16 +477,16 @@ public class AddDialog extends JDialog {
 				gbc_jtxtIssue.gridy = issueTextFieldList.size();
 				jpnlIssueList.add(jtxtIssue, gbc_jtxtIssue);
 				/* END OF jtxtIssue */
-				
+
 				// Add jtxtIssue to the list of JTextFields for issues.
 				// This is to reference them later
 				issueTextFieldList.add(jtxtIssue);
-				
+
 				// Revalidate the dialog component hierarchy
 				revalidate();
 			}
 		});
-		
+
 		jbtnAddIssue.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		GridBagConstraints gbc_jbtnAddIssue = new GridBagConstraints();
 		gbc_jbtnAddIssue.anchor = GridBagConstraints.EAST;
@@ -485,10 +512,10 @@ public class AddDialog extends JDialog {
 		jpnlIssueList.setBorder(new EmptyBorder(5, 5, 5, 5));
 		jscrlpnIssueList.setViewportView(jpnlIssueList);
 		GridBagLayout gbl_jpnlIssueList = new GridBagLayout();
-		gbl_jpnlIssueList.columnWidths = new int[]{0};
-		gbl_jpnlIssueList.rowHeights = new int[]{0};
-		gbl_jpnlIssueList.columnWeights = new double[]{0.30, 0.70};
-		gbl_jpnlIssueList.rowWeights = new double[]{Double.MIN_VALUE};
+		gbl_jpnlIssueList.columnWidths = new int[] { 0 };
+		gbl_jpnlIssueList.rowHeights = new int[] { 0 };
+		gbl_jpnlIssueList.columnWeights = new double[] { 0.30, 0.70 };
+		gbl_jpnlIssueList.rowWeights = new double[] { Double.MIN_VALUE };
 		jpnlIssueList.setLayout(gbl_jpnlIssueList);
 		/* END OF jpnlIssueList */
 
@@ -519,11 +546,11 @@ public class AddDialog extends JDialog {
 		jtxtareaOtherNotes.setMargin(new Insets(4, 4, 4, 4));
 		jscrlpnOtherNotes.setViewportView(jtxtareaOtherNotes);
 		/* END OF jtxtareaOtherNotes */
-		
+
 		/* issueTextFieldList - text field inputs for issues */
 		issueTextFieldList = new ArrayList<>();
 	}
-	
+
 	/**
 	 * Clears and resets the form.
 	 */
@@ -532,7 +559,20 @@ public class AddDialog extends JDialog {
 		jtxtfldFloorNumber.setText("");
 		jtxtfldRoomNumbers.setText("");
 		jcmbGeneralCondition.setSelectedIndex(0);
-		jcmbInspector.setSelectedIndex(0);
+		jcmbInspector.removeAllItems();
+		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db", "pupsims",
+				"pupsimspass_123");
+				Statement retrieveStatement = connection.createStatement();
+				ResultSet securityGuardsResultSet = retrieveStatement.executeQuery("SELECT * FROM security_guard")) {
+
+			while (securityGuardsResultSet.next())
+				jcmbInspector.addItem(securityGuardsResultSet.getInt("employee_id") + " "
+						+ securityGuardsResultSet.getString("first_name") + " "
+						+ securityGuardsResultSet.getString("last_name"));
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					"An error occured while trying to load security guards into combobox.\n\nMessage: " + e);
+		}
 		jtxtfldDate.setText("");
 		jtxtfldTimeStarted.setText("");
 		jtxtfldTimeFinished.setText("");

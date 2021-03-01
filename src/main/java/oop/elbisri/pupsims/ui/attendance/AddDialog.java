@@ -268,7 +268,7 @@ public class AddDialog extends JDialog {
 							PreparedStatement insertStatement = connection.prepareStatement(
 									"INSERT INTO attendance VALUES (NULL, ?, ?, ?, ?, ?, 'Viewed')")) {
 
-						insertStatement.setInt(1, Integer.parseInt(((String) jcmbSecurityGuard.getSelectedItem()).split(" ")[0]));
+						insertStatement.setLong(1, Long.parseLong(((String) jcmbSecurityGuard.getSelectedItem()).split(" ")[0]));
 						insertStatement.setString(2, LocalDate.now().toString());
 						insertStatement.setString(3, LocalTime.parse(jtxtfldWorkIn.getText(), DateTimeFormatter.ISO_TIME).toString());
 						insertStatement.setString(4, LocalTime.parse(jtxtfldWorkOut.getText(), DateTimeFormatter.ISO_TIME).toString());
@@ -302,9 +302,6 @@ public class AddDialog extends JDialog {
 								JOptionPane.INFORMATION_MESSAGE);
 						// Refresh the management panel table model
 						attendanceManagementPanel.updateTable();
-
-						// Reset this form
-						thisDialog.resetForm();
 
 						// Hide this add dialog
 						thisDialog.setVisible(false);
