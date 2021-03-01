@@ -6,11 +6,17 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -36,7 +42,6 @@ public class AddDialog extends JDialog {
 	 */
 	protected ManagementPanel securityGuardManagementPanel;
 	
-	
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField jtxtfldFirstName;
@@ -45,12 +50,22 @@ public class AddDialog extends JDialog {
 	private JTextField jtxtfldEmployeeID;
 	private JTextField jtxtfldSSSID;
 	private JTextField jtxtfldTINNumber;
+	private JRadioButton jrdbtnFemale;
+	private JRadioButton jrdbtnMale;
 
 	/**
 	 * Create the dialog.
 	 */
 	public AddDialog() {
+		
+		// For reference later
+		AddDialog thisDialog = this;
+		
+		// Title Details
 		setTitle("New Employee Details");
+		
+	
+		
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -156,6 +171,7 @@ public class AddDialog extends JDialog {
 			contentPanel.add(jlblSex, gbc_jlblSex);
 		}
 		{
+			
 			JPanel jpnlSex = new JPanel();
 			GridBagConstraints gbc_jpnlSex = new GridBagConstraints();
 			gbc_jpnlSex.insets = new Insets(0, 0, 5, 0);
@@ -163,14 +179,20 @@ public class AddDialog extends JDialog {
 			gbc_jpnlSex.gridx = 1;
 			gbc_jpnlSex.gridy = 5;
 			contentPanel.add(jpnlSex, gbc_jpnlSex);
+			ButtonGroup bttngrpSex = new ButtonGroup();
 			{
-				JRadioButton jrdbtnFemale = new JRadioButton("Female");
+				jrdbtnFemale = new JRadioButton("Female");
 				jpnlSex.add(jrdbtnFemale);
+				bttngrpSex.add(jrdbtnFemale);
 			}
 			{
-				JRadioButton jrdbtnMale = new JRadioButton("Male");
+				jrdbtnMale = new JRadioButton("Male");
 				jpnlSex.add(jrdbtnMale);
+				bttngrpSex.add(jrdbtnMale);
 			}
+			
+			
+			
 		}
 		{
 			JLabel jlblSSSID = new JLabel("SSS ID:");
@@ -214,15 +236,48 @@ public class AddDialog extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				JButton jbtnSaveButton = new JButton("SAVE");
+				jbtnSaveButton.addActionListener(event -> {
+					try {
+						 Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db", "pupsims", "pupsimspass_123"); 
+						 Statement statement = connection.createStatement();
+						 
+						 /* Sex option */ 
+						 //String holder for user input for sex
+						 String strSexInput = " ";
+						 
+						 if (jrdbtnFemale.isSelected())
+							 strSexInput = "Female"; 
+						 else if (jrdbtnMale.isSelected())
+							 strSexInput = "Male";
+						 else
+							 strSexInput = "No sex selected";
+						 
+						 statement.execute("INSERT INTO security_guard VALUES('" + jtxtfldEmployeeID.getText() + "','" + 
+								 			jtxtfldFirstName.getText() + "','" + jtxtfldMiddleName.getText() + "','" + 
+								 			jtxtfldLastName.getText() + "','" + strSexInput + "','" + 
+								 			jtxtfldSSSID.getText() + "','" + jtxtfldTINNumber.getText() + "')");
+
+						  JOptionPane.showMessageDialog(null, "Security guard successfully created!");
+						} catch(SQLException e) {
+						  JOptionPane.showMessageDialog(null, "An error occured while saving.\n\n Details:" + e);
+					}
+					
+					// To close the dialog prompt right after creation
+					this.setVisible(false);
+					
+					// Update the table
+					securityGuardManagementPanel.updateTable();
+				});
+				buttonPane.add(jbtnSaveButton);
+				getRootPane().setDefaultButton(jbtnSaveButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				JButton jbtnCancelButton = new JButton("Cancel");
+				jbtnCancelButton.addActionListener(event -> {
+					thisDialog.setVisible(false);
+				});
+				buttonPane.add(jbtnCancelButton);
 			}
 		}
 	}
