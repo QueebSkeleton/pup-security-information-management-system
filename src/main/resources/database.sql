@@ -122,6 +122,21 @@ CREATE TABLE `pupsims_db`.`inventory_of_supplies` (
 	`item_condition` CHAR(15) NOT NULL,
 	`price` DOUBLE NOT NULL,
 	PRIMARY KEY (`product_code`));
+    
+    -- -----------------------------------------------------
+-- Table `pupsims_db`.`visitor_log'
+-- -----------------------------------------------------
+
+DROP TABLE IF EXISTS `pupsims_db`.`visitor_log`;
+
+CREATE TABLE `pupsims_db`.`visitor_log`(
+`name_of_visitor` VARCHAR(50) NOT NULL,
+`visitor_type` VARCHAR(10) NOT NULL,
+`purpose_of_visit` VARCHAR(100) NOT NULL,
+`time_of_visit` VARCHAR(20) NOT NULL,
+`time_of_leave` VARCHAR(20) NOT NULL
+);
+
 -- -----------------------------------------------------
 -- Main application user
 -- -----------------------------------------------------
