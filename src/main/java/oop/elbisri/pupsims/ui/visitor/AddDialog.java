@@ -6,12 +6,17 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -45,13 +50,16 @@ public class AddDialog extends JDialog {
 	private JLabel lblTimeOfLeave;
 	private JTextField jtxtfldTimeOfVisit;
 	private JTextField jtxtfldTimeOfLeave;
-	private JPanel panel;
+	private JPanel buttonPane;
 	private JButton jbtnOk;
 	private JButton jbtnCancel;
 
 	protected ManagementPanel visitorManagementPanel;
 	
 	public AddDialog() {
+		//For reference later
+		AddDialog thisDialog = this;
+		
 		//prevent user to resize the dialog
 		setResizable(false);
 		
@@ -71,7 +79,7 @@ public class AddDialog extends JDialog {
 		// Use GridBagLayout for an eye-friendly form
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.rowHeights = new int[] {30, 30, 60, 30, 30, 40, 0};
-		gridBagLayout.columnWeights = new double[]{0.15, 0.85, Double.MIN_VALUE};
+		gridBagLayout.columnWeights = new double[]{0.15, 0.85};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		jpnlContentPane.setLayout(gridBagLayout);
 		
@@ -119,6 +127,7 @@ public class AddDialog extends JDialog {
 		gbc_comboBox.gridx = 1;
 		gbc_comboBox.gridy = 1;
 		jpnlContentPane.add(jcmbVisitorType, gbc_comboBox);
+		String visitorType = jcmbVisitorType.getItemAt(jcmbVisitorType.getSelectedIndex());
 		/* END OF comboBox */
 		
 		/* jlblPurposeOfVisit Purpose of Visit */
@@ -192,30 +201,46 @@ public class AddDialog extends JDialog {
 		/* END OF jtxtfldTimeOfLeave*/
 		
 		//create panel that will hold the CANCEL and OK button
-		panel = new JPanel();
-		panel.setMaximumSize(new Dimension(32767, 40));
-		panel.setPreferredSize(new Dimension(10, 40));
-		panel.setMinimumSize(new Dimension(10, 40));
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.gridwidth = 2;
-		gbc_panel.insets = new Insets(0, 0, 0, 5);
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 5;
-		panel.setFocusable(false);
-		jpnlContentPane.add(panel, gbc_panel);
-		panel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		buttonPane = new JPanel();
+		buttonPane.setMaximumSize(new Dimension(32767, 40));
+		buttonPane.setPreferredSize(new Dimension(10, 40));
+		buttonPane.setMinimumSize(new Dimension(10, 40));
+		GridBagConstraints gbc_buttonPane = new GridBagConstraints();
+		gbc_buttonPane.gridwidth = 2;
+		gbc_buttonPane.insets = new Insets(0, 0, 0, 5);
+		gbc_buttonPane.fill = GridBagConstraints.BOTH;
+		gbc_buttonPane.gridx = 0;
+		gbc_buttonPane.gridy = 5;
+		buttonPane.setFocusable(false);
+		jpnlContentPane.add(buttonPane, gbc_buttonPane);
+		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		
 		//create and add buttons to the panel
-		jbtnCancel = new JButton("Cancel");
-		jbtnCancel.setFocusable(false);
-		panel.add(jbtnCancel);
-		
 		jbtnOk = new JButton("Ok");
 		jbtnOk.setFocusable(false);
-		panel.add(jbtnOk);
+		jbtnOk.addActionListener(event ->{
+			try {
+				 Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db", "pupsims", "pupsimspass_123"); 
+				 Statement statement = connection.createStatement();
+				 
+				statement.execute("INSERT INTO visitor_log VALUES ('"+ jtxtfldNameOfVisitor.getText() +"','"+ visitorType +"', '"+ txtPurposeOfVisit.getText() +"', '"
+						+ jtxtfldTimeOfVisit.getText() + "', '"+ jtxtfldTimeOfLeave.getText() +"')");
+				JOptionPane.showMessageDialog(thisDialog, "Visitor added!");
+			}catch(SQLException e) {
+				JOptionPane.showMessageDialog(thisDialog,"An error occured while saving... \n \n Details: "+e );
+			}
+			this.setVisible(false);
+			
+		});
+		buttonPane.add(jbtnOk);
 		
 		
+		jbtnCancel = new JButton("Cancel");
+		jbtnCancel.setFocusable(false);
+		jbtnCancel.addActionListener(event ->{
+			this.setVisible(false);
+		});
+		buttonPane.add(jbtnCancel);
 		
 	}// AddDialog();
 }// class AddDialog
