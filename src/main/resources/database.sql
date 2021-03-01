@@ -104,14 +104,13 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 DROP TABLE IF EXISTS `pupsims_db`.`inventory_of_supplies`;
 
 CREATE TABLE `pupsims_db`.`inventory_of_supplies` (
-	`id` BIGINT NOT NULL AUTO_INCREMENT,
 	`product_code` BIGINT NOt NULL,
-	`ìtem_name` CHARVAR(50) NOT NULL,
+	`ìtem_name` VARCHAR(50) NOT NULL,
 	`item_type` CHAR(20),
 	`quantity` INT,
 	`item_condition` CHAR(15),
 	`price` INT,
-	PRIMARY KEY (`id`))
+	PRIMARY KEY (`product_code`));
 -- -----------------------------------------------------
 -- Main application user
 -- -----------------------------------------------------
