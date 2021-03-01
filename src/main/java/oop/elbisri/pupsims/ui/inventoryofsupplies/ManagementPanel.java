@@ -1,7 +1,9 @@
 package oop.elbisri.pupsims.ui.inventoryofsupplies;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -10,9 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-import java.awt.Font;
-import java.awt.Color;
 
 /**
  * Inventory of Supplies of this Application. Contains a Table
@@ -37,6 +36,8 @@ public class ManagementPanel extends JPanel {
 	 * Add form dialog of this panel
 	 */
 	protected AddSuppliesDialog inventoryAddDialog;
+	
+	protected InventoryTableModel inventoryTableModel;
 	
 
 	/**
@@ -78,13 +79,8 @@ public class ManagementPanel extends JPanel {
 		add(jscrllpnTable);
 		
 		jtblTable = new JTable();
-		jtblTable.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Product Code", "Item Name", "Type", "Quantity", "Condition", "Price"
-			}
-		));
+		inventoryTableModel = new InventoryTableModel();
+		jtblTable.setModel(inventoryTableModel);
 		jtblTable.getColumnModel().getColumn(0).setPreferredWidth(90);
 		jtblTable.getColumnModel().getColumn(2).setPreferredWidth(90);
 		jtblTable.getColumnModel().getColumn(4).setPreferredWidth(100);
@@ -94,6 +90,10 @@ public class ManagementPanel extends JPanel {
 		inventoryAddDialog = new AddSuppliesDialog();
 		inventoryAddDialog.inventoryManagementPanel = this; 
 
+	}
+	
+	public void updateTable() {
+		inventoryTableModel.refresh();
 	}
 
 }
