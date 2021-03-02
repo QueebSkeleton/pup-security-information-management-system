@@ -160,6 +160,18 @@ DEFAULT CHARSET=utf8mb4
 COLLATE=utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
+-- Table `pupsims_db`.`parking_slot`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pupsims_db`.`parking_slot`;
+
+CREATE TABLE `pupsims_db`.`parking_slot`(
+`slot_number` VARCHAR(4) PRIMARY KEY NOT NULL,
+`location` VARCHAR(20) NOT NULL,
+`description` VARCHAR(200) NOT NULL,
+`status` VARCHAR(20) NOT NULL
+);
+
+-- -----------------------------------------------------
 -- Main application user
 -- -----------------------------------------------------
 DROP USER 'pupsims'@'localhost';
