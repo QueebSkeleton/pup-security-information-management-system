@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -259,6 +261,45 @@ public class AddSuppliesDialog extends JDialog {
 			{
 				JButton jbtnSaveButton = new JButton("SAVE");
 				jbtnSaveButton.addActionListener(event -> {
+					
+					List<String> errorMessageList = new ArrayList<>();
+					
+					long code = 0;
+					try {
+						code = Long.parseLong(jtxtfldProductCode.getText());
+					} catch(NumberFormatException e) {
+						errorMessageList.add("Invalid item code. Must not be empty and is an integer.");
+					}
+
+					String name = jtxtfldItemName.getText();
+					if(name.length() == 0 || name.length() > 50)
+						errorMessageList.add("Invalid item name. Must not be empty and at most 50 characters.");
+					
+					int quantity = 0;
+					try {
+						quantity = Integer.parseInt(jtxtfldQuantity.getText());
+					} catch(NumberFormatException e) {
+						errorMessageList.add("Invalid quantity. Must not be empty and is an integer.");
+					}
+					
+					double price = 0;
+					try {
+						price = Double.parseDouble(jtxtfldPrice.getText());
+					} catch(NumberFormatException e) {
+						errorMessageList.add("Invalid price. Must not be empty and is a double.");
+					}
+
+					if (errorMessageList.size() > 0) {
+						StringBuilder errorMessageBuilder = new StringBuilder();
+						for (String errorMessage : errorMessageList) {
+							errorMessageBuilder.append("\n- ");
+							errorMessageBuilder.append(errorMessage);
+						}
+						JOptionPane.showMessageDialog(thisDialog,
+								"Please correct the input errors below:" + errorMessageBuilder.toString());
+						return;
+					}
+					
 					try {
 						Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db",
 								"pupsims", "pupsimspass_123");
@@ -294,10 +335,10 @@ public class AddSuppliesDialog extends JDialog {
 						else
 							strItemConditionInput = "no status selected";
 
-						statement.execute("INSERT INTO inventory_of_supplies VALUES ('" + jtxtfldProductCode.getText()
-								+ "','" + jtxtfldItemName.getText() + "','" + strItemTypeInput + "','"
-								+ jtxtfldQuantity.getText() + "','" + strItemConditionInput + "','"
-								+ jtxtfldPrice.getText() + "')");
+						statement.execute("INSERT INTO inventory_of_supplies VALUES ('" + code
+								+ "','" + name + "','" + strItemTypeInput + "','"
+								+ quantity + "','" + strItemConditionInput + "','"
+								+ price + "')");
 
 						statement.close();
 						connection.close();

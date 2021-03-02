@@ -13,6 +13,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -237,15 +242,62 @@ public class AddReportDialog extends JDialog {
 			{
 				JButton jbtnSave = new JButton("SAVE");
 				jbtnSave.addActionListener(event -> {
+					List<String> errorMessageList = new ArrayList<>();
+
+					LocalDate date = null;
+					try {
+						date = LocalDate.parse(jtxtfldDate.getText());
+					} catch (DateTimeParseException e) {
+						errorMessageList.add(
+								"Invalid date. Must be of the format yyyy-MM-dd");
+					}
+
+					LocalTime time = null;
+					try {
+						time = LocalTime.parse(jtxtfldTime.getText());
+					} catch (DateTimeParseException e) {
+						errorMessageList.add("Invalid time. Must be of the format HH:mm:ss");
+					}
+
+					String injuredPersonName = jtxtfldInjuredPersonName.getText();
+					if(injuredPersonName.length() > 45)
+						errorMessageList.add("Invalid injured person name. Max of 45 characters allowed.");
+
+					int age = 0;
+					try {
+						age = Short.parseShort(jtxtfldInjuredPersonAge.getText());
+					} catch(NumberFormatException e) {
+						errorMessageList.add("Invalid age. Must be numeric and short.");
+					}
+					
+					String medicalNotes = jtxtfldInjuredPersonMedicalNotes.getText();
+					if(medicalNotes.length() > 150)
+						errorMessageList.add("Medical notes too long. Must be max of 150 characters.");
+					
+					String descriptiveDetails = jtxtarDescriptiveDetails.getText();
+					if(descriptiveDetails.length() > 300)
+						errorMessageList.add("Descriptive details too long. Max of 300 characters allowed.");
+
+					if (errorMessageList.size() > 0) {
+						StringBuilder errorMessageBuilder = new StringBuilder();
+						for (String errorMessage : errorMessageList) {
+							errorMessageBuilder.append("\n- ");
+							errorMessageBuilder.append(errorMessage);
+						}
+						JOptionPane.showMessageDialog(thisDialog,
+								"Please correct the input errors below:" + errorMessageBuilder.toString());
+						return;
+					}
+					
 					try {
 						Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db",
 								"pupsims", "pupsimspass_123");
 						Statement statement = connection.createStatement();
 
-						statement.execute("INSERT INTO incident_report VALUES (NULL, '" + jtxtfldDate.getText() + "','"
-								+ jtxtfldTime.getText() + "','" + jtxtfldInjuredPersonName.getText() + "','"
-								+ jtxtfldInjuredPersonAge.getText() + "','" + jtxtfldInjuredPersonMedicalNotes.getText()
-								+ "','" + jtxtarDescriptiveDetails.getText() + "')");
+						statement.execute("INSERT INTO incident_report VALUES (NULL, '" + date + "','"
+								+ time + "','" + injuredPersonName + "','"
+								+ age + "','" + medicalNotes
+								+ "','" + descriptiveDetails + "')");
 
 						statement.close();
 						connection.close();

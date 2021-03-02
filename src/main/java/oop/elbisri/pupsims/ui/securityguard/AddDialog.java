@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -212,6 +214,45 @@ public class AddDialog extends JDialog {
 			{
 				JButton jbtnSaveButton = new JButton("SAVE");
 				jbtnSaveButton.addActionListener(event -> {
+					
+					List<String> errorMessageList = new ArrayList<>();
+					
+					String firstName = jtxtfldFirstName.getText();
+					if(firstName.length() == 0 || firstName.length() > 45)
+						errorMessageList.add("Invalid first name. Must not be empty and at most 45 characters.");
+					
+					String middleName = jtxtfldMiddleName.getText();
+					if(middleName.length() == 0 || middleName.length() > 45)
+						errorMessageList.add("Invalid middle name. Must not be empty and at most 45 characters.");
+					
+					String lastName = jtxtfldLastName.getText();
+					if(lastName.length() == 0 || lastName.length() > 45)
+						errorMessageList.add("Invalid last name. Must not be empty and at most 45 characters.");
+					
+					long sssNumber = 0;
+					try {
+						sssNumber = Long.parseLong(jtxtfldSSSID.getText());
+					} catch(NumberFormatException e) {
+						errorMessageList.add("Invalid sss number. Must be numeric.");
+					}
+					
+					long tinNumber = 0;
+					try {
+						tinNumber = Long.parseLong(jtxtfldTINNumber.getText());
+					} catch(NumberFormatException e) {
+						errorMessageList.add("Invalid TIN number. Must be numeric.");
+					}
+
+					if (errorMessageList.size() > 0) {
+						StringBuilder errorMessageBuilder = new StringBuilder();
+						for (String errorMessage : errorMessageList) {
+							errorMessageBuilder.append("\n- ");
+							errorMessageBuilder.append(errorMessage);
+						}
+						JOptionPane.showMessageDialog(thisDialog,
+								"Please correct the input errors below:" + errorMessageBuilder.toString());
+						return;
+					}
 					try {
 						Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db",
 								"pupsims", "pupsimspass_123");
@@ -228,9 +269,9 @@ public class AddDialog extends JDialog {
 						else
 							strSexInput = "No sex selected";
 
-						statement.execute("INSERT INTO security_guard VALUES(NULL,'" + jtxtfldFirstName.getText()
-								+ "','" + jtxtfldMiddleName.getText() + "','" + jtxtfldLastName.getText() + "','"
-								+ strSexInput + "','" + jtxtfldSSSID.getText() + "','" + jtxtfldTINNumber.getText()
+						statement.execute("INSERT INTO security_guard VALUES(NULL,'" + firstName
+								+ "','" + middleName + "','" + lastName + "','"
+								+ strSexInput + "','" + sssNumber + "','" + tinNumber
 								+ "')");
 						
 						statement.close();
