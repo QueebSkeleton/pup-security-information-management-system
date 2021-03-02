@@ -1,18 +1,23 @@
 package oop.elbisri.pupsims.ui.car;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JButton;
-import java.awt.FlowLayout;
 
 /**
  * Add form dialog for adding car information for parking.
@@ -60,11 +65,14 @@ public class AddDialog extends JDialog{
 	
 	
 	public AddDialog() {
+		//For reference later
+		AddDialog thisDialog = this;
+		
 		//prevent user from resizing the dialog
 		setResizable(false);
 				
 		//set window size
-		setMinimumSize(new Dimension(600, 260));
+		setMinimumSize(new Dimension(600, 300));
 				
 		//set title
 		setTitle("Add Car Information");
@@ -276,16 +284,45 @@ public class AddDialog extends JDialog{
 		panel.setFocusable(false);
 		panel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		
-		jbtnCancel = new JButton("Cancel");
-		jbtnCancel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		jbtnCancel.setFocusable(false);
-		panel.add(jbtnCancel);
-		
 		jbtnOk = new JButton("Ok");
 		jbtnOk.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		jbtnOk.setFocusable(false);
+		jbtnOk.addActionListener(event -> {
+			try {
+				Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db", "pupsims", "pupsimspass_123"); 
+				 Statement statement = connection.createStatement();
+				 
+				 statement.execute("INSERT INTO car_log VALUES('"+ jtxtfldOwnerFirstName.getText() +"', '"+ jtxtfldOwnerLastName.getText() +"',"
+				 		+ "'"+ jtxtfldContactNumber.getText() +"', '"+ jtxtfldCarPlateNumber.getText() +"', '"+ jtxtfldCarModelAndColor.getText() +"',"
+				 		+ "'"+ jtxtfldTimeEntered.getText() +"', '"+ jtxtfldTimeExited.getText() +"', '"+ jtxtfldParkingSlot.getText() +"' )");
+				 JOptionPane.showMessageDialog(thisDialog, "Car added successfully!");
+				 this.setVisible(false);
+				
+			}catch(SQLException e) {
+				JOptionPane.showMessageDialog(thisDialog,"Error occured... \n\n Details: "+ e);
+				
+				
+			}
+		});
 		panel.add(jbtnOk);
 		
-	}// public AddDialog();
+		jbtnCancel = new JButton("Cancel");
+		jbtnCancel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		jbtnCancel.setFocusable(false);
+		jbtnCancel.addActionListener(event -> {
+			this.setVisible(false);
+		});
+		panel.add(jbtnCancel);
+	}
 	
-}// public class AddDialog
+	public void resetForm() {
+		jtxtfldOwnerFirstName.setText("");
+		jtxtfldOwnerLastName.setText("");
+		jtxtfldContactNumber.setText("");
+		jtxtfldCarPlateNumber.setText("");
+		jtxtfldCarModelAndColor.setText("");
+		jtxtfldTimeEntered.setText("");
+		jtxtfldTimeExited.setText("");
+		jtxtfldParkingSlot.setText("");
+	}
+}
