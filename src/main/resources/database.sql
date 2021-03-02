@@ -183,9 +183,10 @@ CREATE TABLE `pupsims_db`.`car_log`(
 `contact_num` VARCHAR(11) UNIQUE NOT NULL,
 `plate_num` VARCHAR(8) UNIQUE NOT NULL,
 `model_and_color` VARCHAR(50) NOT NULL,
-`time_enter` VARCHAR(5) NOT NULL,
-`time_exit` VARCHAR(5) NOT NULL,
-`parking_slot` VARCHAR(3) UNIQUE NOT NULL
+`time_enter` VARCHAR(20) NOT NULL,
+`time_exit` VARCHAR(20) NOT NULL,
+`parking_slot` VARCHAR(4) NOT NULL,
+CONSTRAINT `FK_CAR_PARKING_SLOT` FOREIGN KEY (`parking_slot`) REFERENCES `parking_slot` (`slot_number`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- -----------------------------------------------------
