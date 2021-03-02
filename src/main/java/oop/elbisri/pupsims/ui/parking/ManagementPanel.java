@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * Parking Slot Management Panel of this Application. Contains a Table
@@ -41,6 +40,8 @@ public class ManagementPanel extends JPanel {
 	 */
 	protected AddDialog parkingAddDialog;
 	private JTable jtblParking;
+	
+	protected ParkingSlotTableModel parkingSlotTableModel;
 	
 	/**
 	 * Construct the panel.
@@ -94,13 +95,8 @@ public class ManagementPanel extends JPanel {
 		
 		/* jtblParking - Main Panel Table */
 		jtblParking = new JTable();
-		jtblParking.setModel(new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-					"Slot number", "Location", "Status"
-				}
-		));
+		parkingSlotTableModel = new ParkingSlotTableModel();
+		jtblParking.setModel(parkingSlotTableModel);
 		jtblParking.getColumnModel().getColumn(0).setPreferredWidth(20);
 		jtblParking.getColumnModel().getColumn(1).setPreferredWidth(130);
 		jtblParking.getColumnModel().getColumn(2).setPreferredWidth(124);
@@ -120,6 +116,10 @@ public class ManagementPanel extends JPanel {
 		// Create the add form dialog
 		parkingAddDialog = new AddDialog();
 		parkingAddDialog.parkingManagementPanel = this;
+	}
+	
+	public void updateTable() {
+		parkingSlotTableModel.refresh();
 	}
 
 }

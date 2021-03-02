@@ -196,6 +196,9 @@ public class AddDialog extends JDialog {
 
 				// Close the dialog after saving
 				this.setVisible(false);
+				
+				// Refresh the table
+				parkingManagementPanel.updateTable();
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(thisDialog, "An error occured while saving... \n \n Details: " + e);
 			}
