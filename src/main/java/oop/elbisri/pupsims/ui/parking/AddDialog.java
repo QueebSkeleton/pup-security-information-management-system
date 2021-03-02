@@ -41,16 +41,15 @@ public class AddDialog extends JDialog {
 	private JComboBox<String> jcmbStatus;
 
 	protected ManagementPanel parkingManagementPanel;
-	
 
 	/**
 	 * Create the dialog.
 	 */
 	public AddDialog() {
-		//For reference later
+		// For reference later
 		AddDialog thisDialog = this;
-		
-		//Prevent user from resizing
+
+		// Prevent user from resizing
 		setResizable(false);
 
 		// Set minimum size
@@ -97,8 +96,7 @@ public class AddDialog extends JDialog {
 		jtxtfldSlotNumber.setColumns(10);
 		/* END OF jtxtfldSlotNumber */
 
-		
-		/* jlblLocation Location*/
+		/* jlblLocation Location */
 		JLabel jlblLocation = new JLabel("Location:");
 		jlblLocation.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		GridBagConstraints gbc_jlblLocation = new GridBagConstraints();
@@ -107,9 +105,9 @@ public class AddDialog extends JDialog {
 		gbc_jlblLocation.gridx = 0;
 		gbc_jlblLocation.gridy = 1;
 		jpnlContentPane.add(jlblLocation, gbc_jlblLocation);
-		/* END OF jlblLocation*/
-		
-		/*jtxtfldLocation Location */
+		/* END OF jlblLocation */
+
+		/* jtxtfldLocation Location */
 		jtxtfldLocation = new JTextField();
 		jtxtfldLocation.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		GridBagConstraints gbc_jtxtfldLocation = new GridBagConstraints();
@@ -120,8 +118,7 @@ public class AddDialog extends JDialog {
 		jpnlContentPane.add(jtxtfldLocation, gbc_jtxtfldLocation);
 		jtxtfldLocation.setColumns(10);
 		/* END OF jtxtfldLocation */
-		
-		
+
 		/* jlblDescription Location Description */
 		JLabel jlblDescription = new JLabel("Description:");
 		jlblDescription.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -133,8 +130,7 @@ public class AddDialog extends JDialog {
 		jpnlContentPane.add(jlblDescription, gbc_jlblDescription);
 		/* END OF jlblDescription */
 
-		
-		/* jtxtDescription Description*/
+		/* jtxtDescription Description */
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
@@ -168,7 +164,6 @@ public class AddDialog extends JDialog {
 		gbc_jcmbStatus.gridx = 1;
 		gbc_jcmbStatus.gridy = 3;
 		jpnlContentPane.add(jcmbStatus, gbc_jcmbStatus);
-		String parkingStatus = jcmbStatus.getItemAt(jcmbStatus.getSelectedIndex());
 		/* END OF jcmbStatus */
 
 		// create panel that will hold the CANCEL and OK button
@@ -186,44 +181,43 @@ public class AddDialog extends JDialog {
 		jbtnOk.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		jbtnOk.addActionListener(event -> {
 			try {
-				 Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db", "pupsims", "pupsimspass_123"); 
-				 Statement statement = connection.createStatement();
-				 
-				 statement.execute("INSERT INTO parking_slot VALUES('"+ jtxtfldSlotNumber.getText() +"', '"+ jtxtfldLocation.getText() +"',"
-				 		+ "'"+ jtxtDescription.getText() +"', '"+ parkingStatus +"')");
-				 JOptionPane.showMessageDialog(thisDialog, "Parking slot added successfully!");
-				 
-				 
-				//Close the dialog after saving
-				this.setVisible(false);
-					
+				Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db", "pupsims",
+						"pupsimspass_123");
+				Statement statement = connection.createStatement();
+
+				statement.execute("INSERT INTO parking_slot VALUES('" + jtxtfldSlotNumber.getText() + "', '"
+						+ jtxtfldLocation.getText() + "'," + "'" + jtxtDescription.getText() + "', '" + jcmbStatus.getItemAt(jcmbStatus.getSelectedIndex())
+						+ "')");
+
 				statement.close();
 				connection.close();
-			}catch(SQLException e) {
-				JOptionPane.showMessageDialog(thisDialog,"An error occured while saving... \n \n Details: "+e );
+
+				JOptionPane.showMessageDialog(thisDialog, "Parking slot added successfully!");
+
+				// Close the dialog after saving
+				this.setVisible(false);
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(thisDialog, "An error occured while saving... \n \n Details: " + e);
 			}
 		});
 		buttonPanel.add(jbtnOk);
-		
+
 		JButton jbtnCancel = new JButton("Cancel");
 		jbtnCancel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		jbtnCancel.addActionListener(event -> {
-			//Closes the dialog
+			// Closes the dialog
 			this.setVisible(false);
 		});
 		buttonPanel.add(jbtnCancel);
-		
-		
 
 	}
-	
-	//resets the form
+
+	// resets the form
 	public void resetForm() {
 		jtxtfldSlotNumber.setText("");
 		jtxtfldLocation.setText("");
 		jtxtDescription.setText("");
 		jcmbStatus.setSelectedIndex(0);
 	}
-
 
 }
