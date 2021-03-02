@@ -172,6 +172,23 @@ CREATE TABLE `pupsims_db`.`parking_slot`(
 );
 
 -- -----------------------------------------------------
+-- Table `pupsims_db`.`car_log`
+-- -----------------------------------------------------
+
+DROP TABLE IF EXISTS `pupsims_db`.`car_log`;
+
+CREATE TABLE `pupsims_db`.`car_log`(
+`first_name` VARCHAR (20) NOT NULL,
+`last_name` VARCHAR (20) NOT NULL,
+`contact_num` VARCHAR(11) UNIQUE NOT NULL,
+`plate_num` VARCHAR(8) UNIQUE NOT NULL,
+`model_and_color` VARCHAR(50) NOT NULL,
+`time_enter` VARCHAR(5) NOT NULL,
+`time_exit` VARCHAR(5) NOT NULL,
+`parking_slot` VARCHAR(3) UNIQUE NOT NULL
+);
+
+-- -----------------------------------------------------
 -- Main application user
 -- -----------------------------------------------------
 DROP USER 'pupsims'@'localhost';
