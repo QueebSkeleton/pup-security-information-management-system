@@ -6,12 +6,17 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -31,13 +36,21 @@ public class AddDialog extends JDialog {
 	 */
 	private JPanel jpnlContentPane;
 	private JTextField jtxtfldSlotNumber;
+	private JTextField jtxtfldLocation;
+	private JTextArea jtxtDescription;
+	private JComboBox<String> jcmbStatus;
 
 	protected ManagementPanel parkingManagementPanel;
+	
 
 	/**
 	 * Create the dialog.
 	 */
 	public AddDialog() {
+		//For reference later
+		AddDialog thisDialog = this;
+		
+		//Prevent user from resizing
 		setResizable(false);
 
 		// Set minimum size
@@ -55,9 +68,9 @@ public class AddDialog extends JDialog {
 		setContentPane(jpnlContentPane);
 		GridBagLayout gbl_jpnlContentPane = new GridBagLayout();
 		gbl_jpnlContentPane.columnWidths = new int[] { 148, 0 };
-		gbl_jpnlContentPane.rowHeights = new int[] { 0, 0, 0, 28, 0 };
-		gbl_jpnlContentPane.columnWeights = new double[] { 0.0, 0.85 };
-		gbl_jpnlContentPane.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_jpnlContentPane.rowHeights = new int[] { 0, 32, 0, 0, 28, 0 };
+		gbl_jpnlContentPane.columnWeights = new double[] { 0.0, 1.0 };
+		gbl_jpnlContentPane.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		jpnlContentPane.setLayout(gbl_jpnlContentPane);
 
 		/* jlblSlotNumber Slot number */
@@ -84,42 +97,67 @@ public class AddDialog extends JDialog {
 		jtxtfldSlotNumber.setColumns(10);
 		/* END OF jtxtfldSlotNumber */
 
-		/* jlblLocationDescription Location Description */
-		JLabel jlblLocationDescription = new JLabel("Text Description of Location:");
-		jlblLocationDescription.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		GridBagConstraints gbc_jlblLocationDescription = new GridBagConstraints();
-		gbc_jlblLocationDescription.anchor = GridBagConstraints.NORTHEAST;
-		gbc_jlblLocationDescription.insets = new Insets(0, 0, 5, 5);
-		gbc_jlblLocationDescription.gridx = 0;
-		gbc_jlblLocationDescription.gridy = 1;
-		jpnlContentPane.add(jlblLocationDescription, gbc_jlblLocationDescription);
-		/* END OF jtxtareaLocationDescription */
+		
+		/* jlblLocation Location*/
+		JLabel jlblLocation = new JLabel("Location:");
+		jlblLocation.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		GridBagConstraints gbc_jlblLocation = new GridBagConstraints();
+		gbc_jlblLocation.anchor = GridBagConstraints.EAST;
+		gbc_jlblLocation.insets = new Insets(0, 0, 5, 5);
+		gbc_jlblLocation.gridx = 0;
+		gbc_jlblLocation.gridy = 1;
+		jpnlContentPane.add(jlblLocation, gbc_jlblLocation);
+		/* END OF jlblLocation*/
+		
+		/*jtxtfldLocation Location */
+		jtxtfldLocation = new JTextField();
+		jtxtfldLocation.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		GridBagConstraints gbc_jtxtfldLocation = new GridBagConstraints();
+		gbc_jtxtfldLocation.fill = GridBagConstraints.BOTH;
+		gbc_jtxtfldLocation.insets = new Insets(0, 0, 5, 0);
+		gbc_jtxtfldLocation.gridx = 1;
+		gbc_jtxtfldLocation.gridy = 1;
+		jpnlContentPane.add(jtxtfldLocation, gbc_jtxtfldLocation);
+		jtxtfldLocation.setColumns(10);
+		/* END OF jtxtfldLocation */
+		
+		
+		/* jlblDescription Location Description */
+		JLabel jlblDescription = new JLabel("Description:");
+		jlblDescription.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		GridBagConstraints gbc_jlblDescription = new GridBagConstraints();
+		gbc_jlblDescription.anchor = GridBagConstraints.NORTHEAST;
+		gbc_jlblDescription.insets = new Insets(0, 0, 5, 5);
+		gbc_jlblDescription.gridx = 0;
+		gbc_jlblDescription.gridy = 2;
+		jpnlContentPane.add(jlblDescription, gbc_jlblDescription);
+		/* END OF jlblDescription */
 
-		/* jlblStatus Status */
-
+		
+		/* jtxtDescription Description*/
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane.gridx = 1;
-		gbc_scrollPane.gridy = 1;
+		gbc_scrollPane.gridy = 2;
 		jpnlContentPane.add(scrollPane, gbc_scrollPane);
 
-		JTextArea jtxtareaLocationDescription = new JTextArea();
-		scrollPane.setViewportView(jtxtareaLocationDescription);
-		jtxtareaLocationDescription.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		jtxtDescription = new JTextArea();
+		scrollPane.setViewportView(jtxtDescription);
+		jtxtDescription.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		JLabel jlblStatus = new JLabel("Status:");
 		jlblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		GridBagConstraints gbc_jlblStatus = new GridBagConstraints();
 		gbc_jlblStatus.anchor = GridBagConstraints.NORTHEAST;
 		gbc_jlblStatus.insets = new Insets(0, 0, 5, 5);
 		gbc_jlblStatus.gridx = 0;
-		gbc_jlblStatus.gridy = 2;
+		gbc_jlblStatus.gridy = 3;
 		jpnlContentPane.add(jlblStatus, gbc_jlblStatus);
-		/* END OF jlblStatus */
+		/* END OF jtxtDescription */
 
 		/* jcmbStatus Status selection */
-		JComboBox<String> jcmbStatus = new JComboBox<>();
+		jcmbStatus = new JComboBox<>();
 		jcmbStatus.setAlignmentY(0.0f);
 		jcmbStatus.setAlignmentX(0.0f);
 		jcmbStatus.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -128,29 +166,64 @@ public class AddDialog extends JDialog {
 		gbc_jcmbStatus.fill = GridBagConstraints.HORIZONTAL;
 		gbc_jcmbStatus.insets = new Insets(0, 0, 5, 0);
 		gbc_jcmbStatus.gridx = 1;
-		gbc_jcmbStatus.gridy = 2;
+		gbc_jcmbStatus.gridy = 3;
 		jpnlContentPane.add(jcmbStatus, gbc_jcmbStatus);
+		String parkingStatus = jcmbStatus.getItemAt(jcmbStatus.getSelectedIndex());
 		/* END OF jcmbStatus */
 
 		// create panel that will hold the CANCEL and OK button
-		JPanel panel = new JPanel();
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.gridwidth = 2;
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 3;
-		jpnlContentPane.add(panel, gbc_panel);
-		panel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		JPanel buttonPanel = new JPanel();
+		GridBagConstraints gbc_buttonPanel = new GridBagConstraints();
+		gbc_buttonPanel.gridwidth = 2;
+		gbc_buttonPanel.fill = GridBagConstraints.BOTH;
+		gbc_buttonPanel.gridx = 0;
+		gbc_buttonPanel.gridy = 4;
+		jpnlContentPane.add(buttonPanel, gbc_buttonPanel);
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 
 		// add buttons to panel
-		JButton jbtnCancel = new JButton("Cancel");
-		jbtnCancel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		panel.add(jbtnCancel);
-
 		JButton jbtnOk = new JButton("Ok");
 		jbtnOk.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		panel.add(jbtnOk);
+		jbtnOk.addActionListener(event -> {
+			try {
+				 Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db", "pupsims", "pupsimspass_123"); 
+				 Statement statement = connection.createStatement();
+				 
+				 statement.execute("INSERT INTO parking_slot VALUES('"+ jtxtfldSlotNumber.getText() +"', '"+ jtxtfldLocation.getText() +"',"
+				 		+ "'"+ jtxtDescription.getText() +"', '"+ parkingStatus +"')");
+				 JOptionPane.showMessageDialog(thisDialog, "Parking slot added successfully!");
+				 
+				 
+				//Close the dialog after saving
+				this.setVisible(false);
+					
+				statement.close();
+				connection.close();
+			}catch(SQLException e) {
+				JOptionPane.showMessageDialog(thisDialog,"An error occured while saving... \n \n Details: "+e );
+			}
+		});
+		buttonPanel.add(jbtnOk);
+		
+		JButton jbtnCancel = new JButton("Cancel");
+		jbtnCancel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		jbtnCancel.addActionListener(event -> {
+			//Closes the dialog
+			this.setVisible(false);
+		});
+		buttonPanel.add(jbtnCancel);
+		
+		
 
 	}
+	
+	//resets the form
+	public void resetForm() {
+		jtxtfldSlotNumber.setText("");
+		jtxtfldLocation.setText("");
+		jtxtDescription.setText("");
+		jcmbStatus.setSelectedIndex(0);
+	}
+
 
 }
