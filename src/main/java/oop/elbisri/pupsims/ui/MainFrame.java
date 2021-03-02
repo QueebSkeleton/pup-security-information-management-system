@@ -214,7 +214,9 @@ public class MainFrame extends JFrame {
 		// then remove it from the panel
 		else if(jpnlCurrentShownPanel != null)
 			jpnlContentPane.remove(jpnlCurrentShownPanel);
-		
+
+		// Refresh the table
+		parkingManagementPanel.updateTable();
 		// Set the parking slot management panel as the new panel
 		jpnlCurrentShownPanel = parkingManagementPanel;
 		jpnlContentPane.add(parkingManagementPanel);
