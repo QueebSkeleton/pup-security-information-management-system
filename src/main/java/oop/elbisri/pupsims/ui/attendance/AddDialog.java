@@ -17,6 +17,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
@@ -263,31 +265,58 @@ public class AddDialog extends JDialog {
 			new SwingWorker<Void, Void>() {
 				@Override
 				protected Void doInBackground() throws Exception {
-					try (Connection connection = DriverManager
-							.getConnection("jdbc:mysql://localhost:3306/pupsims_db", "pupsims", "pupsimspass_123");
-							PreparedStatement insertStatement = connection.prepareStatement(
-									"INSERT INTO attendance VALUES (NULL, ?, ?, ?, ?, ?, 'Viewed')")) {
 
-						insertStatement.setLong(1, Long.parseLong(((String) jcmbSecurityGuard.getSelectedItem()).split(" ")[0]));
-						insertStatement.setString(2, LocalDate.now().toString());
-						insertStatement.setString(3, LocalTime.parse(jtxtfldWorkIn.getText(), DateTimeFormatter.ISO_TIME).toString());
-						insertStatement.setString(4, LocalTime.parse(jtxtfldWorkOut.getText(), DateTimeFormatter.ISO_TIME).toString());
-						insertStatement.setString(5, jtxtareaRemarks.getText());
-						
-						insertStatement.execute();
-					} catch (DateTimeParseException e) {
-						// If an error occured while parsing the datetime fields,
-						// output a friendly message
-						JOptionPane.showMessageDialog(thisDialog,
-								"Please check your date and time inputs. It must follow ISO Time.\n"
-										+ "Date must be yyyy-MM-dd, time fields (work-in, work-out) must be HH:mm:ss",
-								"Check your inputs!", JOptionPane.WARNING_MESSAGE);
-						throw new RuntimeException(e);
-					} catch(SQLException e) {
-						JOptionPane.showMessageDialog(thisDialog,
-								"An error occured while trying to save attendance.\n\nMessage: " + e);
-						throw new RuntimeException(e);
+					List<String> errorMessageList = new ArrayList<>();
+
+					long securityGuardId = 0;
+					try {
+						securityGuardId = Long.parseLong(((String) jcmbSecurityGuard.getSelectedItem()).split(" ")[0]);
+					} catch (Exception e) {
+						errorMessageList.add(
+								"Security Guard must not be null. Ensure that you have a valid security guard registered first and selected!");
 					}
+
+					LocalTime workIn = null;
+					try {
+						workIn = LocalTime.parse(jtxtfldWorkIn.getText(), DateTimeFormatter.ISO_TIME);
+					} catch (DateTimeParseException e) {
+						errorMessageList.add("Invalid work in field. Must be of the format: HH:mm:ss");
+					}
+
+					LocalTime workOut = null;
+					try {
+						workOut = LocalTime.parse(jtxtfldWorkOut.getText(), DateTimeFormatter.ISO_TIME);
+					} catch (DateTimeParseException e) {
+						errorMessageList.add("Invalid work out field. Must be of the format: HH:mm:ss");
+					}
+
+					String remarks = jtxtareaRemarks.getText();
+					if (remarks.length() == 0 || remarks.length() > 300)
+						errorMessageList.add("Invalid remarks. Must not be empty, and only up to 300 characters.");
+
+					if (errorMessageList.size() > 0) {
+						StringBuilder errorMessageBuilder = new StringBuilder();
+						for (String errorMessage : errorMessageList) {
+							errorMessageBuilder.append("\n- ");
+							errorMessageBuilder.append(errorMessage);
+						}
+						JOptionPane.showMessageDialog(thisDialog,
+								"Please correct the input errors below:" + errorMessageBuilder.toString());
+						throw new RuntimeException();
+					}
+
+					Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pupsims_db",
+							"pupsims", "pupsimspass_123");
+					PreparedStatement insertStatement = connection
+							.prepareStatement("INSERT INTO attendance VALUES (NULL, ?, ?, ?, ?, ?, 'Viewed')");
+
+					insertStatement.setLong(1, securityGuardId);
+					insertStatement.setString(2, LocalDate.now().toString());
+					insertStatement.setString(3, workIn.toString());
+					insertStatement.setString(4, workOut.toString());
+					insertStatement.setString(5, remarks);
+
+					insertStatement.execute();
 
 					return null;
 				}
@@ -296,7 +325,7 @@ public class AddDialog extends JDialog {
 				protected void done() {
 					try {
 						get();
-						
+
 						// After the attendance object has been saved, show a friendly dialog box
 						JOptionPane.showMessageDialog(thisDialog, "Successfully logged attendance.\n", "Success!",
 								JOptionPane.INFORMATION_MESSAGE);
@@ -328,7 +357,9 @@ public class AddDialog extends JDialog {
 				ResultSet securityGuardsResultSet = retrieveStatement.executeQuery("SELECT * FROM security_guard")) {
 
 			while (securityGuardsResultSet.next())
-				jcmbSecurityGuard.addItem(securityGuardsResultSet.getInt("employee_id") + " " + securityGuardsResultSet.getString("first_name") + " " + securityGuardsResultSet.getString("last_name"));
+				jcmbSecurityGuard.addItem(securityGuardsResultSet.getInt("employee_id") + " "
+						+ securityGuardsResultSet.getString("first_name") + " "
+						+ securityGuardsResultSet.getString("last_name"));
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,
 					"An error occured while trying to load security guards into combobox.\n\nMessage: " + e);
