@@ -262,6 +262,8 @@ public class MainFrame extends JFrame {
 		else if(jpnlCurrentShownPanel != null)
 			jpnlContentPane.remove(jpnlCurrentShownPanel);
 		
+		// Refresh the table
+		carManagementPanel.updateTable();
 		// Set the car management panel as the new panel
 		jpnlCurrentShownPanel = carManagementPanel;
 		jpnlContentPane.add(carManagementPanel);

@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * Car Management Panel of this Application. Contains a Table
@@ -41,6 +40,8 @@ public class ManagementPanel extends JPanel {
 	 * Add Form Dialog of this panel.
 	 */
 	protected AddDialog carAddDialog;
+	
+	protected CarTableModel carTableModel;
 	
 	/**
 	 * Construct the panel.
@@ -81,6 +82,7 @@ public class ManagementPanel extends JPanel {
 		JButton jbtnShowAddForm = new JButton("Add");
 		jbtnShowAddForm.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		jbtnShowAddForm.addActionListener(event -> {
+			carAddDialog.resetForm();
 			carAddDialog.setVisible(true);
 		});
 		jpnlButtonActions.add(jbtnShowAddForm);
@@ -100,13 +102,8 @@ public class ManagementPanel extends JPanel {
 		
 		/* jtblCarLog - Main Panel Table */
 		jtblCarLog = new JTable();
-		jtblCarLog.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Name", "Plate number", "Car model and color", "Time in", "Time out"
-			}
-		));
+		carTableModel = new CarTableModel();
+		jtblCarLog.setModel(carTableModel);
 		jtblCarLog.getColumnModel().getColumn(0).setPreferredWidth(100);
 		jtblCarLog.getColumnModel().getColumn(1).setPreferredWidth(100);
 		jtblCarLog.getColumnModel().getColumn(2).setPreferredWidth(200);
@@ -120,6 +117,10 @@ public class ManagementPanel extends JPanel {
 		// Create the add form dialog
 		carAddDialog = new AddDialog();
 		carAddDialog.carManagementPanel = this;
+	}
+	
+	public void updateTable() {
+		carTableModel.refresh();
 	}
 
 }
